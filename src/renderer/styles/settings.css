@@ -1,0 +1,731 @@
+/* ========================================================================
+   Paramètres
+   ======================================================================== */
+
+/* `.settings` **est** le `<dialog>`, il n'y a plus de boîte dans un calque.
+   Les valeurs par défaut du navigateur pour cet élément — bordure, marge
+   intérieure, largeur maximale — sont donc à défaire ici. */
+.settings {
+  flex-direction: column;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+  /* Large : les écrans Fournisseur, Connexions ou Modèles portent des
+     formulaires et des listes qui étouffaient à 820 px. La marge de 48 px
+     laisse voir l'application derrière, pour qu'on sache où l'on revient. */
+  width: min(1120px, calc(100vw - 48px));
+  /* Hauteur fixe : le dialogue ne doit pas grandir ou rétrécir selon l'onglet
+     ouvert. Un cadre qui saute à chaque clic donne l'impression que la fenêtre
+     est instable, et déplace les boutons sous le curseur. */
+  height: min(860px, calc(100vh - 48px));
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-modal);
+  overflow: hidden;
+}
+
+/* Un `<dialog>` fermé est masqué par le navigateur, mais `display: flex` le
+   rendrait de nouveau visible : il reparaîtrait, hors modale, entre le montage
+   et l'appel de `showModal()`. L'ordre compte — l'état ouvert vient après. */
+.settings[open] {
+  display: flex;
+}
+
+.settings-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 12px 22px;
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+
+.settings-head h2 {
+  flex: 1;
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  min-height: 0;
+  flex: 1;
+}
+
+.settings-side {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+/* Recherche : on cherche ce qu'on veut régler (« thème », « jeton »), et la
+   navigation ne garde que les écrans qui en parlent. */
+.settings-search {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 12px 10px 0;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--text-faint);
+}
+
+.settings-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.settings-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: 400 var(--fs-md)/1.4 var(--sans);
+}
+
+/* Le cadre est porté par le conteneur : le champ lui-même n'en dessine pas. */
+.settings .settings-search input,
+.settings .settings-search input:focus {
+  padding: 7px 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.settings-search-empty {
+  margin: 0;
+  padding: 0 10px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+.settings-tabs {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 16px;
+  padding: 14px 10px;
+}
+
+.settings-tab-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.settings-tab-group-label {
+  margin: 0 0 4px;
+  padding: 0 10px;
+  color: var(--text-faint);
+  font: 600 var(--fs-xs)/1.4 var(--sans);
+}
+
+.settings-tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font: 500 var(--fs-md)/1 var(--sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-tab:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.settings-tab.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.settings-panel {
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.settings-body {
+  display: grid;
+  gap: 18px;
+  padding: 28px 40px 32px;
+}
+
+.settings-section {
+  display: grid;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.settings-section h3 {
+  margin: 0;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+/* Les remarques portent ce qui n'est pas évident : coût d'installation, effet
+   de bord d'un réglage. Grises mais lisibles — les cacher reviendrait à laisser
+   découvrir le problème après coup. */
+.settings-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.settings-ok {
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+  margin: 10px 0 0;
+  padding: 9px 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.settings-ok svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.settings-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 0;
+  padding: 9px 11px;
+  border-radius: var(--r-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* --- Note explicative ---------------------------------------------------- */
+
+/* Repliée par défaut : elle sert la première fois puis devient du bruit. La
+   laisser dépliée en permanence repousserait le formulaire hors de l'écran. */
+.guide {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-subtle);
+}
+
+.guide summary {
+  padding: 9px 12px;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  list-style: none;
+}
+
+.guide summary::-webkit-details-marker {
+  display: none;
+}
+
+.guide summary::before {
+  content: '›';
+  display: inline-block;
+  width: 14px;
+  transition: transform 0.15s ease;
+}
+
+.guide[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.guide-body {
+  padding: 0 14px 12px 26px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+.guide-body p,
+.guide-body ol {
+  margin: 0 0 9px;
+}
+
+.guide-body ol {
+  padding-left: 18px;
+}
+
+.guide-body li {
+  margin: 2px 0;
+}
+
+.guide-body h4 {
+  margin: 12px 0 5px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.guide-body code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-xs);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  font: 0.9em var(--mono);
+}
+
+/* --- Choix exclusifs ---------------------------------------------------- */
+
+.choices {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.choices legend {
+  padding: 0 0 8px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.choice:hover {
+  background: var(--bg-hover);
+}
+
+.choice.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.choice input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.choice-body {
+  display: grid;
+  gap: 2px;
+}
+
+.choice-label {
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+.choice-hint {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+/* --- Champs -------------------------------------------------------------- */
+
+.field {
+  display: grid;
+  gap: 5px;
+}
+
+.field-label {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+}
+
+.field-hint {
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+
+.field-row {
+  display: flex;
+  gap: 8px;
+}
+
+.field-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Portée élargie au dialogue des routines : ces règles étaient attachées au
+   seul écran des Paramètres, si bien qu'un dialogue écrit ailleurs héritait des
+   contrôles bruts du navigateur — champs sans bordure maison et anneau de focus
+   orange par défaut (constat D08 de l'audit du 14 septembre 2026). Élargir la
+   portée vaut mieux que redéclarer : deux copies divergeraient. */
+.settings input[type='url'],
+.settings input[type='text'],
+.settings input[type='password'],
+.settings input[type='number'],
+.settings select,
+.routines-dialog input[type='text'],
+.routines-dialog input:not([type]),
+.routines-dialog textarea,
+.routines-dialog select {
+  padding: 7px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: 400 var(--fs-md)/1.4 var(--sans);
+}
+
+.routines-dialog textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.settings input[readonly] {
+  background: var(--bg-inset);
+  color: var(--text-muted);
+}
+
+.settings input:focus,
+.settings select:focus,
+.routines-dialog input:focus,
+.routines-dialog textarea:focus,
+.routines-dialog select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+
+.toggle input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.toggle > span {
+  display: grid;
+  gap: 3px;
+}
+
+.toggle.inline {
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.toggle.inline input {
+  margin: 0;
+}
+
+/* --- Corpus -------------------------------------------------------------- */
+
+.corpus-list {
+  display: grid;
+  gap: 8px;
+}
+
+.corpus {
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.corpus-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.corpus-name {
+  font-size: var(--fs-md);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.corpus-meta {
+  flex: none;
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.corpus-source {
+  margin-top: 4px;
+  color: var(--text-faint);
+  font: 400 var(--fs-xs)/1.5 var(--mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.corpus-activity {
+  display: grid;
+  gap: 5px;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.corpus-activity.failed {
+  color: var(--danger);
+}
+
+.corpus-bar {
+  height: 3px;
+  border-radius: var(--r-xs);
+  background: var(--bg-hover);
+  overflow: hidden;
+}
+
+.corpus-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+
+.corpus-message {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Pied de barre latérale ---------------------------------------------- */
+
+.sidebar-foot {
+  flex: none;
+  padding: 6px 8px 8px;
+  border-top: 1px solid var(--border);
+}
+
+.sidebar-settings {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-settings:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.nav-badge {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+
+/* --- Conversations archivées -------------------------------------------- */
+
+.archived-group {
+  margin-top: 14px;
+}
+
+.archived-project {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 6px;
+  font: 500 var(--fs-sm)/1.3 var(--sans);
+  color: var(--text-muted);
+}
+
+.archived-count {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+
+.archived-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-subtle);
+}
+
+.archived-row + .archived-row {
+  margin-top: 4px;
+}
+
+/* Le titre est le bouton d'ouverture : dans cet écran, on vient chercher une
+   conversation, pas la contempler. */
+.archived-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: 400 var(--fs-sm)/1.4 var(--sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.archived-title:hover {
+  color: var(--accent);
+}
+
+/* --- Modifier le projet -------------------------------------------------- */
+
+.project-sources {
+  margin-top: 14px;
+}
+
+.project-source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-subtle);
+}
+
+.project-source + .project-source {
+  margin-top: 4px;
+}
+
+.project-source code {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 400 var(--fs-xs)/1.4 var(--mono);
+}
+
+.project-add {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  margin-top: 6px;
+  justify-content: center;
+}
+
+/* Pousse les actions de droite au bout, en laissant « Retirer » à gauche : la
+   distance entre les deux est la seule chose qui empêche de confondre le
+   bouton rouge avec « Annuler ». */
+.dialog-spacer {
+  flex: 1;
+}
+
+.technical-search { display: grid; gap: 6px; font-size: var(--fs-md); }
+.technical-search input { min-width: 0; width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--text); background: var(--bg); }
+.technical-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.extension-details { font-size: var(--fs-sm); color: var(--text-muted); overflow-wrap: anywhere; }
+.extension-details summary { cursor: pointer; }
+.mcp-import { display: grid; gap: 8px; font-size: var(--fs-md); }
+.mcp-import input { max-width: 100%; }
+.ext-head { flex-wrap: wrap; }
+.mcp-server, .mcp-editor { min-width: 0; overflow-wrap: anywhere; }
+.mcp-settings details { margin: 10px 0; }
+.mcp-settings summary { cursor: pointer; font-size: var(--fs-sm); color: var(--text-muted); }
+.settings-body, .settings-section { min-width: 0; grid-template-columns: minmax(0, 1fr); overflow-wrap: anywhere; }
+.settings-row { flex-wrap: wrap; }
+.settings-row > input { min-width: 0; }
+.ext-list { min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.ext, .ext-meta, .ext-repo { min-width: 0; }
+.ext-meta { flex-wrap: wrap; }
+.ext-repo { overflow-wrap: anywhere; white-space: normal; }
+.routine-toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.routines-dialog { overflow-wrap: anywhere; }
+.routine-head { flex-wrap: wrap; }
+.routine-new { min-width: 0; }
+.routine-new select, .routine-new input { max-width: 100%; }
+.routine-toolbar > button[aria-pressed='true'] { background: var(--bg-subtle); font-weight: 600; }
+.routine-toolbar .segmented { margin: 0; width: auto; grid-template-columns: repeat(2, auto); }
+.routine-toolbar .segment { padding: 6px 16px; }
+.routine-help { margin: -4px 0 12px; font-size: var(--fs-sm); }
+.routine-help > summary { cursor: pointer; color: var(--text-muted); }
+.routine-help > p { margin: 6px 0 0; }
+
+.routines-dialog .app-dialog-body > .routine-toolbar { margin-bottom: 16px; }
+.routines-dialog .app-dialog-body > .technical-search { margin-bottom: 14px; }
+
+/* --- Actions d'un formulaire de réglages --------------------------------- */
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.form-actions > button {
+  min-height: 32px;
+  padding: 6px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.form-actions > button[type=submit] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.form-actions > button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

@@ -1,0 +1,246 @@
+/* ========================================================================
+   Modifications
+   ======================================================================== */
+
+.panel-pad {
+  padding: 12px 14px;
+}
+
+.changes-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  flex: none;
+}
+
+.changes-branch {
+  font: 500 var(--fs-sm)/1 var(--mono);
+  color: var(--text);
+}
+
+.changes-count {
+  margin-left: auto;
+}
+
+.changes-loading {
+  color: var(--accent);
+}
+
+.changes-list {
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+.change {
+  border-bottom: 1px solid var(--border);
+}
+
+.change:last-child {
+  border-bottom: none;
+}
+
+.change-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 7px 12px 7px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: 400 var(--fs-sm)/1.3 var(--sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.change-head:hover {
+  background: var(--bg-hover);
+}
+
+.change.open .change-head {
+  background: var(--bg-inset);
+}
+
+/* Lettre de `git status`. Colorée par nature du changement : la même
+   information que le diff, mais lisible sans ouvrir la ligne. */
+.change-status {
+  flex: none;
+  width: 15px;
+  text-align: center;
+  border-radius: var(--r-xs);
+  font: 600 var(--fs-xs)/15px var(--mono);
+  background: var(--bg-inset);
+  color: var(--text-muted);
+}
+
+.change-status.s-m {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.change-status.s-a,
+.change-status.s-untracked {
+  background: var(--add-bg);
+  color: var(--add-line);
+}
+
+.change-status.s-d {
+  background: var(--del-bg);
+  color: var(--del-line);
+}
+
+.change-status.s-r,
+.change-status.s-c {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.change-status.s-u {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.change-name {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Le dossier se contracte avant le nom : quand la place manque, c'est le
+   fichier qu'on veut lire, pas son chemin. */
+.change-dir {
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
+}
+
+.change-staged,
+.change-edits {
+  flex: none;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+
+.change-head .diff-add,
+.change-head .diff-remove {
+  margin-left: auto;
+}
+
+.change-head .diff-add + .diff-remove {
+  margin-left: 0;
+}
+
+.change-body {
+  border-top: 1px solid var(--border);
+}
+
+.change-body .diff-body + .diff-body {
+  border-top: 1px dashed var(--border);
+}
+
+.diff-body.empty {
+  padding: 10px 14px;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+
+/* ========================================================================
+   Terminal
+   ======================================================================== */
+
+.terminal-host {
+  height: 100%;
+  min-height: 220px;
+  padding: 8px 4px 8px 10px;
+}
+
+/* Keep stop, restart and close reachable even with a long remote bookmark. */
+.terminal-target-picker .menu-trigger { max-width: 100px; }
+.terminal-target-picker .menu-trigger > span { overflow: hidden; text-overflow: ellipsis; }
+.terminal-target-picker .menu-list { min-width: 200px; width: 200px; }
+.terminal-target-picker .menu-item-hint { overflow-wrap: anywhere; }
+
+/* xterm mesure la zone au pixel : toute marge non déclarée ici décale son
+   calcul de colonnes et fait couper les lignes au mauvais endroit. */
+.terminal-host .xterm {
+  height: 100%;
+}
+
+/* La barre de défilement d'xterm est dessinée par le navigateur, hors du
+   thème : sans ces règles elle apparaît en gris système, trop appuyée pour
+   une surface claire. */
+.terminal-host .xterm-viewport {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+  background: transparent !important;
+}
+
+.terminal-host .xterm-viewport::-webkit-scrollbar {
+  width: 10px;
+}
+
+.terminal-host .xterm-viewport::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 3px solid transparent;
+  border-radius: var(--r-md);
+  background-clip: content-box;
+}
+
+.terminal-exited.error {
+  border-top-color: var(--danger);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.terminal-exited {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+
+.git-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; border-bottom: 1px solid var(--border); }
+.git-actions label { display: grid; gap: 6px; width: 100%; font-size: var(--fs-sm); color: var(--text-muted); }
+.git-actions input { width: 100%; min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--bg); color: var(--text); }
+.git-actions p { margin: 0; font-size: var(--fs-sm); overflow-wrap: anywhere; }
+.git-pr { width: 100%; min-width: 0; font-size: var(--fs-sm); }
+.git-pr-url { overflow-wrap: anywhere; }
+.change-actions { display: flex; justify-content: flex-end; padding: 0 8px 6px; }
+.git-actions .btn, .change-actions .btn { font-size: var(--fs-sm); padding: 5px 8px; }
+
+.session-diff-note { margin: 12px; font-size: var(--fs-sm); color: var(--text-muted); line-height: 1.5; }
+
+.git-pr { overflow-wrap: anywhere; }
+.review-head { flex-wrap: wrap; }
+.review-toggle { min-width: 0; }
+.review-toggle span { overflow-wrap: anywhere; }
+
+.git-workflow { padding: 12px; border-bottom: 1px solid var(--border); min-width: 0; }
+.git-workflow-content { display: grid; gap: 12px; margin-top: 10px; min-width: 0; font-size: var(--fs-sm); overflow-wrap: anywhere; }
+.git-workflow-content p { margin: 0; }
+.git-workflow fieldset { display: grid; gap: 8px; min-width: 0; margin: 0; padding: 10px; border: 1px solid var(--border); border-radius: var(--r-md); }
+.git-workflow legend, .git-workflow summary { font-weight: 600; }
+.git-workflow summary { cursor: pointer; padding: 4px 0 10px; }
+.git-workflow label { display: grid; gap: 5px; min-width: 0; }
+.git-workflow input:not([type=checkbox]), .git-workflow select, .git-workflow textarea { width: 100%; min-width: 0; box-sizing: border-box; padding: 7px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--bg); color: var(--text); font: inherit; }
+.git-workflow textarea { resize: vertical; }
+.git-workflow .git-checkbox { display: flex; align-items: center; }
+.git-workflow .btn { font-size: var(--fs-sm); white-space: normal; }
+.git-pr-form > .btn, .git-pr-form > .git-pr { margin-top: 10px; }
+.git-confirm { border: 1px solid var(--accent); border-radius: var(--r-md); padding: 12px; }
+.git-confirm p { margin-bottom: 10px; }
+.git-confirm .btn + .btn { margin-left: 8px; }

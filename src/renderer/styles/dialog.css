@@ -1,0 +1,113 @@
+/* ========================================================================
+   Gabarit de dialogue (lot C de l'audit UX)
+
+   En-tête (titre, Fermer), corps qui défile, pied d'actions à droite. Trois
+   largeurs. Le composant est `ui/Dialog.tsx` ; `ui/confirm.tsx` s'en sert
+   pour remplacer `window.confirm()`.
+
+   `dialog.app-dialog` plutôt que `.app-dialog` : les dialogues migrés gardent
+   leurs anciennes classes (`.dialog`, `.session-dialog`…) pour leurs styles
+   internes, et le gabarit doit l'emporter sur leurs marges d'origine.
+   ======================================================================== */
+
+dialog.app-dialog {
+  flex-direction: column;
+  width: min(640px, calc(100vw - 32px));
+  max-width: none;
+  max-height: min(85vh, calc(100vh - 32px));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: var(--shadow-modal);
+  overflow: hidden;
+}
+
+/* Un `<dialog>` fermé est masqué par le navigateur ; `display: flex` ne doit
+   s'appliquer qu'une fois ouvert, sinon il reparaîtrait hors modale. */
+dialog.app-dialog[open] {
+  display: flex;
+}
+
+dialog.app-dialog.size-sm {
+  width: min(480px, calc(100vw - 32px));
+}
+
+dialog.app-dialog.size-lg {
+  width: min(1120px, calc(100vw - 48px));
+}
+
+.app-dialog-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  padding: 12px 14px 12px 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-dialog-head h2 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.app-dialog-body {
+  flex: 1;
+  min-height: 0;
+  padding: 18px 22px;
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+
+.app-dialog-body > :first-child {
+  margin-top: 0;
+}
+
+.app-dialog-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  padding: 12px 22px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+/* Dans un dialogue migré, la rangée d'actions finale garde sa place dans le
+   corps ; elle prend l'alignement du pied. */
+.app-dialog-body > .dialog-actions:last-child {
+  margin-top: 18px;
+}
+
+.confirm-message {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+/* Administration : sa propre navigation et son propre défilement ; le corps
+   du gabarit lui laisse toute la place. */
+dialog.app-dialog.administration {
+  height: min(720px, calc(100dvh - 32px));
+}
+
+.administration .app-dialog-body {
+  display: flex;
+  padding: 0;
+  overflow: hidden;
+}
+
+.administration .app-dialog-body > .administration-layout {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}

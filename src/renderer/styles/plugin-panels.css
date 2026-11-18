@@ -1,0 +1,34 @@
+.plugin-records { display: flex; flex-direction: column; min-height: 100%; min-width: 0; }
+.plugin-records-search { padding: 10px 14px 6px; }
+.plugin-records-search input { width: 100%; padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: var(--r-sm); background: var(--bg); color: var(--text); font: 400 var(--fs-md)/1.4 var(--sans); }
+.plugin-records-search input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.plugin-records-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 14px 6px; border-bottom: 1px solid var(--border); }
+.plugin-records-tabs button { border: none; background: none; padding: 4px 8px; border-radius: var(--r-sm); color: var(--text-muted); font-size: var(--fs-sm); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.plugin-records-tabs button[aria-selected='true'] { background: var(--accent-soft); color: var(--accent); }
+.plugin-records-count { margin: 8px 14px 4px; color: var(--text-muted); font-size: var(--fs-xs); }
+.plugin-records-list { list-style: none; margin: 0; padding: 0 6px 10px; }
+.plugin-records-row { display: flex; flex-direction: column; gap: 3px; width: 100%; text-align: left; border: none; background: none; padding: 8px; border-radius: var(--r-sm); color: var(--text); cursor: pointer; overflow-wrap: anywhere; }
+.plugin-records-row:hover, .plugin-records-row:focus-visible { background: var(--bg-hover); }
+.plugin-records-row-title { font-size: var(--fs-md); line-height: 1.4; }
+.plugin-records-row-meta { color: var(--text-muted); font-size: var(--fs-xs); overflow-wrap: anywhere; }
+.plugin-records-row-excerpt { color: var(--text-muted); font-size: var(--fs-xs); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.plugin-records-badge { display: inline-block; margin-right: 6px; padding: 0 7px; border-radius: 999px; background: var(--bg-inset); color: var(--text-muted); font-size: var(--fs-xs); font-weight: 500; line-height: 1.6; }
+.plugin-records-detail-head { margin-bottom: 8px; }
+.plugin-records-detail-head button { padding: 3px 9px; font-size: var(--fs-sm); }
+.plugin-records-title { margin: 0 0 2px; font-size: var(--fs-lg); line-height: 1.4; overflow-wrap: anywhere; }
+.plugin-records-detail-actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+.plugin-records-fields { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 4px 12px; margin: 8px 0; font-size: var(--fs-sm); }
+.plugin-records-fields dt { color: var(--text-muted); overflow-wrap: anywhere; }
+.plugin-records-fields dd { margin: 0; overflow-wrap: anywhere; }
+.plugin-records-actions { display: flex; flex-direction: column; gap: 12px; margin: 12px 0; padding: 10px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg-subtle); }
+.plugin-records-actions form { display: flex; flex-direction: column; gap: 6px; }
+.plugin-records-actions label { display: flex; flex-direction: column; gap: 4px; font-size: var(--fs-sm); color: var(--text-muted); }
+.plugin-records-actions input:not([type=checkbox]), .plugin-records-actions textarea, .plugin-records-actions select { width: 100%; min-width: 0; box-sizing: border-box; }
+.plugin-records-actions textarea { resize: vertical; }
+.plugin-records-actions .plugin-records-check { flex-direction: row; align-items: center; }
+.plugin-records-outcome { margin: 0; font-size: var(--fs-sm); white-space: pre-wrap; overflow-wrap: anywhere; }
+.plugin-records-detail h4 { margin: 14px 0 6px; font-size: var(--fs-sm); color: var(--text-muted); }
+.plugin-records-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--fs-sm); line-height: 1.5; }
+.plugin-records-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.plugin-records-items > li { border-left: 2px solid var(--border); padding-left: 8px; min-width: 0; }
+.plugin-records-detail .link { border: none; background: none; padding: 2px 0; color: var(--accent); cursor: pointer; text-align: left; overflow-wrap: anywhere; }

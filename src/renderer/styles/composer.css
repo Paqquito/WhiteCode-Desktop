@@ -1,0 +1,108 @@
+/* ========================================================================
+   Menu « + »
+   ======================================================================== */
+
+.permission-card { min-width: 0; padding: 14px 16px 10px; font-size: var(--fs-md); }
+.permission-kind { color: var(--text-muted); font-size: var(--fs-xs); }
+.permission-title { margin: 6px 0 9px; font-size: var(--fs-md); font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; max-height: 4.35em; overflow: auto; }
+.permission-summary { display: block; color: var(--text-muted); font-size: var(--fs-xs); line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 3.2em; overflow: auto; }
+.permission-details { margin-top: 8px; font-size: var(--fs-xs); color: var(--text-muted); }
+.permission-details > summary { cursor: pointer; width: fit-content; }
+.permission-detail-body { max-height: min(240px, 30vh); overflow: auto; margin-top: 8px; color: var(--text); }
+.permission-detail-body pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.permission-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.permission-actions button { padding: 6px 12px; min-height: 32px; font-size: var(--fs-sm); border-radius: 999px; }
+.permission-actions .permission-stop { margin-right: auto; }
+
+.menu-list.wide {
+  min-width: 300px;
+}
+
+.menu-separator {
+  height: 1px;
+  margin: 5px 4px;
+  background: var(--border);
+}
+
+.menu-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 9px 3px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.menu-heading-note {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+/* Case à cocher dessinée plutôt qu'un `input` : elle doit s'aligner sur la
+   grille du menu et suivre la couleur d'accent, ce que le contrôle natif ne
+   fait pas de façon fiable d'une plateforme à l'autre. */
+.menu-check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xs);
+  color: var(--on-accent);
+}
+
+.menu-check.on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.menu-item.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.menu-item.disabled:hover {
+  background: transparent;
+}
+
+/* Pastille sur le « + » quand des corpus sont actifs : le modèle a alors accès
+   à autre chose que le dossier de travail, et cela doit se voir sans ouvrir
+   le menu. */
+.plus-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.composer-tools .icon-button {
+  position: relative;
+}
+
+/* Bouton d'en-tête de panneau avec libellé : le crayon seul n'annonçait pas
+   assez clairement qu'on peut éditer le fichier affiché. */
+.panel-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--text-muted);
+  font: 500 var(--fs-sm)/1 var(--sans);
+  cursor: pointer;
+}
+
+.panel-button:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+  border-color: var(--border-strong);
+}

@@ -1,0 +1,494 @@
+/* ========================================================================
+   Panneaux
+   ======================================================================== */
+
+.panel-host {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  min-width: 0;
+  min-height: 0;
+  /* Quand les hauteurs demandées dépassent la colonne, on défile plutôt que
+     d'écraser le dernier panneau sous sa hauteur minimale. */
+  overflow-y: auto;
+  background: var(--bg-subtle);
+}
+
+/* Enveloppe dont la hauteur est pilotée par la poignée. Le panneau lui-même
+   ignore sa taille : il remplit ce qu'on lui donne. */
+.panel-slot {
+  display: flex;
+  min-height: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 6px 7px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  flex: none;
+}
+
+.panel-title {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 2px;
+  flex: none;
+}
+
+.panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.panel-body.no-scroll {
+  overflow: hidden;
+}
+
+.panel-body.padded {
+  padding: 12px 14px;
+}
+
+.panel-empty {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: var(--fs-md);
+}
+
+.panel-empty.centered {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  max-width: 34ch;
+  margin: 24px auto;
+  text-align: center;
+}
+
+.panel-empty.centered p {
+  margin: 0;
+}
+
+/* Avec un sous-titre, c'est lui qui prend la place restante : le titre
+   reste collé à sa précision au lieu d'en être séparé par tout l'en-tête. */
+.panel-title:has(+ .panel-subtitle) {
+  flex: none;
+}
+
+.panel-subtitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Routines ------------------------------------------------------------ */
+
+.routines-dialog {
+  min-width: 520px;
+  max-width: 640px;
+}
+
+.routine-list {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.routine-row {
+  border-left: 2px solid var(--border);
+  padding-left: 8px;
+}
+
+.routine-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.routine-cron {
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.routine-once {
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+}
+
+.routine-remove {
+  margin-left: auto;
+}
+
+.routine-prompt {
+  margin: 2px 0 0;
+  font-size: var(--fs-md);
+}
+
+/* L'échéance est ce qu'on vient vérifier après avoir écrit une routine :
+   discrète, mais toujours présente. */
+.routine-next {
+  margin: 2px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+}
+
+.routine-new {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px;
+}
+
+.routine-rythme {
+  display: flex;
+  gap: 8px;
+}
+
+.routine-rythme input {
+  flex: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.routine-recurring {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-md);
+}
+
+/* --- Agents -------------------------------------------------------------- */
+
+.agent-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-row {
+  border-left: 2px solid var(--border);
+  padding-left: 8px;
+}
+
+/* Seul l'agent qui travaille se signale : une liste où tout est coloré ne
+   hiérarchise plus rien. L'échec, lui, appelle une action. */
+.agent-row.working {
+  border-left-color: var(--accent);
+}
+
+.agent-row.failed {
+  border-left-color: var(--danger);
+}
+
+.agent-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.agent-tool {
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.agent-status {
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+}
+
+.agent-status.failed {
+  color: var(--danger);
+}
+
+.agent-steps {
+  margin-left: auto;
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-description {
+  margin: 2px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text);
+}
+
+.agent-last {
+  margin: 2px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* --- Explorateur -------------------------------------------------------- */
+
+/* La colonne de gauche cesse de grandir passé 260 px. En pourcentage seul,
+   élargir le panneau élargissait aussi l'arborescence — qui n'en a pas besoin,
+   ses noms ne s'allongent pas — et la lecture ne récupérait que 62 % de la
+   place gagnée. Le pourcentage est gardé pour les largeurs faibles, où 260 px
+   prendraient tout. */
+.files {
+  display: grid;
+  grid-template-columns: minmax(150px, min(38%, 260px)) 1fr;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Arborescence masquée : la lecture prend tout, sans colonne vide ni bordure
+   résiduelle. */
+.files.tree-hidden {
+  grid-template-columns: 1fr;
+}
+
+.file-tree {
+  overflow: auto;
+  border-right: 1px solid var(--border);
+  padding: 6px 4px;
+  min-height: 0;
+}
+
+.tree-loading {
+  margin: 6px 8px;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  padding: 3px 6px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-sm);
+  text-align: left;
+}
+
+.tree-row:hover {
+  background: var(--bg-hover);
+}
+
+.tree-row.selected {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tree-row svg {
+  flex: none;
+  color: var(--text-faint);
+}
+
+.tree-row.selected svg {
+  color: var(--accent);
+}
+
+/* Réserve la place du chevron pour les fichiers : sans elle, les noms de
+   fichiers et de dossiers ne s'alignent pas. */
+.tree-spacer {
+  width: 11px;
+  flex: none;
+}
+
+.tree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Colonne : en-tête figé, corps extensible. Ni marge ni défilement ici — le
+   défilement appartient à l'éditeur, qui doit synchroniser ses deux couches ;
+   un second niveau de défilement au-dessus les découplerait. */
+.file-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* La bascule Aperçu / Source se pose au bout de la ligne de titre plutôt que
+   sur une barre à elle : le panneau est déjà court en hauteur, et une rangée
+   de plus se prendrait sur le texte. */
+.file-modes {
+  margin-left: auto;
+  padding: 0;
+  border-bottom: none;
+}
+
+/* Contrairement à l'éditeur, l'aperçu tient son propre défilement : il n'a pas
+   deux couches à garder alignées. */
+.file-preview {
+  box-sizing: border-box;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+  padding: 10px 16px;
+}
+
+/* ========================================================================
+   Barre d'état
+   ======================================================================== */
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 6px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-subtle);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--add-rail);
+  flex: none;
+}
+
+.dot.busy {
+  background: var(--accent);
+  animation: pulse 1.15s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.28;
+  }
+}
+
+.muted {
+  color: var(--text-faint);
+}
+
+.status.phase-waiting .dot { background: var(--warning-strong); }
+.status.phase-failed .dot { background: var(--danger); }
+
+.status-cost {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ========================================================================
+   Modale
+   ======================================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--scrim);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  z-index: 20;
+  padding: 32px;
+}
+
+/* Le fond des dialogues natifs, déclaré une fois pour tous.
+   Il reprend celui du calque de `.overlay` : Routines, Restauration, Nouvelle
+   session et Paramètres n'ont aucune raison de s'assombrir différemment. */
+dialog::backdrop {
+  background: var(--scrim);
+  backdrop-filter: blur(2px);
+}
+
+.dialog {
+  width: min(660px, 100%);
+  max-height: 82vh;
+  overflow: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-pop);
+}
+
+.dialog h2 {
+  margin: 0 0 6px;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.dialog-desc {
+  margin: 0 0 6px;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+}
+
+.dialog-reason {
+  margin: 0 0 6px;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+
+.dialog-input {
+  margin: 14px 0 18px;
+  padding: 11px 13px;
+  background: var(--bg-inset);
+  border-radius: var(--r-md);
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+}
+
+.dialog-change {
+  margin: 14px 0 18px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+
+.file-tabs { display: flex; flex: 0 0 auto; overflow-x: auto; border-bottom: 1px solid var(--border); min-height: 36px; }
+.file-tab { display: flex; flex-shrink: 0; border-right: 1px solid var(--border); max-width: 220px; }
+.file-tab button { border: 0; background: transparent; color: var(--text-muted); padding: 8px; cursor: pointer; }
+.file-tab button[role="tab"] { display: flex; gap: 6px; min-width: 0; }
+.file-tab button[aria-selected="true"] { color: var(--text); background: var(--bg-hover); box-shadow: inset 0 -2px var(--accent); }
+.file-tab button span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-head { flex-wrap: wrap; gap: 6px; }
+.file-error { flex-shrink: 0; overflow-wrap: anywhere; }

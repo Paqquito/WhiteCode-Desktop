@@ -1,0 +1,174 @@
+/* ========================================================================
+   Saisie
+   ======================================================================== */
+
+.composer {
+  padding: 10px 0 16px;
+  width: min(740px, calc(100% - 56px));
+  margin-inline: auto;
+}
+
+/* Carte unique : pièces jointes, texte, puis réglages. Le cadre entoure
+   l'ensemble plutôt que la seule zone de texte — c'est ce qui fait des
+   réglages une partie du message qu'on s'apprête à envoyer, et non une barre
+   d'outils indépendante posée à côté. */
+.composer-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 9px 9px 7px;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.composer-card:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.composer textarea {
+  resize: none;
+  font: inherit;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  padding: 3px 5px;
+  max-height: 220px;
+  /* Une ligne au repos, exactement la hauteur du bouton d'envoi : la carte
+     s'ouvre à la taille de ce qu'on va y mettre, pas à celle qu'elle pourrait
+     prendre. */
+  min-height: 26px;
+  overflow-y: auto;
+}
+
+.composer textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.composer textarea:focus {
+  outline: none;
+}
+
+/* Rangée de pied : ajout, mode à gauche ; contexte, modèle, effort et envoi à
+   droite. L'ordre suit la question posée — quoi joindre, sous quelle règle,
+   avec quel modèle, puis partir. */
+.composer-tools {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.composer-spacer {
+  flex: 1;
+}
+
+.composer-action {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  flex: none;
+  margin-left: 4px;
+  border-radius: var(--r-sm);
+}
+
+.composer-action.primary:disabled {
+  /* Désactivé neutre : un bleu pâle passait pour un bouton actif mal contrasté. */
+  opacity: 1;
+  background: var(--bg-inset);
+  border-color: var(--border);
+  color: var(--text-faint);
+}
+
+.composer-action + .composer-action {
+  margin-left: 2px;
+}
+
+/* Aucun modèle utilisable : le sélecteur devient l'accès au réglage. */
+.composer-model-missing {
+  padding: 3px 9px;
+  border-color: color-mix(in srgb, var(--warning) 35%, transparent);
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: var(--fs-sm);
+  white-space: nowrap;
+}
+
+.composer-model-missing:hover:not(:disabled) {
+  background: var(--warning-soft);
+  border-color: var(--warning);
+}
+
+/* File d'attente : au-dessus de la saisie, dans la carte du composeur. */
+.composer-queue {
+  margin: 0 0 6px;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  background: var(--bg-subtle);
+  font-size: var(--fs-sm);
+}
+
+.composer-queue-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px;
+  color: var(--text-muted);
+}
+
+.composer-queue-head button {
+  margin-left: auto;
+  padding: 2px 8px;
+  font-size: var(--fs-sm);
+  color: var(--accent);
+}
+
+.composer-queue ol {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.composer-queue li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text);
+}
+
+.composer-queue li > svg {
+  flex: none;
+  color: var(--text-faint);
+}
+
+.composer-queue li > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-queue .icon-button {
+  width: 22px;
+  height: 22px;
+}
+
+.composer-action.danger {
+  background: var(--bg);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.composer-action.danger:hover {
+  background: var(--danger-soft);
+}

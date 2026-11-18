@@ -1,0 +1,91 @@
+/* ========================================================================
+   Pièces jointes
+   ======================================================================== */
+
+.attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 9px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  max-width: 280px;
+}
+
+.chip svg {
+  color: var(--text-faint);
+  flex: none;
+}
+
+.chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip-detail {
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+  flex: none;
+}
+
+/* Une pièce refusée reste affichée plutôt que d'être écartée en silence :
+   l'utilisateur doit savoir que son fichier ne partira pas, et pourquoi. */
+.chip.rejected {
+  border-color: color-mix(in srgb, var(--danger) 35%, var(--border));
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.chip.rejected svg,
+.chip.rejected .chip-detail {
+  color: var(--danger);
+}
+
+.chip-remove {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-xs);
+  color: var(--text-faint);
+  flex: none;
+}
+
+.chip-remove:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+/* --- Dépôt de fichiers -------------------------------------------------- */
+
+.composer.drop-target textarea {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.drop-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--accent-soft) 88%, transparent);
+  border: 1.5px dashed var(--accent);
+  border-radius: var(--r-lg);
+  color: var(--accent);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  /* Le voile ne doit pas intercepter le dépôt qu'il annonce. */
+  pointer-events: none;
+}

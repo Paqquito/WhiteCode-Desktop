@@ -1,0 +1,242 @@
+/*
+ * Feuille de style de l'application.
+ *
+ * Marque blanche : noir, blanc et gris. La couleur ne sert qu'à deux choses :
+ * signaler une erreur ou une action destructive, et distinguer un ajout d'une
+ * suppression. Une marque peut remplacer l'accent par sa propre couleur. Partout ailleurs, c'est la typographie et
+ * l'espacement qui structurent — un outil qu'on garde ouvert toute la journée
+ * ne doit pas fatiguer.
+ */
+
+:root {
+  /* --- Surfaces --------------------------------------------------------- */
+  --bg: #ffffff;
+  --bg-subtle: #fafafa;
+  --bg-inset: #f4f4f4;
+  --bg-hover: #eeeeee;
+
+  --border: #e4e4e4;
+  --border-strong: #d0d0d0;
+
+  /* --- Texte ------------------------------------------------------------ */
+  --text: #141414;
+  --text-muted: #5f5f5f;
+  /* Au moins 4,5:1 sur blanc et sur la barre latérale : conforme AA pour le petit texte.
+     La hiérarchie avec --text-muted passe par la taille, pas la pâleur. */
+  --text-faint: #6b6b6b;
+
+  /* --- Accent ----------------------------------------------------------- */
+  --accent: #111111;
+  --accent-hover: #000000;
+  --accent-soft: #efefef;
+  --accent-ring: rgba(0, 0, 0, 0.2);
+
+  /* --- États ------------------------------------------------------------ */
+  --danger: #b42318;
+  --danger-soft: #fef3f1;
+  --warning: #4d4d4d;
+  --warning-soft: #f2f2f2;
+  --warning-strong: #8c8c8c;
+  --success: #3d3d3d;
+  /* Encre posée sur l'accent (bouton principal, pastille active). */
+  --on-accent: #ffffff;
+  /* Voile derrière un dialogue modal. */
+  --scrim: rgba(20, 20, 20, 0.32);
+
+  /* --- Élévation ---------------------------------------------------------
+   * Trois niveaux seulement : posé (segment actif, pouce d'interrupteur),
+   * flottant (menus, cartes de survol, infobulles riches) et modal.
+   */
+  --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-pop: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 1px 2px rgba(0, 0, 0, 0.04), 0 24px 64px rgba(0, 0, 0, 0.2);
+
+  /* --- Diff -------------------------------------------------------------
+   * Teintes franches, assumées. Un diff pâle oblige à chercher ce qui a
+   * changé ; c'est précisément le seul endroit de l'interface où la couleur
+   * porte le sens, elle doit donc se voir sans effort.
+   */
+  --add-bg: #ddf4e4;
+  --add-line: #116b33;
+  --add-rail: #46a163;
+  --del-bg: #ffe3df;
+  --del-line: #a4231a;
+  --del-rail: #e0685c;
+
+  /* --- Coloration syntaxique (le thème sombre les redéfinit) ----------- */
+  --syntax-text: #1a1a1a;
+  --syntax-keyword: #000000;
+  --syntax-string: #4a4a4a;
+  --syntax-title: #262626;
+  --syntax-number: #575757;
+  --syntax-type: #333333;
+  --syntax-tag: #333333;
+  --syntax-comment: #8a8a8a;
+  --syntax-delete: #5c5c5c;
+
+  /* --- Formes ----------------------------------------------------------- */
+  /* --r-xs pour les petits objets (touches, code en ligne, barres fines),
+     999px pour les pastilles et interrupteurs. Rien d'autre. */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 9px;
+  --r-lg: 13px;
+
+  /* --- Échelle typographique -------------------------------------------
+   * Six tailles. Les demi-pixels d'écart (12 / 12,5, 13 / 13,5) ne se
+   * lisaient pas comme une hiérarchie mais comme du flou : chaque marche
+   * est maintenant visible. Les tailles réglables par l'utilisateur
+   * (--reading-size, --code-size) restent à part.
+   */
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 13.5px;
+  --fs-lg: 15px;
+  --fs-xl: 20px;
+  --fs-2xl: 28px;
+
+  /* --- Typographie ------------------------------------------------------ */
+  --sans:
+    "Segoe UI Variable Text", "Segoe UI", -apple-system, BlinkMacSystemFont,
+    Inter, system-ui, sans-serif;
+  --mono:
+    ui-monospace, "Cascadia Mono", "SF Mono", "JetBrains Mono", Menlo, Consolas,
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 400 var(--fs-lg)/1.62 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Barres de défilement discrètes : présentes quand il faut, invisibles sinon. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border: 3px solid transparent;
+  border-radius: var(--r-md);
+  background-clip: content-box;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  background-clip: content-box;
+}
+
+/* ========================================================================
+   Coquille
+   ======================================================================== */
+
+/* Les colonnes sont posées en ligne par `App` : leurs largeurs sont un
+   réglage de l'utilisateur, pas une constante de style. */
+.app {
+  display: grid;
+  height: 100%;
+}
+
+.workbench {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.conversation {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+/* --- Poignées de redimensionnement -------------------------------------- */
+
+.splitter {
+  background: transparent;
+  display: grid;
+  place-items: center;
+  /* Sans cela, la poignée s'étire et pousse ses voisines. */
+  flex: none;
+}
+
+.splitter.x {
+  width: 5px;
+  cursor: col-resize;
+}
+
+.splitter.y {
+  height: 7px;
+  cursor: row-resize;
+}
+
+.splitter-grip {
+  background: var(--border);
+  transition: background 0.12s ease, width 0.12s ease, height 0.12s ease;
+}
+
+.splitter.x .splitter-grip {
+  width: 1px;
+  height: 100%;
+}
+
+.splitter.y .splitter-grip {
+  height: 1px;
+  width: 100%;
+  border-radius: var(--r-xs);
+}
+
+.splitter:hover .splitter-grip,
+.splitter:focus-visible .splitter-grip,
+.splitter.dragging .splitter-grip {
+  background: var(--accent);
+}
+
+.splitter.x:hover .splitter-grip,
+.splitter.x:focus-visible .splitter-grip,
+.splitter.x.dragging .splitter-grip {
+  width: 2px;
+}
+
+.splitter.y:hover .splitter-grip,
+.splitter.y:focus-visible .splitter-grip,
+.splitter.y.dragging .splitter-grip {
+  height: 2px;
+}
+
+.splitter:focus-visible {
+  outline: none;
+}
+
+/* Pendant le glissement, le curseur ne doit pas changer au survol des zones
+   traversées, ni le texte se sélectionner sous le pointeur. */
+body.resizing-x,
+body.resizing-y {
+  user-select: none;
+}
+
+body.resizing-x,
+body.resizing-x * {
+  cursor: col-resize !important;
+}
+
+body.resizing-y,
+body.resizing-y * {
+  cursor: row-resize !important;
+}

@@ -1,0 +1,205 @@
+/* ========================================================================
+   Diffs
+   ======================================================================== */
+
+.diff {
+  margin-top: 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.diff-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 12px;
+  background: var(--bg-inset);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  font-family: var(--mono);
+}
+
+.diff-path {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* Tronqué à gauche : la fin du chemin — le nom du fichier — porte
+     l'information, pas la racine. */
+  direction: rtl;
+  text-align: left;
+  color: var(--text-muted);
+}
+
+.diff-add {
+  color: var(--add-line);
+  font-weight: 700;
+}
+
+.diff-remove {
+  color: var(--del-line);
+  font-weight: 700;
+}
+
+.diff-flag {
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+  font-family: var(--sans);
+}
+
+.diff-body {
+  max-height: 420px;
+  overflow: auto;
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+.diff-line {
+  display: grid;
+  grid-template-columns: 38px 38px 18px 1fr;
+  white-space: pre-wrap;
+  word-break: break-word;
+  /* Rail de couleur à gauche : lisible même pour un œil qui distingue mal le
+     rouge du vert, et repérable en défilement rapide. */
+  border-left: 3px solid transparent;
+}
+
+.diff-line.add {
+  background: var(--add-bg);
+  border-left-color: var(--add-rail);
+  color: var(--add-line);
+}
+
+.diff-line.remove {
+  background: var(--del-bg);
+  border-left-color: var(--del-rail);
+  color: var(--del-line);
+}
+
+.diff-no {
+  text-align: right;
+  padding-right: 9px;
+  color: var(--text-faint);
+  user-select: none;
+}
+
+.diff-line.add .diff-no,
+.diff-line.remove .diff-no {
+  color: currentColor;
+  opacity: 0.55;
+}
+
+.diff-sign {
+  text-align: center;
+  user-select: none;
+  font-weight: 700;
+}
+
+.diff-text {
+  padding-right: 12px;
+}
+
+.diff-gap {
+  padding: 3px 0 3px 47px;
+  color: var(--text-faint);
+  user-select: none;
+  border-left: 3px solid transparent;
+}
+
+/* ========================================================================
+   Échec du pont
+   ======================================================================== */
+
+.bridge-missing {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 40px;
+  text-align: center;
+}
+
+.bridge-missing img {
+  width: 46px;
+  height: 46px;
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.bridge-missing h1 {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--danger);
+  margin: 0 0 10px;
+}
+
+.bridge-missing p {
+  margin: 0 0 8px;
+  color: var(--text-muted);
+}
+
+.bridge-missing .hint {
+  color: var(--text-faint);
+  font-size: var(--fs-md);
+  max-width: 54ch;
+}
+
+.bridge-missing code {
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  background: var(--bg-inset);
+  padding: 1px 5px;
+  border-radius: var(--r-xs);
+}
+
+/* ========================================================================
+   Onglets internes à un panneau
+   ======================================================================== */
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font: 500 var(--fs-sm)/1 var(--sans);
+  cursor: pointer;
+}
+
+.tab:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.tab.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tab-count {
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.tab.active .tab-count {
+  background: color-mix(in srgb, var(--bg) 75%, transparent);
+  color: var(--accent);
+}

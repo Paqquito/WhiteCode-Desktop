@@ -1,0 +1,11 @@
+{
+  "version": 1, "id": "tickets", "connector": "tickets", "title": "Tickets",
+  "views": [{
+    "id": "all", "label": "Demandes", "request": { "tool": "list_issues", "args": {} },
+    "rows": { "items": "issues", "id": "id", "title": "{item.subject}", "empty": "Aucune demande." }
+  }],
+  "detail": {
+    "request": { "tool": "get_issue", "args": { "id": { "$path": "selection" } } },
+    "title": "{record.subject}", "blocks": [{ "kind": "text", "value": "{record.description}" }]
+  }
+}

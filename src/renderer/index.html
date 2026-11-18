@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <!--
+      Politique de sécurité stricte : le rendu n'exécute que ses propres
+      scripts et ne joint aucun hôte. Toute donnée arrive par le pont IPC,
+      jamais par le réseau — une réponse du modèle ne doit pas pouvoir faire
+      charger quoi que ce soit.
+
+      `style-src` admet `'unsafe-inline'`, et c'est une concession assumée :
+      xterm.js construit à l'exécution des feuilles de style — dimensions de
+      cellule, police, couleurs du thème — en écrivant dans le `textContent`
+      d'un `<style>`. Sans cette permission le navigateur les bloque
+      silencieusement : le terminal s'affiche alors dans la police
+      proportionnelle de l'application, sans curseur ni couleurs, et paraît
+      inerte. La concession reste étroite — `default-src 'none'` interdit
+      toujours la moindre requête, et `script-src` n'est pas relâché : aucun
+      code étranger ne peut s'exécuter, seule la mise en forme est ouverte.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'"
+    />
+    <title></title>
+    <link rel="stylesheet" href="xterm.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="renderer.js"></script>
+  </body>
+</html>

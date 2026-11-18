@@ -1,0 +1,671 @@
+/* ========================================================================
+   Barre latérale
+   ======================================================================== */
+
+/*
+ * Colonne et non grille, et ce n'est pas un goût : la grille déclarait cinq
+ * lignes — `auto auto auto auto 1fr` — pour **sept** enfants (haut, segments,
+ * navigation, recherche, titre de section, liste, pied). Le `1fr` tombait donc
+ * sur le *titre* de section, qui s'étirait sur toute la hauteur disponible,
+ * pendant que la liste, reléguée en ligne implicite `auto`, se retrouvait
+ * poussée en bas de la fenêtre — d'autant plus visible que les résultats
+ * étaient peu nombreux (constat D01 de l'audit du 14 septembre 2026).
+ *
+ * En colonne, la ligne flexible n'est plus désignée par son rang mais par
+ * l'élément lui-même : ajouter un enfant ne décale plus rien. Les enfants
+ * étaient d'ailleurs déjà écrits pour une colonne — `.sidebar-foot` porte
+ * `flex: none` et `.sidebar-scroll` porte `min-height: 0` —, ce qui indique un
+ * conteneur passé en grille sans que ses enfants suivent.
+ */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-subtle);
+  border-right: 1px solid var(--border);
+}
+
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px 10px 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 1;
+  min-width: 0;
+}
+
+.brand img {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--r-sm);
+  flex: none;
+}
+
+.brand-name {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* --- Bascule Chat / Code ------------------------------------------------ */
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 0 12px 12px;
+  padding: 2px;
+  background: var(--bg-inset);
+  border-radius: var(--r-md);
+}
+
+.segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 4px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  min-width: 0;
+}
+
+.segment span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segment:hover:not(.active) {
+  background: transparent;
+  color: var(--text);
+}
+
+/* L'onglet actif se détache par une pastille blanche surélevée : la même
+   surface que le contenu qu'il désigne. */
+.segment.active {
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 500;
+  box-shadow: var(--shadow-raised);
+}
+
+/* --- Navigation --------------------------------------------------------- */
+
+.sidebar-nav {
+  display: grid;
+  gap: 1px;
+  padding: 0 8px 10px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 8px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-size: var(--fs-md);
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: var(--bg-hover);
+}
+
+.nav-item svg {
+  color: var(--text-muted);
+  flex: none;
+}
+
+.nav-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-hint {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  flex: none;
+}
+
+/* --- Filtre ------------------------------------------------------------- */
+
+.sidebar-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 12px 10px;
+  padding: 0 6px 0 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  color: var(--text-faint);
+}
+
+.sidebar-search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.sidebar-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 0;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: 400 var(--fs-md)/1.3 var(--sans);
+}
+
+.sidebar-search input:focus {
+  outline: none;
+}
+
+/* Chrome dessine sa propre croix dans les champs `search`, qui doublerait la
+   nôtre et ne suit pas le thème. */
+.sidebar-search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* --- Projets et sessions ------------------------------------------------ */
+
+.sidebar-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 10px 4px 16px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+/* Tout le reste garde sa taille : en colonne flex, un enfant se comprime par
+   défaut, ce que la grille ne faisait pas — sans cette règle, la recherche et
+   les segments s'écraseraient dans une fenêtre courte. */
+.sidebar > * {
+  flex: none;
+}
+
+/* Le seul enfant extensible de la barre : c'est lui qui absorbe la hauteur
+   restante, et lui seul qui défile. */
+.sidebar-scroll {
+  flex: 1;
+  overflow-y: auto;
+  /* Jamais de défilement horizontal : la largeur de la barre est réglée à la
+     poignée, ce qu'elle contient doit s'y plier. */
+  overflow-x: hidden;
+  min-height: 0;
+  padding: 0 8px 16px;
+}
+
+.sidebar-empty {
+  padding: 8px 8px;
+  margin: 0;
+  color: var(--text-faint);
+  font-size: var(--fs-sm);
+}
+
+.project-list {
+  display: grid;
+  gap: 2px;
+}
+
+.project-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 5px 7px;
+  border: none;
+  background: transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  text-align: left;
+}
+
+.project-head:hover {
+  background: var(--bg-hover);
+}
+
+.project-head svg {
+  flex: none;
+  color: var(--text-faint);
+}
+
+.project-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-count {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.project-sessions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  /* Filet vertical aligné sur le chevron : rattache visuellement les sessions
+     à leur projet sans indentation excessive. */
+  margin: 1px 0 4px 13px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border);
+}
+
+/* La ligne porte désormais deux commandes : ouvrir, et le menu d'actions. Le
+   bouton d'ouverture occupe toute la place restante pour que la cible reste
+   aussi large qu'avant — c'est lui qu'on vise cent fois par jour. */
+.session-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.session-row > .session {
+  flex: 1;
+  min-width: 0;
+  /* Seconde barrière : rien de cette ligne ne doit sortir de la barre, quelle
+     que soit la largeur donnée à la poignée. */
+  overflow: hidden;
+  /* En ligne et non en grille : le titre, l'activité et l'origine se suivent
+     sur la même ligne au lieu de s'empiler. */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Les deux outils n'apparaissent qu'au survol de leur ligne, ou au clavier.
+   Affichés en permanence, ils feraient un rideau d'icônes dans la liste. */
+.session-tools {
+  position: absolute;
+  right: 4px;
+  display: flex;
+  gap: 1px;
+  opacity: 0;
+}
+
+.session-row:hover .session-tools,
+.session-tools:focus-within {
+  opacity: 1;
+}
+
+/* Une épingle posée reste visible sans survol : c'est un état, pas une action
+   offerte. */
+.session-tool.on {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.session-tool {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.session-row:hover .session-tool {
+  background: var(--bg-hover);
+}
+
+.session-tool:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+/* Non lue : un point plein en tête, comme une messagerie. La graisse du titre
+   suit, sinon la marque se perd dans une liste dense. */
+.session.unread .session-title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Une archivée reste lisible mais cesse d'appeler l'œil : elle n'est là que
+   parce qu'on est allé la chercher. */
+.session.archived .session-title {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.session-pin {
+  color: var(--accent);
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+/* Le renommage prend exactement la place du titre, pour que la ligne ne saute
+   pas au passage en édition. */
+.session-rename {
+  flex: 1;
+  min-width: 0;
+  margin: 2px 0;
+  padding: 5px 8px;
+  border: 1px solid var(--accent);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: 400 var(--fs-sm)/1.35 var(--sans);
+}
+
+/* Compteur d'archivées, dans l'en-tête de section. Un bouton et non un
+   libellé : c'est lui qui les fait apparaître. */
+.sidebar-archived {
+  margin-left: auto;
+  padding: 2px 7px;
+  border: none;
+  border-radius: 999px;
+  background: var(--bg-inset);
+  color: var(--text-faint);
+  font: 500 var(--fs-xs)/1.4 var(--sans);
+  /* L'en-tête de section est en capitales ; le compteur est une phrase, pas un
+     intitulé de section. */
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.sidebar-archived:hover {
+  color: var(--text);
+}
+
+.sidebar-archived.on {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.session {
+  display: grid;
+  gap: 1px;
+  text-align: left;
+  background: transparent;
+  border-color: transparent;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+}
+
+.session:hover {
+  background: var(--bg-hover);
+}
+
+/* L'entrée active se signale par un fond, pas par un trait : dans une liste
+   longue, une bordure crée un bruit que le fond évite. */
+.session.active {
+  background: var(--accent-soft);
+}
+
+.session.active .session-title {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Une seule ligne, tronquée par des points de suspension. Deux lignes par
+   entrée faisaient d'une liste de trente conversations soixante lignes à
+   parcourir du regard ; ce qui dépasse se lit dans la carte de survol. */
+/* `min-width: 0` n'est pas décoratif : c'est ce qui autorise la troncature.
+   La taille minimale automatique d'un élément flex vaut sa largeur de contenu,
+   et avec `white-space: nowrap` c'est la phrase entière — le titre poussait
+   donc la ligne au-delà de la barre latérale, par-dessus la conversation, et
+   les deux outils partaient avec lui hors d'atteinte. */
+.session-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.session-meta {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+
+/* --- Liste plate (mode Chat & Cowork) ----------------------------------- */
+
+.session-list {
+  display: grid;
+  /* `minmax(0, 1fr)` et non `1fr` : une piste de grille a elle aussi une
+     taille minimale automatique, qui laisserait passer un titre trop long. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  padding: 0 2px;
+}
+
+.session.flat {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+}
+
+.session-indicator { flex: none; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-faint); }
+.session-indicator svg { width: 14px; height: 14px; }
+.session-indicator-dot { width: 5px; height: 5px; border: 1px solid var(--border-strong); border-radius: 50%; }
+.indicator-working, .indicator-unread { color: var(--accent); }
+.indicator-unread .session-indicator-dot { width: 7px; height: 7px; border-color: var(--accent); background: var(--accent); }
+.indicator-failed { color: var(--danger); }
+.indicator-waiting { color: var(--warning-strong); }
+/* Réponse attendue : pastille pleine avec un halo, la plus visible des marques
+   parce que c'est la seule qui bloque tant qu'on n'agit pas. */
+.indicator-waiting .session-indicator-dot { width: 8px; height: 8px; border: 0; background: var(--warning-strong); box-shadow: 0 0 0 3px color-mix(in srgb, var(--warning-strong) 25%, transparent); }
+.indicator-idle .session-indicator-dot { border-color: var(--border); }
+/* Changer de dossier : l'icône d'édition, discrète au repos. */
+.nav-hint svg { display: block; opacity: 0.55; }
+.nav-item:hover .nav-hint svg, .nav-item:focus-visible .nav-hint svg { opacity: 1; }
+.session-orbit { animation: session-orbit 1.2s linear infinite; }
+@keyframes session-orbit { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .session-orbit { animation: none; } }
+
+.session-body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+
+/* --- Carte de survol et menu contextuel --------------------------------- */
+
+/* En coordonnées de fenêtre : la barre latérale défile et masque ce qui
+   déborde, une carte posée dedans serait coupée par son propre conteneur. */
+.session-card,
+.context-menu {
+  position: fixed;
+  z-index: 60;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-pop);
+}
+
+.session-card {
+  box-sizing: border-box;
+  width: 320px;
+  max-width: calc(100vw - 20px);
+  height: 120px;
+  padding: 9px 12px;
+  /* Purement informative : la laisser capter la souris la ferait clignoter
+     dès qu'elle passe sous le curseur. */
+  pointer-events: none;
+}
+
+.session-card-title {
+  margin: 0 0 6px;
+  font: 500 var(--fs-sm)/1.4 var(--sans);
+  color: var(--text);
+}
+
+.session-card-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 0;
+  font: 400 var(--fs-xs)/1.4 var(--sans);
+  color: var(--text-muted);
+}
+
+.session-card-line svg {
+  flex: none;
+  opacity: 0.7;
+}
+
+.context-menu {
+  min-width: 232px;
+  max-width: 300px;
+  padding: 5px;
+}
+
+.context-menu .menu-item:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.context-menu .menu-item:disabled:hover {
+  background: transparent;
+}
+
+/* Accusé de geste, en bas de fenêtre : archiver et copier ne produisent rien
+   de visible ailleurs. */
+.flash {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 70;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font: 500 var(--fs-sm)/1.3 var(--sans);
+  box-shadow: var(--shadow-pop);
+}
+
+/* --- En-tête de projet --------------------------------------------------- */
+
+.project-head-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.project-head-row > .project-head {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.project-head-row .project-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Les outils remplacent le compteur au survol : les deux ensemble
+   encombreraient une ligne déjà courte. */
+.project-tools {
+  position: absolute;
+  right: 4px;
+  display: flex;
+  gap: 1px;
+  opacity: 0;
+}
+
+.project-head-row:hover .project-tools,
+.project-tools:focus-within {
+  opacity: 1;
+}
+
+.project-head-row:hover .project-count {
+  opacity: 0;
+}
+
+.project-head-row:hover .session-tool {
+  background: var(--bg-hover);
+}
+
+/* La carte d'un projet porte une action, contrairement à celle d'une
+   conversation : elle doit recevoir la souris. */
+.project-card {
+  pointer-events: auto;
+}
+
+.project-card .session-card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Un chemin n'a pas d'espace où se replier : la coupure est forcée, sinon la
+   carte s'élargit jusqu'à sortir de l'écran. */
+.session-card-path {
+  margin: 8px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font: 400 var(--fs-xs)/1.45 var(--mono);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.session-card-action {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font: 400 var(--fs-sm)/1.3 var(--sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.session-card-action:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+/* Stable hover surfaces: reserve two title lines and all metadata rows. */
+.session-card-title { height: 35px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow-wrap: anywhere; }
+.session-card-line { height: 16px; min-width: 0; }
+.session-card-line span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project-card { width: 360px; height: 188px; }
+.project-card .session-card-title { align-items: flex-start; }
+.project-card .session-card-title span { min-width: 0; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.session-card-path { box-sizing: content-box; height: 32px; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+
+.project-card .session-card-title svg { flex: none; margin-top: 2px; }
+
+.project-show-more { display: block; margin: 4px 10px; padding: 5px 8px; border: 0; background: transparent; color: var(--text-muted); font-size: var(--fs-sm); cursor: pointer; }
+.project-show-more:hover { color: var(--accent); }

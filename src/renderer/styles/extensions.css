@@ -1,0 +1,326 @@
+/* ========================================================================
+   Extensions
+   ======================================================================== */
+
+.ext-list {
+  display: grid;
+  gap: 8px;
+}
+
+.ext {
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.ext + .ext {
+  margin-top: 8px;
+}
+
+.ext-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.ext-name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+/* Une extension absente du disque reste lisible mais visiblement inactive :
+   elle annonce ce qu'on pourrait ajouter, pas ce qui tourne. */
+.ext-name.not-installed {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.ext-revision {
+  flex: none;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--bg-inset);
+  color: var(--text-faint);
+  font: 400 var(--fs-xs)/1.6 var(--mono);
+}
+
+.ext-busy {
+  color: var(--accent);
+}
+
+.ext-summary {
+  margin: 5px 0 0;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.ext-meta {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+}
+
+.ext-repo {
+  font-family: var(--mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ext-activity {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.ext-activity.failed {
+  color: var(--danger);
+}
+
+.ext-activity code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-xs);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  font: 0.92em var(--mono);
+}
+
+.ext-found {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--add-bg);
+  color: var(--add-line);
+  font-size: var(--fs-xs);
+}
+
+.ext-missing {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+}
+
+/* Les commandes en colonne : elles peuvent être nombreuses une fois les
+   extensions chargées, et une grille les rendrait impossibles à parcourir au
+   clavier dans un ordre prévisible. */
+.command-picker {
+  flex-direction: column;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.command-picker .mention {
+  width: 100%;
+}
+
+/* Menu : un intitulé, des numéros, et une dernière entrée détachée.
+   Le numéro rappelle un raccourci et donne un repère stable dans la liste ;
+   la séparation isole ce qui n'est pas un choix du même ordre. */
+.menu-title {
+  padding: 8px 12px 6px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.menu-item-index {
+  flex: none;
+  min-width: 13px;
+  text-align: right;
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+}
+
+.menu-item.apart {
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+/* Session outcomes remain visible after a turn ends. */
+.session-activity { display: block; font-size: var(--fs-xs); line-height: 1.5; }
+.session-activity .activity-duration { white-space: nowrap; }
+.session-activity .activity-time { display: block; color: var(--text-muted); }
+.session-activity.phase-waiting .activity-label { color: var(--warning); }
+.session-activity.phase-failed .activity-label { color: var(--danger); }
+.session-activity.phase-done .activity-label { color: var(--success); }
+.status .session-activity { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.status .session-activity .activity-time { margin-left: 8px; }
+
+/* Two cells share the sidebar; each owns its conversation and supporting panels. */
+.cell-workspace { min-width: 0; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.cell-toolbar { display: flex; align-items: center; gap: 16px; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.cell-toolbar button { font-size: var(--fs-sm); padding: 4px 8px; }
+.cell-help { color: var(--text-muted); font-size: var(--fs-sm); }
+.session-cells { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 0; overflow: auto; }
+.session-cells.double { grid-template-columns: repeat(2, minmax(360px, 1fr)); }
+.session-cell { display: flex; flex-direction: column; min-width: 0; min-height: 0; outline: none; }
+.session-cell + .session-cell { border-left: 1px solid var(--border-strong); }
+/* Affichage partagé : la conversation qui reçoit la frappe porte un filet
+   d'accent en tête, l'autre reste neutre. Une colonne seule ne porte rien —
+   un cadre permanent se lisait comme un état d'erreur ou un focus figé. */
+.session-cells.double .session-cell { position: relative; }
+.session-cells.double .session-cell.focused::before { content: ''; position: absolute; inset: 0 0 auto; height: 2px; background: var(--accent); z-index: 3; pointer-events: none; }
+.cell-body { flex: 1; display: grid; min-width: 0; min-height: 0; }
+.cell-body.split { grid-template-columns: minmax(0, 1fr); }
+.cell-body.split.has-panels { grid-template-rows: minmax(260px, 1fr) minmax(140px, .7fr); overflow-y: auto; }
+.cell-body.split > .panel-host { border-top: 1px solid var(--border-strong); min-width: 0; }
+.cell-body.split .topbar { flex-wrap: wrap; gap: 4px; padding: 8px 12px; }
+.cell-body.split .topbar-title { min-width: 60px; }
+.cell-body.split .composer { width: calc(100% - 24px); margin-inline: 12px; }
+.cell-body.split .composer-tools { flex-wrap: wrap; }
+.cell-body.split .composer-action { flex-shrink: 0; margin-left: auto; }
+.cell-body.split .menu { max-width: 100%; }
+@media (max-width: 900px) {
+  .cell-help { display: none; }
+  .cell-body:not(.split).has-panels { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: minmax(260px, 1fr) minmax(140px, .7fr); overflow: auto; }
+  .cell-body:not(.split).has-panels > .splitter { display: none; }
+}
+/* Native dialog supplies keyboard focus containment and restores focus on close. */
+.session-dialog { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 24px; width: min(620px, calc(100vw - 48px)); max-height: 85vh; overflow: auto; color: var(--text); background: var(--bg); }
+.session-dialog h2 { margin: 0 0 20px; font-size: var(--fs-xl); }
+.session-dialog fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.session-dialog label { display: grid; gap: 6px; margin: 14px 0; }
+.session-dialog input:not([type=radio]):not([type=checkbox]), .session-dialog select { width: 100%; padding: 8px; border: 1px solid var(--border-strong); border-radius: var(--r-sm); font: inherit; }
+.session-dialog .session-choice { display: flex; align-items: center; gap: 8px; }
+.session-dialog .hint { font-size: var(--fs-sm); line-height: 1.5; overflow-wrap: anywhere; }
+.session-dialog button { padding: 7px 12px; border-radius: var(--r-sm); border: 1px solid var(--border-strong); }
+.session-dialog .dialog-actions { flex-wrap: wrap; }
+.saved-worktrees { margin-top: 24px; }
+.saved-worktrees summary { cursor: pointer; }
+.saved-worktree { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.saved-worktree code { display: block; overflow-wrap: anywhere; font-size: var(--fs-sm); margin: 6px 0; }
+.session-error { color: var(--danger); overflow-wrap: anywhere; }
+.session-worktree { padding: 6px 18px; font-size: var(--fs-sm); background: var(--bg-inset); overflow-wrap: anywhere; }
+.session-worktree span { display: block; color: var(--text-muted); font-size: var(--fs-xs); }
+.mcp-server { padding: 16px 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
+.mcp-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+.mcp-choice { display: flex; align-items: center; gap: 7px; font-size: var(--fs-sm); }
+.mcp-settings .mcp-actions button { padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: var(--r-sm); }
+.mcp-settings details { margin-top: 8px; font-size: var(--fs-sm); }
+.mcp-editor { display: grid; gap: 12px; margin-top: 18px; }
+.mcp-editor label { display: grid; gap: 6px; }
+.mcp-editor input, .mcp-editor textarea { width: 100%; border: 1px solid var(--border-strong); border-radius: var(--r-sm); padding: 8px; }
+.mcp-editor textarea { font: var(--fs-sm) ui-monospace, monospace; resize: vertical; }
+
+/* ========================================================================
+   Points de restauration
+   ======================================================================== */
+.restore-points { list-style: none; margin: 0; padding: 0; }
+.restore-point { border-bottom: 1px solid var(--border); }
+.restore-point.active { background: var(--bg-inset); }
+.restore-choose { display: flex; align-items: baseline; gap: 12px; width: 100%; padding: 10px 8px; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.restore-choose:disabled { cursor: default; opacity: .6; }
+.restore-choose:hover:not(:disabled) { background: var(--bg-inset); }
+/* L'invite peut faire plusieurs lignes ; une seule suffit à reconnaître le
+   tour, et la date doit rester lisible à droite. */
+.restore-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.restore-date { flex: none; font-size: var(--fs-sm); color: var(--text-muted); }
+.restore-preview { padding: 4px 8px 14px; }
+.restore-files { list-style: none; margin: 8px 0; padding: 0; max-height: 180px; overflow: auto; }
+.restore-files code { font-size: var(--fs-sm); overflow-wrap: anywhere; }
+.restore-warning { margin: 10px 0; padding: 8px 10px; border-radius: var(--r-sm); font-size: var(--fs-sm); line-height: 1.5; color: var(--warning); background: var(--warning-soft); border: 1px solid color-mix(in srgb, var(--warning) 25%, transparent); }
+.restore-done { display: flex; align-items: baseline; gap: 8px; font-size: var(--fs-md); line-height: 1.5; }
+
+/* La provenance est distincte de l’activité (en cours, terminé, non consulté). */
+.routine-origin {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+.session-meta .routine-origin { margin-right: 5px; }
+.topbar > .routine-origin { flex-shrink: 1; min-width: 0; }
+
+/* T20: source configuration and diagnostics stay inside the settings column. */
+.extension-sources { border: 1px solid var(--border); border-radius: var(--r-md); padding: 12px; margin-bottom: 16px; }
+.extension-sources > summary { cursor: pointer; font-weight: 500; }
+.extension-source-form { display: grid; gap: 10px; margin: 14px 0; }
+.extension-source-form label { display: grid; gap: 5px; }
+.extension-source-form input { width: 100%; min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: var(--r-sm); }
+.extension-source-form button { justify-self: start; }
+.extension-source, .extension-details, .ext-activity { overflow-wrap: anywhere; }
+.extension-details { margin-top: 10px; font-size: var(--fs-sm); }
+.extension-details summary { cursor: pointer; }
+.ext-diagnostic { max-height: 220px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; padding: 10px; background: var(--bg-inset); border-radius: var(--r-sm); font: var(--fs-xs)/1.6 var(--mono); }
+.ext-head { flex-wrap: wrap; }
+.ext-head .toggle { min-width: 0; }
+.ext-head .ext-name { overflow-wrap: anywhere; }
+.ext-activity { white-space: pre-wrap; }
+
+/* A catalogue is a workspace destination, independent of the settings dialog. */
+.plugin-catalog { min-width: 0; overflow: auto; padding: clamp(20px, 4vw, 56px); background: var(--bg); }
+.catalog-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; max-width: 1100px; margin: 0 auto 24px; }
+.catalog-header h1 { font-size: var(--fs-2xl); margin: 0 0 10px; letter-spacing: -.025em; }
+.catalog-header h1:focus { outline: none; }
+.catalog-header p { color: var(--text-muted); margin: 0; }
+.catalog-header button { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.plugin-catalog .settings-body { max-width: 1100px; margin: auto; padding: 0; gap: 12px; }
+.plugin-catalog .settings-body > button { justify-self: start; }
+.catalog-filters { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin: 20px 0 12px; }
+.catalog-filters .segmented { margin: 0; width: auto; grid-template-columns: repeat(3, auto); }
+.catalog-filters button { padding: 8px 18px; }
+.catalog-filters select { padding: 7px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--bg); color: inherit; }
+.plugin-catalog .ext-list, .settings-page .ext-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); gap: 16px; margin: 24px 0; align-items: start; }
+.plugin-catalog .ext, .settings-page .catalog-card { min-width: 0; padding: 20px; border: 1px solid var(--border); border-radius: var(--r-lg); }
+.plugin-catalog .ext + .ext { margin-top: 0; }
+.catalog-icon { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--r-md); background: var(--accent-soft); color: var(--accent); flex-shrink: 0; }
+.catalog-skills { list-style: none; padding: 0; display: grid; gap: 10px; }
+.catalog-skills li { display: flex; align-items: center; gap: 8px; overflow-wrap: anywhere; font-size: var(--fs-md); }
+.plugin-catalog .extension-sources { margin-top: 32px; }
+@media (max-width: 750px) { .catalog-header { flex-direction: column; } }
+
+.plugin-catalog .ext-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.settings-page .ext-list { max-width: 860px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.plugin-catalog .catalog-card, .settings-page .catalog-card { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 16px; text-align: left; background: transparent; color: inherit; width: 100%; }
+.catalog-card:hover { background: var(--bg-hover); }
+.catalog-card-copy { display: grid; gap: 7px; min-width: 0; }
+.catalog-card-copy strong { font-weight: 600; overflow-wrap: normal; }
+.catalog-card-copy .ext-summary { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0; }
+.catalog-card-status { font-size: var(--fs-sm); color: var(--text-muted); }
+.plugin-panel { width: min(780px, calc(100vw - 32px)); height: min(760px, calc(100dvh - 48px)); max-width: none; max-height: none; padding: 0; border: 1px solid var(--border); border-radius: var(--r-lg); background: var(--bg); color: var(--text); overflow: hidden; }
+.plugin-panel[open] { display: flex; flex-direction: column; }
+.plugin-panel::backdrop { background: var(--scrim); }
+.plugin-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--border); gap: 16px; }
+.plugin-panel-header h2 { font-size: var(--fs-xl); margin: 0; overflow-wrap: anywhere; }
+.plugin-panel-body { padding: 24px; overflow: auto; min-height: 0; }
+.plugin-panel .app-dialog-body > .ext { border: none; padding: 0; }
+.plugin-panel .ext-head .ext-name { flex: 1 1 160px; }
+.plugin-panel .ext-head .ext-name { overflow-wrap: normal; }
+.plugin-skills { margin: 28px 0; }
+.plugin-skills h3 { font-size: var(--fs-lg); font-weight: 500; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+.plugin-skills h3 span { color: var(--text-muted); margin-left: 6px; }
+.plugin-skills .catalog-skills { gap: 0; }
+.plugin-skills li { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.plugin-skills li svg { flex: none; color: var(--accent); }
+@media (max-width: 850px) { .plugin-catalog .ext-list { grid-template-columns: minmax(0, 1fr); } }
+
+/* --- Lot E : catalogue et fiche ----------------------------------------- */
+
+/* La carte entière ouvre la fiche (bouton étiré), sauf « Installer », posé
+   au-dessus : une extension disponible s'installe sans détour. */
+.catalog-card-open { position: absolute; inset: 0; padding: 0; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
+.catalog-card-open:focus-visible { box-shadow: 0 0 0 3px var(--accent-ring); }
+.catalog-card > :not(.catalog-card-open) { position: relative; pointer-events: none; }
+.catalog-card > .catalog-card-install { pointer-events: auto; z-index: 1; }
+.catalog-filter-end { display: flex; align-items: center; gap: 8px; }
+.catalog-note { margin: 0 0 12px; font-size: var(--fs-sm); }
+.catalog-note > summary { cursor: pointer; color: var(--text-muted); }
+.catalog-note > p { margin: 8px 0 0; }
+.ext-enable { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; font-size: var(--fs-sm); color: var(--text-muted); cursor: pointer; }
+.ext-head .ext-enable + * { margin-left: 0; }

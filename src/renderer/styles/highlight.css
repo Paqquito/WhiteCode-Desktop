@@ -1,0 +1,390 @@
+/* ========================================================================
+   Coloration syntaxique
+   ========================================================================
+
+   Palette reprise du thème clair de GitHub. Ce n'est pas une préférence
+   esthétique : ces teintes sont éprouvées sur fond blanc, très saturées, et
+   suffisamment éloignées les unes des autres pour se distinguer à distance de
+   lecture. Les palettes plus douces donnent l'impression d'un texte tout noir
+   dès qu'on s'écarte de l'écran.
+
+   Le texte non classé reste sombre — c'est le corps du code, il ne doit pas
+   entrer en concurrence avec ce qui porte du sens. */
+
+.hljs {
+  color: var(--syntax-text);
+}
+
+/* Mots-clés, opérateurs de langage : le rouge, le plus visible du jeu. */
+.hljs-keyword,
+.hljs-operator,
+.hljs-selector-tag,
+.hljs-doctag,
+.hljs-meta-keyword,
+.hljs-template-tag {
+  color: var(--syntax-keyword);
+}
+
+/* Chaînes : bleu profond. Elles occupent souvent de longues plages, une teinte
+   trop claire y fatiguerait. */
+.hljs-string,
+.hljs-regexp,
+.hljs-char,
+.hljs-meta .hljs-string,
+.hljs-addition {
+  color: var(--syntax-string);
+}
+
+/* Fonctions, classes, titres : le violet, réservé à ce qui est appelé ou
+   défini. */
+.hljs-title,
+.hljs-title.function_,
+.hljs-title.class_,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: var(--syntax-title);
+  font-weight: 500;
+}
+
+/* Nombres, constantes, littéraux, propriétés : le bleu franc. En JSON et en
+   YAML c'est la couleur des clés, donc la plus fréquente à l'écran. */
+.hljs-number,
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attr,
+.hljs-property,
+.hljs-attribute,
+.hljs-variable.constant_,
+.hljs-link {
+  color: var(--syntax-number);
+}
+
+/* Types, variables, paramètres, fonctions natives : l'orange sombre. */
+.hljs-type,
+.hljs-built_in,
+.hljs-variable,
+.hljs-params,
+.hljs-template-variable,
+.hljs-namespace,
+.hljs-class .hljs-title {
+  color: var(--syntax-type);
+}
+
+/* Balises de langages à balises. */
+.hljs-tag {
+  color: var(--syntax-tag);
+}
+
+/* Commentaires : nettement en retrait, jamais illisibles. */
+.hljs-comment,
+.hljs-quote,
+.hljs-meta {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.hljs-deletion {
+  color: var(--syntax-delete);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 600;
+}
+
+/* --- Markdown des réponses ---------------------------------------------- */
+
+/* Les marges verticales sont portées par les blocs eux-mêmes et fusionnent
+   entre voisins : un titre suivi d'un paragraphe ne doit pas cumuler deux
+   écarts. Le premier et le dernier sont annulés pour que le bloc s'aligne sur
+   les autres entrées du fil. */
+.md {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.md > * {
+  margin: 0.85em 0;
+}
+
+.md > *:first-child {
+  margin-top: 0;
+}
+
+.md > *:last-child {
+  margin-bottom: 0;
+}
+
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  margin: 1.5em 0 0.5em;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.md h1 {
+  font-size: 1.32em;
+}
+
+.md h2 {
+  font-size: 1.16em;
+}
+
+.md h3 {
+  font-size: 1.04em;
+}
+
+.md h4 {
+  font-size: 1em;
+  color: var(--text-muted);
+}
+
+.md ul,
+.md ol {
+  padding-left: 1.4em;
+}
+
+.md li {
+  margin: 0.25em 0;
+}
+
+.md li::marker {
+  color: var(--text-faint);
+}
+
+.md blockquote {
+  padding-left: 14px;
+  border-left: 2px solid var(--border-strong);
+  color: var(--text-muted);
+}
+
+.md hr {
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.md a,
+.md-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--accent-ring);
+}
+
+/* Les identifiants longs restent lisibles dans la colonne, même avec un
+   panneau ouvert. Les blocs de code conservent leur défilement propre. */
+.md code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-xs);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  font: 0.88em/1.4 var(--mono);
+  white-space: normal;
+}
+
+.md-code {
+  position: relative;
+  margin: 1em 0;
+  padding: 12px 14px;
+  overflow-x: auto;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.md-code code {
+  padding: 0;
+  border: none;
+  background: none;
+  white-space: pre;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+/* Le langage annoncé par la clôture, discret en haut à droite : utile pour
+   vérifier ce que le modèle a produit, jamais au point de gêner la lecture. */
+.md-lang {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  color: var(--text-faint);
+  font: 500 var(--fs-xs)/1 var(--sans);
+}
+
+.md-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.md table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-md);
+}
+
+.md th,
+.md td {
+  padding: 7px 11px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.md tr:last-child td {
+  border-bottom: none;
+}
+
+.md th {
+  background: var(--bg-inset);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.four-square-loader {
+  display: inline-grid;
+  grid-template-columns: repeat(2, 7px);
+  grid-template-rows: repeat(2, 7px);
+  gap: 3px;
+  margin: 4px 2px;
+  vertical-align: middle;
+  color: var(--accent);
+}
+.four-square-loader > span {
+  border-radius: var(--r-xs);
+  background: currentColor;
+  animation: four-square-pulse 1.2s ease-in-out infinite;
+}
+.four-square-loader > span:nth-child(2) { animation-delay: .15s; }
+.four-square-loader > span:nth-child(4) { animation-delay: .3s; }
+.four-square-loader > span:nth-child(3) { animation-delay: .45s; }
+@keyframes four-square-pulse {
+  0%, 100% { opacity: .35; transform: scale(.75); }
+  50% { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .four-square-loader > span { animation: none; }
+}
+
+/* --- Blocs repliables ---------------------------------------------------- */
+
+.entry.thinking,
+.tool-call {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 9px 13px;
+}
+
+.entry.thinking > summary,
+.tool-call > summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: var(--fs-md);
+  list-style: none;
+}
+
+.entry.thinking > summary::-webkit-details-marker,
+.tool-call > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Le chevron pivote à l'ouverture : l'état se lit sans second libellé. */
+.disclosure {
+  flex: none;
+  color: var(--text-faint);
+  transition: transform 0.15s ease;
+}
+
+details[open] > summary .disclosure {
+  transform: rotate(90deg);
+}
+
+.entry.thinking pre {
+  margin-top: 9px;
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+}
+
+.tool-name {
+  color: var(--text);
+  font-weight: 600;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+}
+
+.tool-state {
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+}
+
+.tool-state.denied,
+.tool-state.failed {
+  color: var(--danger);
+}
+
+/* Ni réussite ni échec : une incertitude ne se signale pas en rouge, elle se
+   signale en la nommant. */
+.tool-state.unknown {
+  font-style: italic;
+}
+
+/* Dernier mot d'un sous-agent, sous l'appel qui l'a lancé. Discret : c'est un
+   indice d'avancement, pas une réponse. */
+.tool-child-last {
+  margin: 4px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+.tool-call.failed {
+  border-color: color-mix(in srgb, var(--danger) 30%, var(--border));
+  background: var(--danger-soft);
+}
+
+.tool-input,
+.tool-result {
+  margin-top: 9px;
+  padding: 9px 11px;
+  background: var(--bg-inset);
+  border-radius: var(--r-md);
+  /* Une sortie d'outil peut faire des milliers de lignes : la plafonner
+     l'empêche de repousser le reste du fil hors de l'écran. */
+  max-height: 300px;
+  overflow: auto;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.tool-result {
+  color: var(--text-muted);
+}
+
+.entry.notice {
+  padding: 9px 13px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  white-space: pre-wrap;
+}
+
+.entry.notice.error {
+  border-color: color-mix(in srgb, var(--danger) 30%, var(--border));
+  background: var(--danger-soft);
+  color: var(--danger);
+}

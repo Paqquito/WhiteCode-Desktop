@@ -1,0 +1,47 @@
+/* L03 : une seule entrée principale, le composeur et son contexte. */
+.cell-workspace { grid-template-rows: minmax(0, 1fr); }
+.conversation { display: flex; flex-direction: column; min-height: 0; }
+.conversation > .thread { flex: 1; min-height: 0; }
+.conversation.is-empty { justify-content: center; overflow-y: auto; padding: 24px 0 8vh; }
+.conversation-welcome { text-align: center; margin: 0 24px 24px; }
+.conversation-welcome h1 { font-size: clamp(23px, 2.5vw, 32px); font-weight: 550; letter-spacing: -.7px; margin: 0 0 12px; }
+.conversation-welcome p { color: var(--text-muted); line-height: 1.5; }
+.conversation.is-empty .composer textarea { min-height: 88px; }
+.composer { flex: none; }
+.composer-tools { flex-wrap: wrap; gap: 4px; }
+.composer-tools .menu { min-width: 0; max-width: 100%; }
+.composer-tools .menu-trigger { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.composer-tools .menu-trigger > span:first-child { overflow: hidden; text-overflow: ellipsis; }
+.conversation-context { margin-bottom: 10px; color: var(--text-muted); font-size: var(--fs-sm); }
+.conversation-context > summary { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; cursor: pointer; border-radius: var(--r-sm); padding: 6px 8px; }
+.conversation-context > summary:hover { background: var(--bg-hover); }
+.context-project { font-weight: 600; color: var(--text); max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.context-count { margin-left: auto; }
+.context-count::after { content: ' ⌄'; }
+.context-content { max-height: 240px; overflow: auto; padding: 8px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-md); }
+.context-content h3 { font-size: var(--fs-sm); color: var(--text); margin: 12px 0 6px; }
+.context-content p { margin: 6px 0 12px; line-height: 1.5; }
+.context-path, .context-file { overflow-wrap: anywhere; }
+.context-row { display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.context-row button { flex: none; }
+.context-file { display: block; width: 100%; text-align: left; margin: 4px 0; }
+.draft-recovery { margin: 8px 0; font-size: var(--fs-sm); color: var(--text-muted); max-height: 180px; overflow: auto; }
+.draft-recovery summary { cursor: pointer; }
+.draft-recovery button { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; margin: 4px 0; }
+.composer-preparing { font-size: var(--fs-sm); color: var(--text-muted); }
+.session-dialog .session-intro { color: var(--text-muted); line-height: 1.6; margin: 0 0 20px; }
+.session-advanced { margin: 18px 0; padding: 12px 0; border-top: 1px solid var(--border); }
+.session-advanced summary { cursor: pointer; color: var(--text-muted); font-size: var(--fs-md); }
+.session-advanced > label { display: flex; align-items: center; gap: 10px; margin: 16px 0; }
+.session-advanced input[type=checkbox] { width: auto; }
+.context-menu { max-height: calc(100vh - 16px); overflow-y: auto; }
+@media (max-width: 1000px) { .composer-tools .menu-trigger { max-width: 220px; } }
+
+.context-instructions { white-space: pre-wrap; overflow-wrap: anywhere; }
+.project-dialog textarea { width: 100%; resize: vertical; }
+
+.attachment-preview { width: min(760px, 90vw); }
+.attachment-preview pre { max-height: 55vh; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.session-cells.double { grid-template-columns: repeat(2, minmax(320px, 1fr)); }
+.topbar-chip { max-width: 25%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

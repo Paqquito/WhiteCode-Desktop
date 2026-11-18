@@ -1,0 +1,328 @@
+/* ========================================================================
+   Plan et tâches
+   ======================================================================== */
+
+.panel-badge {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--bg-inset);
+  color: var(--text-muted);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.plan {
+  padding: 0 0 12px;
+}
+
+.plan-progress {
+  height: 2px;
+  background: var(--bg-hover);
+}
+
+.plan-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.todos {
+  list-style: none;
+  margin: 0;
+  padding: 8px 14px;
+  display: grid;
+  gap: 2px;
+}
+
+.todo {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
+  align-items: start;
+  padding: 4px 0;
+  font-size: var(--fs-md);
+  line-height: 1.45;
+}
+
+.todo-mark {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xs);
+  color: var(--on-accent);
+}
+
+.todo.completed .todo-mark {
+  background: var(--add-rail);
+  border-color: var(--add-rail);
+}
+
+.todo.completed .todo-label {
+  color: var(--text-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
+}
+
+.todo.in_progress .todo-mark {
+  border-color: var(--accent);
+}
+
+.todo.in_progress .todo-label {
+  font-weight: 500;
+}
+
+/* Anneau tournant : la tâche en cours est la seule information du panneau qui
+   change sans qu'on touche à rien, elle doit se voir bouger. */
+.todo-spinner {
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid var(--accent);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.plan-text {
+  padding: 4px 14px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+.plan-text h3 {
+  margin: 12px 0 6px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+.plan-text .md {
+  font-size: var(--fs-md);
+}
+
+/* ========================================================================
+   Revue : annotations de diff
+   ======================================================================== */
+
+.diff-annotate {
+  position: absolute;
+  left: 2px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  border-radius: var(--r-xs);
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.diff-body.annotatable .diff-line {
+  position: relative;
+}
+
+/* Révélée au survol seulement : une bulle sur chaque ligne en permanence
+   transformerait le diff en formulaire. */
+.diff-body.annotatable .diff-line:hover .diff-annotate {
+  opacity: 1;
+}
+
+.diff-annotate:focus-visible {
+  opacity: 1;
+}
+
+.diff-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 3px 8px 3px 34px;
+  padding: 7px 9px;
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  background: var(--accent-soft);
+  color: var(--text);
+  font: 400 var(--fs-sm)/1.45 var(--sans);
+}
+
+.diff-comment-text {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+}
+
+.diff-draft {
+  margin: 4px 8px 6px 34px;
+  padding: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+}
+
+.diff-draft textarea {
+  width: 100%;
+  resize: vertical;
+  border: none;
+  padding: 0 0 6px;
+  background: transparent;
+  color: var(--text);
+  font: 400 var(--fs-sm)/1.45 var(--sans);
+}
+
+.diff-draft textarea:focus {
+  outline: none;
+}
+
+.diff-draft-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.change-noted {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: var(--fs-xs);
+}
+
+/* --- Barre de revue ------------------------------------------------------ */
+
+.review-bar {
+  width: min(740px, calc(100% - 56px));
+  margin: 0 auto 8px;
+  border: 1px solid var(--accent);
+  border-radius: var(--r-md);
+  background: var(--accent-soft);
+}
+
+.cell-body.split .review-bar {
+  width: calc(100% - 24px);
+  margin-inline: 12px;
+}
+
+.review-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px 7px 10px;
+}
+
+.review-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font: 500 var(--fs-sm)/1 var(--sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.review-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 8px 8px;
+  display: grid;
+  gap: 3px;
+}
+
+.review-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 9px;
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.review-where {
+  flex: none;
+  color: var(--accent);
+  font: 500 var(--fs-xs)/1.6 var(--mono);
+}
+
+.review-text {
+  flex: 1;
+  min-width: 0;
+  white-space: pre-wrap;
+}
+
+/* ========================================================================
+   Édition de fichier
+   ======================================================================== */
+
+.file-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  flex: none;
+}
+
+.file-name {
+  font: 500 var(--fs-sm)/1 var(--mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-dirty {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--warning-soft);
+  color: var(--warning);
+  font-size: var(--fs-xs);
+}
+
+.file-error {
+  padding: 7px 12px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: var(--fs-sm);
+  flex: none;
+}
+
+/* Vignette d'une image jointe : montrer plutôt que nommer. */
+.chip-open {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.chip-thumb {
+  width: 22px;
+  height: 22px;
+  object-fit: cover;
+  border-radius: var(--r-xs);
+  border: 1px solid var(--border);
+}

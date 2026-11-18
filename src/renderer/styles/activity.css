@@ -1,0 +1,41 @@
+/* L04 : le texte reste la lecture principale ; les outils se déplient. */
+.thread-shell { position: relative; flex: 1; display: flex; min-height: 0; min-width: 0; }
+.thread-shell > .thread { flex: 1; min-width: 0; scroll-behavior: auto; overflow-anchor: none; }
+.thread-turn { display: flex; flex-direction: column; gap: 18px; padding-bottom: 26px; min-width: 0; }
+.thread-turn .entry.user { max-width: min(580px, 90%); margin: 0 0 8px auto; }
+.activity-group { border: 1px solid var(--border); border-radius: var(--r-md); padding: 10px 12px; color: var(--text-muted); font-size: var(--fs-sm); }
+.activity-group > summary { cursor: pointer; line-height: 1.6; }
+.activity-heading { font-weight: 550; color: var(--text); }
+.activity-counts { display: inline-flex; flex-wrap: wrap; gap: 2px 5px; margin-left: 5px; }
+.activity-count.failed, .tool-state.failed { color: var(--danger); }
+.activity-count.working { color: var(--accent); }
+.activity-count.unknown, .activity-count.interrupted, .activity-count.denied { color: var(--text-muted); }
+.activity-entries { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin-top: 12px; }
+.activity-group, .tool-call { min-width: 0; }
+.activity-current, .tool-child-last, .tool-proposal { overflow-wrap: anywhere; line-height: 1.5; }
+.activity-agents { margin-top: 10px; }
+.tool-call summary { flex-wrap: wrap; }
+.tool-description { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 140px; color: var(--text-muted); font-size: var(--fs-sm); }
+.tool-input, .tool-result { max-height: 340px; max-width: 100%; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tool-name { min-width: 0; overflow-wrap: anywhere; }
+.tool-proposal { padding: 0 12px; color: var(--text-muted); font-size: var(--fs-sm); }
+.turn-summary { border-top: 1px solid var(--border); padding-top: 12px; color: var(--text-muted); font-size: var(--fs-sm); }
+.turn-state { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.turn-summary.working .turn-state > span { color: var(--accent); }
+.turn-summary.failed .turn-state > span { color: var(--danger); }
+.turn-tool-warning { margin: 8px 0; line-height: 1.5; }
+.turn-deliverables { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; max-width: 100%; }
+/* Pastille de fichier : icône et nom, sur une ligne ; le chemin complet en infobulle. */
+.file-chip { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 3px 10px 3px 8px; border-radius: 999px; background: var(--bg-subtle); font-size: var(--fs-sm); color: var(--text); }
+.file-chip svg { flex: none; color: var(--text-muted); }
+.file-chip span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-chip:hover:not(:disabled) { border-color: var(--accent); }
+/* L'action de revue clôt la rangée, en lien : elle ne doit pas peser autant que les fichiers. */
+.turn-review { margin-left: 4px; padding: 3px 4px; border: 0; background: transparent; color: var(--accent); font-size: var(--fs-sm); }
+.turn-review:hover:not(:disabled) { background: transparent; text-decoration: underline; }
+.response-label { display: block; margin-bottom: 10px; font-size: var(--fs-sm); color: var(--text-muted); font-weight: 550; }
+.entry.assistant > .entry-actions { position: static; margin-top: 8px; opacity: 1; }
+.thread-latest { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); border-radius: 999px; box-shadow: var(--shadow-pop); white-space: nowrap; z-index: 2; background: var(--bg); }
+.cell-body.split .thread-turn { width: calc(100% - 24px); }
+
+.activity-preview { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 4px; font-weight: 400; }

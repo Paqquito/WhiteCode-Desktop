@@ -1,0 +1,15 @@
+# Dépendances et build, reconstruits par npm ci et build.ts.
+node_modules/
+dist/
+release/
+output/
+
+# Fixtures temporaires des tests Electron.
+.test-*/
+
+# Journal de diagnostic local : il peut contenir des traces de sessions.
+protocol.log
+
+# Captures et artefacts des tests.
+tmp/
+build/

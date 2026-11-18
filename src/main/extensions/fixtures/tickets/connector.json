@@ -1,0 +1,52 @@
+{
+  "id": "tickets",
+  "name": "Tickets",
+  "label": "Tickets — suivi de l’équipe",
+  "url": "https://tickets.example.test/mcp",
+  "auth": {
+    "secrets": [
+      {
+        "name": "apiKey",
+        "label": "Clé API",
+        "header": "X-Tickets-API-Key",
+        "pattern": "^[0-9A-Za-z]{20,64}$",
+        "required": true,
+        "help": "Clé d’accès personnelle du service de tickets. Chaque écriture demande votre accord. La clé est chiffrée avec le coffre système et n’est jamais envoyée au modèle."
+      }
+    ]
+  },
+  "writeTools": [
+    "update_issues",
+    "add_note",
+    "create_issue"
+  ],
+  "tools": {
+    "endpoint": "https://tickets.example.test/api/tools/{tool}",
+    "names": [
+      "list_issues",
+      "get_issue",
+      "add_note",
+      "update_issues",
+      "prepare_validation",
+      "create_issue"
+    ]
+  },
+  "prepare": {
+    "update_issues": {
+      "tool": "prepare_validation",
+      "merge": {
+        "proposal": "changes.custom_fields"
+      },
+      "warnings": "warnings"
+    }
+  },
+  "account": {
+    "endpoint": "https://tickets.example.test/api/me",
+    "name": "account.name",
+    "login": "account.login",
+    "site": "url"
+  },
+  "links": {
+    "issue": "{site}/issues/{id}"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "fixture-tickets",
+  "version": "1.0.0",
+  "description": "Plugin de test : tickets, panneau déclaratif et écritures confirmées.",
+  "components": {
+    "skills": "skills"
+  }
+}

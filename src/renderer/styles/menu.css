@@ -1,0 +1,205 @@
+/* ========================================================================
+   Menus déroulants
+   ======================================================================== */
+
+.menu {
+  position: relative;
+  flex: none;
+}
+
+.menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 7px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font: 500 var(--fs-sm)/1 var(--sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-trigger:hover,
+.menu-trigger.open {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.menu-caret {
+  opacity: 0.55;
+}
+
+/* Le sens est porté par une classe, calculée à l'ouverture d'après la place
+   disponible — voir `Menu.tsx`. La hauteur l'est aussi, par un style en ligne
+   qui prend le pas sur le repli ci-dessous ; `Menu` mesure, les menus qui ne
+   mesurent pas gardent ce plafond. */
+.menu-list {
+  position: absolute;
+  z-index: 40;
+  max-height: 320px;
+  overflow-y: auto;
+  min-width: 220px;
+  max-width: 340px;
+  padding: 5px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-pop);
+}
+
+.menu-list.up {
+  bottom: calc(100% + 6px);
+}
+
+.menu-list.down {
+  top: calc(100% + 6px);
+}
+
+.menu-list.left {
+  left: 0;
+}
+
+.menu-list.right {
+  right: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 9px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.menu-item.active {
+  color: var(--accent);
+}
+
+.menu-item-body {
+  display: grid;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.menu-item-label {
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+.menu-item-hint {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  line-height: 1.35;
+}
+
+/* ========================================================================
+   Jauge de contexte
+   ======================================================================== */
+
+.context {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px 0 6px;
+  color: var(--text-faint);
+  font: 500 var(--fs-xs)/1 var(--sans);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.context-bar {
+  width: 34px;
+  height: 4px;
+  border-radius: var(--r-xs);
+  background: var(--bg-hover);
+  overflow: hidden;
+}
+
+.context-fill {
+  display: block;
+  height: 100%;
+  background: var(--border-strong);
+  transition: width 0.25s ease;
+}
+
+/* La couleur n'apparaît qu'au moment où le chiffre demande une décision :
+   une barre teintée en permanence n'alerte plus de rien. */
+.context.warn {
+  color: var(--warning);
+}
+
+.context.warn .context-fill {
+  background: var(--warning-strong);
+}
+
+.context.critical {
+  color: var(--danger);
+}
+
+.context.critical .context-fill {
+  background: var(--danger);
+}
+
+/* ========================================================================
+   Aperçu d'image
+   ======================================================================== */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: 40px;
+  background: rgba(28, 28, 26, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: calc(100vh - 130px);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  box-shadow: var(--shadow-modal);
+}
+
+.lightbox-name {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--fs-sm);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: white;
+  cursor: pointer;
+}
+
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.24);
+}

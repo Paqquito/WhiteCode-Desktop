@@ -1,0 +1,142 @@
+/* ========================================================================
+   Gabarit des écrans de réglages (lot C de l'audit UX)
+
+   Page, groupes, lignes et interrupteurs, communs à tous les écrans des
+   Paramètres. Les composants vivent dans `ui/SettingRows.tsx`.
+   ======================================================================== */
+
+.settings-panel { container-type: inline-size; }
+.settings-page > fieldset { display: grid; gap: 28px; padding: 0; margin: 0; border: 0; min-width: 0; }
+.settings-page-head h3 { margin: 0; font-size: var(--fs-xl); font-weight: 600; letter-spacing: -0.01em; }
+.settings-page-head p { margin: 4px 0 0; color: var(--text-muted); font-size: var(--fs-md); }
+
+/* --- Lignes de réglage ---------------------------------------------------
+   Une ligne : ce qu'on règle (et son effet) à gauche, le contrôle à droite.
+   Le label est en « display: contents » : il garde son rôle (nom accessible,
+   clic sur le titre) sans imposer de boîte, si bien que titre, explication et
+   contrôle se rangent directement dans la grille de la ligne. */
+.setting-group { max-width: 860px; min-width: 0; }
+.setting-group h4 { margin: 0 0 8px 2px; font-size: var(--fs-sm); font-weight: 600; color: var(--text-muted); }
+.setting-list { border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg); min-width: 0; }
+.setting-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, max-content); grid-template-areas: "title control" "hint control"; column-gap: 32px; row-gap: 2px; align-items: center; padding: 13px 16px; min-width: 0; }
+.setting-row + .setting-row { border-top: 1px solid var(--border); }
+.setting-label { display: contents; }
+.setting-title { grid-area: title; font-size: var(--fs-md); font-weight: 500; line-height: 1.45; cursor: pointer; }
+.setting-row:not(:has(.setting-hint)) .setting-title { grid-row: 1 / -1; }
+.setting-hint { grid-area: hint; margin: 0; max-width: 64ch; color: var(--text-muted); font-size: var(--fs-sm); line-height: 1.5; }
+.setting-control { grid-area: control; justify-self: end; }
+.setting-row.disabled .setting-title, .setting-row.disabled .setting-hint { color: var(--text-faint); cursor: default; }
+.settings select.setting-control { width: clamp(180px, 30cqi, 280px); padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: var(--r-sm); background: var(--bg); color: var(--text); font: 400 var(--fs-md)/1.4 var(--sans); }
+.settings select.setting-control:disabled { background: var(--bg-inset); color: var(--text-muted); }
+.optional-unavailable .setting-title { cursor: default; }
+
+/* Interrupteur : un réglage binaire se lit mieux en position (gauche/droite)
+   qu'en case cochée, c'est la convention des réglages système. Le contrôle
+   reste une vraie case à cocher, annoncée comme interrupteur. */
+input.switch { appearance: none; -webkit-appearance: none; position: relative; flex: none; width: 34px; height: 20px; margin: 0; border-radius: 999px; background: var(--border-strong); cursor: pointer; transition: background 0.15s ease; }
+input.switch::before { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: var(--shadow-raised); transition: transform 0.15s ease; }
+input.switch:checked { background: var(--accent); }
+input.switch:checked::before { transform: translateX(14px); }
+input.switch:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-ring); }
+input.switch:disabled { opacity: 0.45; cursor: default; }
+
+.preference-sample { max-width: 860px; border: 1px dashed var(--border-strong); border-radius: var(--r-md); padding: 14px 16px; background: var(--bg-subtle); overflow-wrap: anywhere; }
+.preference-sample p { margin: 0 0 8px; }
+
+/* --- Page de réglages --------------------------------------------------- */
+
+.settings-page { display: flex; flex-direction: column; gap: 24px; }
+.settings-page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.settings-page-head > div:first-child { min-width: 0; }
+.settings-page-actions { display: flex; flex-wrap: wrap; gap: 6px; flex: none; }
+
+/* Accusé d'enregistrement : présent sans bouger la page, visible un instant. */
+.settings-saved { display: inline-flex; align-items: center; gap: 6px; margin: 4px 0 0; flex: none; color: var(--success); font-size: var(--fs-sm); opacity: 0; transition: opacity 0.2s ease; }
+.settings-saved.visible { opacity: 1; }
+.settings-page-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; max-width: 860px; padding-top: 16px; border-top: 1px solid var(--border); }
+.settings-page-foot .settings-note { margin-left: auto; }
+
+.setting-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+.setting-row .setting-hint > p { margin: 0; }
+.setting-badge { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 999px; background: var(--bg-inset); color: var(--text-muted); font-size: var(--fs-xs); font-weight: 500; vertical-align: 1px; }
+.setting-badge.ok { background: color-mix(in srgb, var(--success) 14%, transparent); color: var(--success); }
+.setting-badge.warn { background: var(--warning-soft); color: var(--warning); }
+
+/* Détails repliés dans une liste : même filet et même marge qu'une ligne. */
+.setting-list > details { padding: 10px 16px; border-top: 1px solid var(--border); }
+.setting-list > details:first-child { border-top: 0; }
+.setting-list > details > summary { cursor: pointer; font-size: var(--fs-md); font-weight: 500; }
+.setting-list > details[open] > summary { margin-bottom: 10px; }
+.setting-row > details { grid-column: 1 / -1; margin-top: 6px; }
+/* Tout ce qu'une ligne porte en plus (détails, résultat, confirmation) passe
+   sous elle, sur toute la largeur. */
+.setting-row > :not(.setting-label):not(.setting-hint):not(.setting-control) { grid-column: 1 / -1; }
+.setting-list > .mcp-server { border-bottom: 0; }
+.mcp-probe { font-size: var(--fs-sm); }
+.settings-page > .technical-search { max-width: 860px; }
+.dx-settings fieldset { gap: 24px; }
+.settings-page > fieldset, .settings-page fieldset:not(.choices) { min-width: 0; margin: 0; padding: 0; border: 0; display: grid; gap: 24px; }
+.settings .settings-page input.setting-control:not([type=checkbox]) { width: clamp(220px, 40cqi, 360px); padding: 7px 10px; border: 1px solid var(--border-strong); border-radius: var(--r-sm); background: var(--bg); color: var(--text); font: 400 var(--fs-md)/1.4 var(--sans); }
+.settings .settings-page input.setting-control:disabled { background: var(--bg-inset); color: var(--text-muted); }
+.setting-list details form { display: grid; gap: 10px; margin-top: 4px; }
+.setting-list details form label { display: grid; gap: 5px; font-size: var(--fs-md); }
+.dx-settings .setting-row > details[open] { display: flex; flex-direction: column; gap: 10px; }
+.setting-row > details > summary { cursor: pointer; color: var(--text-muted); font-size: var(--fs-sm); }
+
+/* --- Formulaires existants (Fournisseur, Modèles, Corpus) ---------------
+   Ils emploient `Field` et `.settings-section` : plutôt que de réécrire
+   chaque écran, ces deux briques prennent la forme du gabarit. Une section
+   devient un groupe encadré ; un champ devient une ligne, intitulé et
+   indication à gauche, contrôle à droite. */
+.settings .settings-section { max-width: 860px; padding: 16px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg); }
+.settings .settings-section h3 { font-size: var(--fs-md); color: var(--text); }
+.settings .field { grid-template-columns: minmax(0, 1fr) minmax(0, clamp(220px, 45%, 420px)); grid-template-areas: "label control" "hint control"; column-gap: 24px; row-gap: 2px; align-items: center; }
+.settings .field > .field-label { grid-area: label; font-size: var(--fs-md); }
+.settings .field > .field-hint { grid-area: hint; color: var(--text-muted); }
+.settings .field > :not(.field-label):not(.field-hint) { grid-area: control; width: 100%; min-width: 0; }
+.settings .choices { max-width: 860px; }
+
+/* Le panneau, pas la fenêtre, décide de l'empilement : à 800 px de large, la
+   navigation garde sa colonne et il reste moins de 560 px pour les lignes. */
+@container (max-width: 560px) {
+  .setting-row { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "hint" "control"; row-gap: 6px; }
+  .setting-row:not(:has(.setting-hint)) .setting-title { grid-row: auto; }
+  .setting-control { justify-self: start; }
+  .setting-actions { justify-content: flex-start; }
+  .settings select.setting-control { width: 100%; }
+  .settings-page-head { flex-direction: column; }
+  .settings .field { grid-template-columns: minmax(0, 1fr); grid-template-areas: "label" "control" "hint"; }
+}
+
+/* --- Chargement --------------------------------------------------------- */
+
+.skeleton-rows { display: grid; gap: 10px; max-width: 860px; }
+.skeleton-row { display: grid; gap: 7px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--r-md); }
+.skeleton-bar { display: block; height: 10px; border-radius: 999px; background: var(--bg-inset); animation: skeleton 1.4s ease-in-out infinite; }
+.skeleton-bar.short { width: 30%; height: 8px; }
+@keyframes skeleton { 50% { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { .skeleton-bar { animation: none; } }
+
+/* Un enfant de page ne déborde jamais : un chemin long (corpus, source)
+   tronque au lieu de pousser la carte hors des marges. */
+.settings-page > * { min-width: 0; }
+.settings-page .corpus-list { max-width: 860px; }
+/* La liste est une grille : sans colonne bornée, sa piste prend la largeur
+   du chemin complet de la base (insécable) et pousse la carte, le bouton
+   Indexer compris, hors du panneau. */
+.corpus-list { grid-template-columns: minmax(0, 1fr); }
+.corpus, .corpus-head, .corpus-head .toggle { min-width: 0; }
+.corpus-head .toggle { flex: 1; }
+.corpus-head .corpus-name { min-width: 0; }
+
+/* --- Personnalisation ---------------------------------------------------- */
+
+/* Retour au parent d'une sous-page (le compte GitLab depuis Connecteurs). */
+.settings-back { display: inline-flex; align-items: center; gap: 6px; margin: 20px 40px -12px; padding: 4px 0; border: 0; background: transparent; color: var(--accent); font-size: var(--fs-sm); }
+.settings-back:hover:not(:disabled) { background: transparent; text-decoration: underline; }
+.settings-back svg { transform: rotate(180deg); }
+.settings-callout { max-width: 860px; margin: 0; padding: 12px 16px; border-radius: var(--r-md); background: var(--accent-soft); color: var(--text); font-size: var(--fs-md); line-height: 1.5; }
+.setting-group-hint { margin: 0; padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: var(--fs-sm); }
+.skill-names { display: flex; flex-wrap: wrap; gap: 4px 6px; margin: 6px 0 0; padding: 0; list-style: none; }
+.skill-names li { padding: 1px 8px; border-radius: 999px; background: var(--bg-inset); color: var(--text); font-size: var(--fs-xs); }
+@container (max-width: 560px) { .settings-back { margin: 12px 16px -8px; } }

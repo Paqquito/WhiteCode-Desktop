@@ -1,0 +1,92 @@
+/* ========================================================================
+   Boutons
+   ======================================================================== */
+
+button {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  padding: 6px 13px;
+  cursor: pointer;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+/* Action notable, pas destructrice : « Retirer le projet » sort un dossier de
+   la liste sans rien effacer. Le rouge signale qu'on ne la déclenche pas par
+   inadvertance ; la confirmation en deux temps fait le reste. */
+button.danger {
+  border-color: color-mix(in srgb, var(--danger) 30%, var(--border));
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+button.danger:hover:not(:disabled) {
+  border-color: var(--danger);
+}
+
+/* Action secondaire (Annuler, Tout effacer, Actualiser) : sans cadre au repos,
+   pour que l'action principale voisine soit la seule à attirer l'œil. Le fond
+   au survol suffit à montrer que c'est un bouton. */
+button.ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+button.ghost:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+button.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+/* Bouton d'icône : cible cliquable confortable, sans cadre au repos. */
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--r-sm);
+  flex: none;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.icon-button.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}

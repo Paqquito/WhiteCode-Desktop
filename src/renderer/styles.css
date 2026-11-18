@@ -1,0 +1,47 @@
+/*
+ * Feuille de style de l'application.
+ *
+ * Ce fichier ne porte plus de règles : il déclare l'**ordre**. En CSS l'ordre
+ * est du sens — à spécificité égale, la dernière règle gagne — donc les
+ * morceaux sont des tranches **contiguës** du fichier d'origine, importées
+ * dans leur ordre d'origine. Les regrouper par affinité aurait déplacé des
+ * règles les unes par rapport aux autres et changé le rendu sans qu'aucun
+ * test ne le voie : rien, ici, ne surveille l'apparence.
+ *
+ * Aucune règle n'a été réécrite. Ce qui est mort ou dupliqué se traitera
+ * ensuite, une fois devenu visible.
+ *
+ * `build.ts` recompose cette liste en un seul fichier : `dist/` ne porte
+ * aucun `@import`, et l'artefact livré est identique, octet pour octet, à
+ * celui d'avant la découpe.
+ */
+
+@import './styles/base.css'; /* en-tête, jetons de couleur, remise à zéro, coquille */
+@import './styles/controls.css'; /* boutons */
+@import './styles/sidebar.css'; /* barre latérale : bascule, navigation, filtre, projets */
+@import './styles/thread.css'; /* en-tête et fil de conversation */
+@import './styles/code.css'; /* éditeur superposé, mention « @ », liens de fichiers */
+@import './styles/composer.css'; /* menu « + » */
+@import './styles/settings.css'; /* écrans de réglages */
+@import './styles/menu.css'; /* menus déroulants, jauge de contexte, aperçu d’image */
+@import './styles/plan.css'; /* plan et tâches, revue de diff, édition de fichier */
+@import './styles/highlight.css'; /* coloration syntaxique */
+@import './styles/input.css'; /* saisie */
+@import './styles/panels.css'; /* panneaux, barre d’état, modale */
+@import './styles/plugin-panels.css'; /* panneaux déclaratifs de plugins */
+@import './styles/diff.css'; /* diffs, échec du pont, onglets de panneau */
+@import './styles/changes.css'; /* modifications et terminal */
+@import './styles/attachments.css'; /* pièces jointes */
+@import './styles/extensions.css'; /* extensions et points de restauration */
+
+@import './styles/context.css'; /* L03 : composeur et contexte */
+
+@import './styles/activity.css'; /* L04 : fil et exécution */
+
+@import './styles/preferences.css'; /* L07 : préférences personnelles et thème */
+
+@import './styles/browser.css'; /* L10 : navigation et lecteurs */
+
+
+@import './styles/settings-ui.css'; /* lot C : gabarit des écrans de réglages */
+@import './styles/dialog.css'; /* lot C : gabarit de dialogue */

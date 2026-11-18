@@ -1,0 +1,55 @@
+{
+  "name": "whitecode-desktop",
+  "version": "0.1.0",
+  "description": "WhiteCode — application de bureau en marque blanche",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "bun run scripts/test.ts",
+    "build": "bun run build.ts",
+    "package:windows": "bun scripts/package-windows.ts",
+    "check:runtime": "node scripts/check-runtime.cjs",
+    "prestart": "npm run check:runtime",
+    "start": "bun run build.ts && electron .",
+    "predev": "npm run check:runtime",
+    "dev": "bun run build.ts --dev && electron .",
+    "postinstall": "node node_modules/electron/install.js"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "^0.129.0",
+    "@resvg/resvg-js": "2.6.2",
+    "@types/bun": "^1.4.0",
+    "@types/node": "^22.20.1",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "electron": "^44.1.0",
+    "exceljs": "4.4.0",
+    "resedit": "3.1.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/xterm": "^6.0.0",
+    "lowlight": "^3.3.0",
+    "node-pty": "^1.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "saxes": "5.0.1",
+    "tree-kill": "1.2.2",
+    "zod": "4.6.7"
+  },
+  "productName": "WhiteCode",
+  "allowScripts": {
+    "node-pty@1.1.0": true
+  },
+  "trustedDependencies": [
+    "electron",
+    "node-pty"
+  ],
+  "overrides": {
+    "exceljs": {
+      "uuid": "11.1.1"
+    }
+  }
+}
