@@ -70,13 +70,18 @@ export async function loadModules(ids: readonly string[], roots: string[], out: 
   return modules
 }
 
+export function servicePaths(modules: NativeModule[], desktop: string): Record<string, string> {
+  const defaults = Object.fromEntries(Object.entries(hostPackage.imports).map(([name, source]) => [name, resolve(desktop, source)]))
+  return Object.assign(defaults, ...modules.map(module => module.provides ?? {}))
+}
+
 export function bundleModules(modules: NativeModule[], target: 'main' | 'renderer', desktop: string): BunPlugin {
   return {
     name: 'distribution-' + target,
     setup(builder) {
-      const services = new Map(modules.flatMap(module => Object.entries(module.provides ?? {})))
-      builder.onResolve({ filter: /^#desktop\// }, args => {
-        const implementation = services.get(args.path)
+      const services = servicePaths(modules, desktop)
+      builder.onResolve({ filter: /^#desktop(?:-kit)?\// }, args => {
+        const implementation = services[args.path]
         if (implementation) return { path: implementation }
       })
       // Tests import a regular, empty registry. Only this exact host entry is replaced.

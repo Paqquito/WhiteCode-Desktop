@@ -24,7 +24,7 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { dirname, isAbsolute, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Resvg } from '@resvg/resvg-js'
-import { bundleModules, loadModules } from './scripts/nativeModules.js'
+import { bundleModules, loadModules, servicePaths } from './scripts/nativeModules.js'
 
 const ROOT = dirname(fileURLToPath(import.meta.url))
 const OUT = join(ROOT, 'dist')
@@ -60,7 +60,7 @@ if (configArg >= 0) {
   if (!process.argv[configArg + 1] || process.argv[configArg + 1]!.startsWith('--')) throw Error('Chemin de configuration TypeScript requis.')
   const config = resolve(process.argv[configArg + 1]!)
   const paths = Object.assign({}, ...modules.map(module => module.provides ?? {})) as Record<string, string>
-  const types = Object.fromEntries(Object.entries(paths).map(([key, path]) => [key, [path]]))
+  const types = Object.fromEntries(Object.entries(servicePaths(modules, ROOT)).map(([key, path]) => [key, [path]]))
   types['@whitecode/desktop-modules'] = [join(ROOT, 'packages/desktop-modules/index.d.ts')]
   // External module sources share dependencies with this Electron application.
   types.react = [join(ROOT, 'node_modules/@types/react/index.d.ts')]
