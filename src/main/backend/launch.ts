@@ -64,4 +64,4 @@ export function backendArguments(settings: SessionSettings, { resume, fork, sour
   return args
 }
 
-export const DESKTOP_DELIVERY_INSTRUCTIONS = 'Dans cette application, livrer les fichiers avec deliver_file en précisant mode="attach", y compris les images. Le mode render du canal de livraison n’est pas pris en charge ; les fichiers livrés restent consultables dans l’aperçu de l’application.'
+export const DESKTOP_DELIVERY_INSTRUCTIONS = 'Pour générer des fichiers à joindre, indiquez toutes les sorties finales dans attach_files lors de la commande de création si son schéma le propose. Le moteur appelle deliver_file en mode attach avant la réponse. Pour les fichiers déjà créés, appelez deliver_file avec mode="attach". Vérifiez chaque reçu avant d’annoncer les pièces jointes. Pour une conversion, utilisez la source originale, conservez nombres, réserves, négations et actions ouvertes. Le mode render est indisponible dans le desktop.'

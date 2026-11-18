@@ -2,7 +2,7 @@ import { testConfig } from '../engine/testConfig.js'
 import { expect, test } from 'bun:test'
 import { createServer } from 'node:http'
 import { once } from 'node:events'
-import { mkdtemp } from 'node:fs/promises'
+import { mkdtemp, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { execFileSync } from 'node:child_process'
@@ -29,7 +29,7 @@ type InferenceRequest = {
   }>
 }
 
-test('office skill reaches the model, creates Excel through a real shell tool and delivers it', async () => {
+test('shell generation attaches every declared document before the first reply without a model delivery call', async () => {
   const directory = await mkdtemp(join(tmpdir(), 'wc-send-user-file-'))
   const delivered = join(directory, 'budget.xlsx')
   // Le vrai parcours : le catalogue WhiteCode-Extensions (copie locale du
@@ -52,7 +52,7 @@ test('office skill reaches the model, creates Excel through a real shell tool an
   const runtime = await extensions.officeRuntime()
   expect(runtime).toBeTruthy()
   const office = dirname(runtime!)
-  await cp(join(office, 'skills/excel/example.cjs'), join(directory, 'creer.cjs'))
+  await writeFile(join(directory, 'README.md'), '# Revue\n\n## À confirmer\n\n- Valider le lot A.\n\n| Lot | Essais |\n|---|---|\n| A | 17 |\n')
 
   const requests: InferenceRequest[] = []
   const messages: EngineMessage[] = []
@@ -65,7 +65,7 @@ test('office skill reaches the model, creates Excel through a real shell tool an
       return
     }
     requests.push(JSON.parse(raw) as InferenceRequest)
-    const first = requests.length <= 3
+    const first = requests.length <= 2
     res.writeHead(200, { 'content-type': 'text/event-stream' })
     const sse = (type: string, value: unknown) =>
       res.write(`event: ${type}\ndata: ${JSON.stringify(value)}\n\n`)
@@ -89,7 +89,7 @@ test('office skill reaches the model, creates Excel through a real shell tool an
         ? {
             type: 'tool_use',
             id: `office-tool-${requests.length}`,
-            name: requests.length === 1 ? 'use_skill' : requests.length === 2 ? (process.platform === 'win32' ? 'run_powershell' : 'run_shell') : 'deliver_file',
+            name: requests.length === 1 ? 'use_skill' : (process.platform === 'win32' ? 'run_powershell' : 'run_shell'),
             input: {},
           }
         : { type: 'text', text: '' },
@@ -100,13 +100,9 @@ test('office skill reaches the model, creates Excel through a real shell tool an
       delta: first
         ? {
             type: 'input_json_delta',
-            partial_json: JSON.stringify(requests.length === 1 ? { name: OFFICE_PLUGIN + ':excel' } : requests.length === 2 ? { command: process.platform === 'win32'
-              ? `$env:ELECTRON_RUN_AS_NODE='1'; & $env:OFFICE_NODE $env:OFFICE_RUNTIME ./creer.cjs; if ($LASTEXITCODE -ne 0) { throw 'office failed' }`
-              : 'ELECTRON_RUN_AS_NODE=1 "$OFFICE_NODE" "$OFFICE_RUNTIME" ./creer.cjs' } : {
-              files: [delivered],
-              caption: 'Le rapport demandé.',
-              status: 'normal',
-            }),
+            partial_json: JSON.stringify(requests.length === 1 ? { name: OFFICE_PLUGIN + ':excel' }  : { attach_files: ['budget.xlsx', 'revue.pdf'], command: process.platform === 'win32'
+              ? "$env:ELECTRON_RUN_AS_NODE='1'; & $env:OFFICE_NODE $env:OFFICE_RUNTIME --convert ./README.md ./budget.xlsx ./revue.pdf; if ($LASTEXITCODE -ne 0) { throw 'office failed' }"
+              : 'ELECTRON_RUN_AS_NODE=1 "$OFFICE_NODE" "$OFFICE_RUNTIME" --convert ./README.md ./budget.xlsx ./revue.pdf' }),
           }
         : { type: 'text_delta', text: 'Fichier envoyé.' },
     })
@@ -170,7 +166,8 @@ test('office skill reaches the model, creates Excel through a real shell tool an
 
     expect(JSON.stringify(requests[0])).toContain('OFFICE_RUNTIME')
     const workbook = new ExcelJS.Workbook(); await workbook.xlsx.readFile(delivered)
-    expect(workbook.getWorksheet('Budget')!.getCell('B4').value).toEqual({ formula: 'SUM(B2:B3)', result: 2000 })
+    expect(workbook.getWorksheet('Tableau 1')!.getCell('B2').value).toBe(17)
+    expect(notices.filter(n => n.startsWith('Fichier disponible')).map(n => n.split(' : ').at(-1))).toEqual(['budget.xlsx', 'revue.pdf'])
 
     // L'outil est proposé au modèle, avec sa description.
     const offered = requests[0]?.tools?.find(t => t.name === 'deliver_file')
@@ -187,11 +184,11 @@ test('office skill reaches the model, creates Excel through a real shell tool an
     expect(loaded?.is_error).toBeFalsy()
     expect(JSON.stringify(loaded?.content)).toContain('OFFICE_RUNTIME')
     const result = blocks.find(
-      b => b.type === 'tool_result' && b.tool_use_id === 'office-tool-3',
+      b => b.type === 'tool_result' && b.tool_use_id?.startsWith('file_'),
     )
     expect(result).toBeDefined()
     expect(result?.is_error).toBeFalsy()
-    expect(JSON.stringify(result?.content)).toContain('1/1 file(s) delivered')
+    expect(JSON.stringify(result?.content)).toContain('2/2 file(s) delivered')
     expect(messages.some(m => m.type === 'result' && !m.is_error)).toBe(true)
   } finally {
     clearTimeout(timer)
