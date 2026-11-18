@@ -22,6 +22,8 @@ type InferenceRequest = {
       | string
       | Array<{
           type: string
+          name?: string
+          text?: string
           tool_use_id?: string
           is_error?: boolean
           content?: unknown
@@ -183,7 +185,7 @@ test('shell generation attaches every declared document before the first reply w
     const loaded = blocks.find(b => b.type === 'tool_result' && b.tool_use_id === 'office-tool-1')
     expect(loaded?.is_error).toBeFalsy()
     expect(JSON.stringify(loaded?.content)).toContain('OFFICE_RUNTIME')
-    const deliveryMessage = requests.at(-1)?.messages?.find(m => Array.isArray(m.content) && m.content.some(b => b.type === 'tool_use' && 'name' in b && b.name === 'deliver_file'))
+    const deliveryMessage = requests.at(-1)?.messages?.find(m => Array.isArray(m.content) && m.content.some(b => b.type === 'tool_use' && b.name === 'deliver_file'))
     expect(deliveryMessage?.content).toContainEqual({ type: 'text', text: 'Transmission des fichiers demandés.' })
     const result = blocks.find(
       b => b.type === 'tool_result' && b.tool_use_id?.startsWith('file_'),
