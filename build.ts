@@ -81,6 +81,7 @@ const shared = {
 const node = await Bun.build({
   entrypoints: [join(ROOT, 'src', 'bootstrap', 'index.ts'), join(ROOT, 'src', 'main', 'preload.ts')],
   outdir: OUT,
+  naming: '[name].[ext]',
   plugins: [bundleModules(modules, 'main', ROOT)],
   target: 'node',
   format: 'cjs',
