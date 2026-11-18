@@ -1,5 +1,5 @@
 /** WhiteCode's public JSONL protocol translated to the desktop's display events. */
-import type { EngineMessage, PermissionMode } from '#desktop/session-protocol'
+import { ESSENTIAL_TOOLS, type EngineMessage, type PermissionMode } from '#desktop/session-protocol'
 
 export const approvalMode = (mode: PermissionMode): string => ({ default: 'ask', acceptEdits: 'auto_edit', plan: 'planning', bypassPermissions: 'unrestricted', dontAsk: 'no_prompt' })[mode]
 export const desktopMode = (mode: string): PermissionMode => ({ ask: 'default', auto_edit: 'acceptEdits', planning: 'plan', unrestricted: 'bypassPermissions', no_prompt: 'dontAsk' } as Record<string, PermissionMode>)[mode] ?? 'default'
@@ -10,7 +10,16 @@ const TOOLS: Record<string, string[]> = {
   Glob: ['find_files'], Grep: ['search_content'], TodoWrite: ['update_todo_list'], Agent: ['spawn_agent'], Task: ['spawn_agent'],
   WebFetch: ['fetch_url'], NotebookEdit: ['update_notebook_cell'],
 }
-export function whiteCodeTools(tools: string[]): string[] { return [...new Set(tools.flatMap(name => TOOLS[name] ?? [name]))] }
+export function whiteCodeTools(tools: string[]): string[] {
+  const names = new Set(tools.flatMap(name => TOOLS[name] ?? [name]))
+  // Saved sessions store the reduced preset as desktop names. Translate it here
+  // so existing and new sessions can both load skills and attach their output.
+  if (tools.length === ESSENTIAL_TOOLS.length && ESSENTIAL_TOOLS.every(name => tools.includes(name))) {
+    names.add('use_skill')
+    names.add('deliver_file')
+  }
+  return [...names]
+}
 
 export function whiteCodeContent(content: string | unknown[]): unknown {
   if (typeof content === 'string') return content

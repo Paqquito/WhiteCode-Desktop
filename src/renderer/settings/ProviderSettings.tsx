@@ -127,12 +127,9 @@ export function ProviderSettings({
             <span>
               Jeu d’outils réduit
               <span className="field-hint">
-                Sept outils au lieu de trente-cinq. Ce n’est pas un détail : la
-                définition des outils occupe l’essentiel de l’invite système —
-                environ 25 000 jetons — que le modèle relit à chaque tour. Sur
-                un processeur, cette seule lecture prend plusieurs minutes et le
-                moteur abandonne avant la réponse. À laisser coché tant que le
-                modèle tourne sans carte graphique.
+                Le modèle reçoit les outils courants pour lire, écrire, exécuter des commandes,
+                charger les compétences activées et joindre les fichiers créés.
+                Ce réglage raccourcit les demandes envoyées au modèle.
               </span>
             </span>
           </label>

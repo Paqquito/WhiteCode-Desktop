@@ -11,7 +11,7 @@ import { Engine } from '../engine/engine.js'
 import { Extensions, OFFICE_PLUGIN } from './plugins.js'
 import ExcelJS from 'exceljs'
 import { cp } from 'node:fs/promises'
-import { DEFAULT_SESSION_SETTINGS, type EngineMessage } from '../../shared/protocol.js'
+import { DEFAULT_SESSION_SETTINGS, ESSENTIAL_TOOLS, type EngineMessage } from '../../shared/protocol.js'
 import { ISOLATION_ENV } from '../providers/index.js'
 import { EXTENSIONS_ROOT, TEST_ROOTS } from '../testRoots.test-support.js'
 
@@ -65,7 +65,7 @@ test('office skill reaches the model, creates Excel through a real shell tool an
       return
     }
     requests.push(JSON.parse(raw) as InferenceRequest)
-    const first = requests.length <= 2
+    const first = requests.length <= 3
     res.writeHead(200, { 'content-type': 'text/event-stream' })
     const sse = (type: string, value: unknown) =>
       res.write(`event: ${type}\ndata: ${JSON.stringify(value)}\n\n`)
@@ -89,7 +89,7 @@ test('office skill reaches the model, creates Excel through a real shell tool an
         ? {
             type: 'tool_use',
             id: `office-tool-${requests.length}`,
-            name: requests.length === 1 ? (process.platform === 'win32' ? 'run_powershell' : 'run_shell') : 'deliver_file',
+            name: requests.length === 1 ? 'use_skill' : requests.length === 2 ? (process.platform === 'win32' ? 'run_powershell' : 'run_shell') : 'deliver_file',
             input: {},
           }
         : { type: 'text', text: '' },
@@ -100,7 +100,7 @@ test('office skill reaches the model, creates Excel through a real shell tool an
       delta: first
         ? {
             type: 'input_json_delta',
-            partial_json: JSON.stringify(requests.length === 1 ? { command: process.platform === 'win32'
+            partial_json: JSON.stringify(requests.length === 1 ? { name: OFFICE_PLUGIN + ':excel' } : requests.length === 2 ? { command: process.platform === 'win32'
               ? `$env:ELECTRON_RUN_AS_NODE='1'; & $env:OFFICE_NODE $env:OFFICE_RUNTIME ./creer.cjs; if ($LASTEXITCODE -ne 0) { throw 'office failed' }`
               : 'ELECTRON_RUN_AS_NODE=1 "$OFFICE_NODE" "$OFFICE_RUNTIME" ./creer.cjs' } : {
               files: [delivered],
@@ -132,7 +132,7 @@ test('office skill reaches the model, creates Excel through a real shell tool an
     ...TEST_ROOTS,
     settings: {
       ...DEFAULT_SESSION_SETTINGS,
-      tools: null,
+      tools: ESSENTIAL_TOOLS,
       permissionMode: 'bypassPermissions',
     },
     pluginDirs: () => extensions.pluginDirs(),
@@ -183,8 +183,11 @@ test('office skill reaches the model, creates Excel through a real shell tool an
     const blocks = requests
       .flatMap(r => r.messages ?? [])
       .flatMap(m => (Array.isArray(m.content) ? m.content : []))
+    const loaded = blocks.find(b => b.type === 'tool_result' && b.tool_use_id === 'office-tool-1')
+    expect(loaded?.is_error).toBeFalsy()
+    expect(JSON.stringify(loaded?.content)).toContain('OFFICE_RUNTIME')
     const result = blocks.find(
-      b => b.type === 'tool_result' && b.tool_use_id === 'office-tool-2',
+      b => b.type === 'tool_result' && b.tool_use_id === 'office-tool-3',
     )
     expect(result).toBeDefined()
     expect(result?.is_error).toBeFalsy()
