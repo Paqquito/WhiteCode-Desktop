@@ -100,7 +100,7 @@ test('shell generation attaches every declared document before the first reply w
       delta: first
         ? {
             type: 'input_json_delta',
-            partial_json: JSON.stringify(requests.length === 1 ? { name: OFFICE_PLUGIN + ':excel' }  : { attach_files: ['budget.xlsx', 'revue.pdf'], command: process.platform === 'win32'
+            partial_json: JSON.stringify(requests.length === 1 ? { name: OFFICE_PLUGIN + ':excel' } : { attach_files: ['budget.xlsx', 'revue.pdf'], command: process.platform === 'win32'
               ? "$env:ELECTRON_RUN_AS_NODE='1'; & $env:OFFICE_NODE $env:OFFICE_RUNTIME --convert ./README.md ./budget.xlsx ./revue.pdf; if ($LASTEXITCODE -ne 0) { throw 'office failed' }"
               : 'ELECTRON_RUN_AS_NODE=1 "$OFFICE_NODE" "$OFFICE_RUNTIME" --convert ./README.md ./budget.xlsx ./revue.pdf' }),
           }
@@ -183,6 +183,8 @@ test('shell generation attaches every declared document before the first reply w
     const loaded = blocks.find(b => b.type === 'tool_result' && b.tool_use_id === 'office-tool-1')
     expect(loaded?.is_error).toBeFalsy()
     expect(JSON.stringify(loaded?.content)).toContain('OFFICE_RUNTIME')
+    const deliveryMessage = requests.at(-1)?.messages?.find(m => Array.isArray(m.content) && m.content.some(b => b.type === 'tool_use' && 'name' in b && b.name === 'deliver_file'))
+    expect(deliveryMessage?.content).toContainEqual({ type: 'text', text: 'Transmission des fichiers demandés.' })
     const result = blocks.find(
       b => b.type === 'tool_result' && b.tool_use_id?.startsWith('file_'),
     )
