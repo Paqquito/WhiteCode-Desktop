@@ -24,6 +24,8 @@ npm ci --include=dev --no-audit --no-fund
 npm start
 ```
 
+Pour utiliser un moteur déjà compilé dans un autre dossier, créez un fichier `.env.local` à la racine du desktop et ajoutez une ligne comme `DESKTOP_ENGINE_DIR=C:/dev/mon-moteur` avec le chemin absolu de votre clone. Ensuite, `npm start` charge ce réglage pour le build et pour Electron à chaque lancement.
+
 Pour une autre marque, construisez le moteur avec son identité, puis le desktop avec `DESKTOP_IDENTITY=<chemin du fichier d'identité>`.
 
 ## Modules et distribution Windows

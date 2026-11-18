@@ -10,9 +10,9 @@
     "package:windows": "bun scripts/package-windows.ts",
     "check:runtime": "node scripts/check-runtime.cjs",
     "prestart": "npm run check:runtime",
-    "start": "bun run build.ts && electron .",
+    "start": "bun run build.ts && bun --env-file=.env.local run electron .",
     "predev": "npm run check:runtime",
-    "dev": "bun run build.ts --dev && electron .",
+    "dev": "bun run build.ts --dev && bun --env-file=.env.local run electron .",
     "postinstall": "node node_modules/electron/install.js"
   },
   "devDependencies": {

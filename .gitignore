@@ -1,5 +1,6 @@
 # Dépendances et build, reconstruits par npm ci et build.ts.
 node_modules/
+.env.local
 dist/
 release/
 output/
