@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { GitWorkflowState, WorkflowAction, WorkflowPR, WorkflowRequest } from '../../main/vcs/workflow.js'
+import type { GitWorkflowState, WorkflowAction, WorkflowPR, WorkflowRequest } from '#desktop/repository-workflow'
 
 /** Loaded on demand; opening the changes panel never contacts a remote. */
 export function GitWorkflow({ cwd, disabled, revision, onChange, onPending }: {

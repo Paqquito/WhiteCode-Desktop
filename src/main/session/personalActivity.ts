@@ -3,7 +3,7 @@ import { readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { createInterface } from 'node:readline'
 import type { PersonalActivity } from '../../shared/personalActivity.js'
-import { promptTextOf } from './sessions.js'
+import { promptTextOf } from '#desktop/session-history'
 import { desktopTranscript } from '../backend/transcript.js'
 
 const dayKey = (date: Date) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`

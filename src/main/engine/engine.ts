@@ -7,17 +7,17 @@ import { WhiteCodeProtocol, whiteCodeContent, whiteCodeTools, approvalMode } fro
 import { inferenceRelay } from '../backend/inferenceRelay.js'
 import { whiteCodeExtensions } from '../backend/extensions.js'
 import { DesktopFileDelivery } from '../backend/fileDelivery.js'
-import { McpSession } from '../extensions/mcpSession.js'
+import { McpSession } from '#desktop/connector-session'
 import { requireInferenceEndpoint } from '../../shared/inferenceEndpoint.js'
-import { DiagnosticLog, Redactor } from '../logging/logging.js'
-import type { McpLaunch } from '../extensions/mcpRegistry.js'
+import { DiagnosticLog, Redactor } from '#desktop/redaction'
+import type { McpLaunch } from '#desktop/connector-registry'
 import {
   DEFAULT_SESSION_SETTINGS,
   type EffortLevel,
   type EngineMessage,
   type PermissionDecision,
   type SessionSettings,
-} from '../../shared/protocol.js'
+} from '#desktop/session-protocol'
 
 export type EngineOptions = {
   /** Desktop session ID for correlating interleaved diagnostic records. */

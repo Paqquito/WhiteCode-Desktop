@@ -21,10 +21,10 @@ import { OpenAIBridge, openAIEndpoint, boundedJSON } from './openaiBridge.js'
 
 import { join } from 'node:path'
 import type { LocalModels, ModelProgress } from '../models/index.js'
-import type { EffortLevel } from '../../shared/protocol.js'
+import type { EffortLevel } from '#desktop/session-protocol'
 import { OllamaBridge } from './ollamaBridge.js'
-import { ProviderStorage, type SecretVault } from './storage.js'
-import { catalogModels, selectedGatewayModel, LEGACY_MODEL } from '../../shared/modelSelection.js'
+import { ProviderStorage, type SecretVault } from '#desktop/account-storage'
+import { catalogModels, selectedGatewayModel, LEGACY_MODEL } from '#desktop/model-selection'
 
 import { requireInferenceEndpoint } from '../../shared/inferenceEndpoint.js'
 export type ProviderKind = 'compatible' | 'ollama' | 'llamacpp' | 'openai'

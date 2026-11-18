@@ -1,6 +1,6 @@
 import { DEFAULT_PREFERENCES, type Preferences } from '../../shared/preferences.js'
 import type { EventEmitter } from 'node:events'
-import type { SessionSnapshot } from '../engine/engineManager.js'
+import type { SessionSnapshot } from '#desktop/conversation-manager'
 
 type NativeNotice = EventEmitter & { show(): void; close(): void }
 type NoticeOptions = { title: string; body: string; silent: boolean }

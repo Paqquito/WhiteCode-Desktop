@@ -11,7 +11,7 @@ import { RoutineOrigin } from './RoutineOrigin.js'
 
 import { nativeId, nativePanels } from '../nativeViews.js'
 import * as React from 'react'
-import { panelLabel, type BuiltinPanelId, type PanelId } from '../state/usePanels.js'
+import { panelLabel, type BuiltinPanelId, type PanelId } from '#desktop/panel-selection'
 import type { PluginPanelManifest } from '../../shared/pluginPanel.js'
 import { SessionMenu } from './SessionMenu.js'
 import { Icon, type IconName } from '../ui/Icon.js'

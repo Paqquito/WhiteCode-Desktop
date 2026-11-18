@@ -1,7 +1,7 @@
 import * as React from 'react'
-import type { Turn } from '../../shared/activity.js'
-import { toolLabel, toolState } from '../../shared/activity.js'
-import { sessionFiles } from '../composer/ConversationContext.js'
+import type { Turn } from '#desktop/tool-activity'
+import { toolLabel, toolState } from '#desktop/tool-activity'
+import { sessionFiles } from '#desktop/conversation-files'
 import { Icon } from '../ui/Icon.js'
 import { FileLinkContext } from './fileLink.js'
 

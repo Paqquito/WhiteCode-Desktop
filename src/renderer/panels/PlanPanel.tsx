@@ -19,7 +19,7 @@
  */
 
 import * as React from 'react'
-import type { ThreadEntry } from '../../shared/protocol.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
 import { Markdown } from '../thread/Markdown.js'
 import { Icon } from '../ui/Icon.js'
 import { Panel, PanelEmpty } from '../ui/Panel.js'

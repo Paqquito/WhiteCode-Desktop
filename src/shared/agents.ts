@@ -12,8 +12,8 @@
  * l'exécution — c'est exactement le moment où la question se pose.
  */
 
-import { toolState, type ToolState } from './activity.js'
-import type { ThreadEntry } from './protocol.js'
+import { toolState, type ToolState } from '#desktop/tool-activity'
+import type { ThreadEntry } from '#desktop/session-protocol'
 
 /**
  * État d'un sous-agent, tel que le fil permet de l'établir.

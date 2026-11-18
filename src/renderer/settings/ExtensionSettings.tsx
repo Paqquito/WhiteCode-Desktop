@@ -6,7 +6,7 @@ import { skillNames } from '../catalog/skillNames.js'
 import { IconButton } from '../ui/IconButton.js'
 import { Dialog } from '../ui/Dialog.js'
 import { SettingsPage } from '../ui/SettingRows.js'
-import type { CatalogueStatus } from '../../main/extensions/plugins.js'
+import type { CatalogueStatus } from '#desktop/plugin-registry'
 
 export function ExtensionSettings({
   extensions,

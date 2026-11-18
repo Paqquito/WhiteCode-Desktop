@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { randomUUID } from 'node:crypto'
-import type { SessionSettings } from '../../shared/protocol.js'
+import type { SessionSettings } from '#desktop/session-protocol'
 import { approvalMode, whiteCodeTools } from './protocol.js'
 
 /** Application folder (with `dist/distribution.json`) and engine folder (with the product executable in `dist/`). */

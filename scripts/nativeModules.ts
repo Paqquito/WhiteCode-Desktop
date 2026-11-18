@@ -2,8 +2,11 @@ import { cp, mkdir, readFile, realpath, stat } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import type { BunPlugin } from 'bun'
+import hostPackage from '../package.json'
 
-interface NativeModule {
+export interface NativeModule {
+  provides?: Record<string, string>
+  styles?: string[]
   id: string
   main?: string
   renderer?: string
@@ -21,6 +24,7 @@ async function member(directory: string, name: unknown): Promise<string> {
 
 export async function loadModules(ids: readonly string[], roots: string[], out: string): Promise<NativeModule[]> {
   const modules: NativeModule[] = []
+  const owners = new Map<string, string>()
   for (const id of ids) {
     if (!/^[a-z][a-z0-9-]{0,47}$/.test(id)) throw Error('Identifiant de module invalide : ' + id)
     const matches = roots.filter(root => existsSync(join(root, id, 'module.json')))
@@ -29,6 +33,28 @@ export async function loadModules(ids: readonly string[], roots: string[], out: 
     const manifest = JSON.parse(await readFile(await member(directory, 'module.json'), 'utf8'))
     if (manifest.apiVersion !== 1 || (manifest.assets !== undefined && !Array.isArray(manifest.assets))) throw Error('Manifeste de module invalide : ' + id)
     const entry: NativeModule = { id }
+    if (manifest.requires !== undefined && (!Array.isArray(manifest.requires) || manifest.requires.some((required: unknown) => typeof required !== 'string' || !ids.includes(required)))) throw Error('Dépendance de module absente : ' + id)
+    if (manifest.provides !== undefined) {
+      if (!manifest.provides || Array.isArray(manifest.provides) || typeof manifest.provides !== 'object') throw Error('Services invalides : ' + id)
+      entry.provides = {}
+      for (const [service, file] of Object.entries(manifest.provides)) {
+        if (!Object.hasOwn(hostPackage.imports, '#desktop/' + service)) throw Error('Service de distribution inconnu : ' + service)
+        if (owners.has(service)) throw Error('Deux modules fournissent ' + service + ' : ' + owners.get(service) + ', ' + id)
+        const path = await member(directory, file)
+        if (!/\.tsx?$/.test(path) || !(await stat(path)).isFile()) throw Error('Source TypeScript attendue : ' + service)
+        entry.provides['#desktop/' + service] = path
+        owners.set(service, id)
+      }
+    }
+    if (manifest.styles !== undefined) {
+      if (!Array.isArray(manifest.styles)) throw Error('Feuilles de style invalides : ' + id)
+      entry.styles = []
+      for (const name of manifest.styles) {
+        const file = await member(directory, name)
+        if (!file.endsWith('.css')) throw Error('Feuille de style invalide : ' + name)
+        entry.styles.push(file)
+      }
+    }
     for (const target of ['main', 'renderer'] as const) {
       if (manifest[target] !== undefined) entry[target] = await member(directory, manifest[target])
     }
@@ -48,6 +74,11 @@ export function bundleModules(modules: NativeModule[], target: 'main' | 'rendere
   return {
     name: 'distribution-' + target,
     setup(builder) {
+      const services = new Map(modules.flatMap(module => Object.entries(module.provides ?? {})))
+      builder.onResolve({ filter: /^#desktop\// }, args => {
+        const implementation = services.get(args.path)
+        if (implementation) return { path: implementation }
+      })
       // Tests import a regular, empty registry. Only this exact host entry is replaced.
       builder.onLoad({ filter: /[\\/]nativeEntries\.ts$/ }, args => {
         if (resolve(args.path) !== resolve(desktop, 'src', target, 'nativeEntries.ts')) return

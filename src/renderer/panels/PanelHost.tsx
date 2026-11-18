@@ -19,18 +19,18 @@ import {
   PANEL_HEIGHT_MIN,
   type useLayout,
 } from '../state/useLayout.js'
-import { panelLabel, type PanelId } from '../state/usePanels.js'
+import { panelLabel, type PanelId } from '#desktop/panel-selection'
 import type { PluginPanelManifest } from '../../shared/pluginPanel.js'
 import { PluginPanel } from './PluginPanel.js'
 import { Splitter } from '../ui/Splitter.js'
-import type { ThreadEntry } from '../../shared/protocol.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
 import type { ReviewComment } from '../state/useReview.js'
 import { AgentsPanel } from './AgentsPanel.js'
 import { ChangesPanel } from './ChangesPanel.js'
 import { FilesPanel } from './FilesPanel.js'
 import { PlanPanel } from './PlanPanel.js'
 import { Panel, PanelEmpty } from '../ui/Panel.js'
-import { TerminalPanel } from './TerminalPanel.js'
+import { TerminalPanel } from '#desktop/terminal-panel'
 
 /** Ce que le panneau des modifications consomme de la revue. */
 type ReviewApi = {

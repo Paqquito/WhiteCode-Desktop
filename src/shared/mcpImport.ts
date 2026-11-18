@@ -1,4 +1,4 @@
-import type { McpEntry } from '../main/extensions/mcpRegistry.js'
+import type { McpEntry } from '#desktop/connector-registry'
 /** Import only one named server into a reviewable form; never activate on import. */
 export function importMcp(text: string): McpEntry {
   const value = JSON.parse(text)

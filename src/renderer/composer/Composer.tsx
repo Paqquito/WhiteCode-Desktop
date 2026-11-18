@@ -17,9 +17,9 @@ import { sendsMessage } from '../../shared/preferences.js'
 
 import * as React from 'react'
 import type { Attachment, Corpus, ExtensionState } from '../../main/preload.js'
-import type { EffortLevel, PermissionMode, SessionStatus } from '../../shared/protocol.js'
+import type { EffortLevel, PermissionMode, SessionStatus } from '#desktop/session-protocol'
 import { EFFORTS, PERMISSION_MODES } from '../state/useSettings.js'
-import { ADD_MODEL } from '../state/useModelChoice.js'
+import { ADD_MODEL } from '#desktop/model-choice'
 import { useDraft } from '../state/useDraft.js'
 import { Icon } from '../ui/Icon.js'
 import { Menu, type MenuOption } from '../ui/Menu.js'
@@ -33,7 +33,7 @@ import {
 import { PlusMenu } from './PlusMenu.js'
 import { useCompletion } from './useCompletion.js'
 import { useFileDrop } from './useFileDrop.js'
-import type { Tab as SettingsTab } from '../settings/SettingsDialog.js'
+import type { Tab as SettingsTab } from '#desktop/settings-dialog'
 
 export function Composer({
   sessionId,

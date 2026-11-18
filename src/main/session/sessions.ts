@@ -3,8 +3,8 @@ import { projectKey, desktopTranscript } from '../backend/transcript.js'
 import { readdir, readFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import { join, dirname, resolve } from 'node:path'
-import { readTranscriptSummary, promptTextOf, textOf } from './transcriptSummary.js'
-export { promptTextOf } from './transcriptSummary.js'
+import { readTranscriptSummary, promptTextOf, textOf } from '#desktop/transcript-reader'
+export { promptTextOf } from '#desktop/transcript-reader'
 
 export type SessionSummary = {
   id: string

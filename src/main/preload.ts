@@ -1,4 +1,6 @@
-import type { GitWorkflowState, WorkflowRequest, WorkflowPR } from './vcs/workflow.js'
+import { featureBridge } from '#desktop/bridge'
+export * from '#desktop/bridge'
+import type { GitWorkflowState, WorkflowRequest, WorkflowPR } from '#desktop/repository-workflow'
 import type { SurfaceSource, SurfaceState, SurfaceBounds, SurfaceCommand, BrowserSelection } from '../shared/browser.js'
 import type { Preferences } from '../shared/preferences.js'
 import type { ActivityPeriod, PersonalActivity } from '../shared/personalActivity.js'
@@ -13,22 +15,22 @@ import type { GitAction, PullRequestInfo } from './vcs/git.js'
  */
 
 import { contextBridge, ipcRenderer, webUtils } from 'electron'
-import type { SessionSnapshot } from './engine/engineManager.js'
+import type { SessionSnapshot } from '#desktop/conversation-manager'
 import type { SessionMeta } from '../shared/sessionMeta.js'
 import type { ProjectMeta } from '../shared/projectMeta.js'
-import type { McpEntry, McpView, McpProbe, ConnectorStatus, ConnectorResult, ConnectorView } from './extensions/mcpRegistry.js'
-export type { McpEntry, McpView, McpProbe, ConnectorStatus, ConnectorResult, ConnectorView } from './extensions/mcpRegistry.js'
+import type { McpEntry, McpView, McpProbe, ConnectorStatus, ConnectorResult, ConnectorView } from '#desktop/connector-registry'
+export type { McpEntry, McpView, McpProbe, ConnectorStatus, ConnectorResult, ConnectorView } from '#desktop/connector-registry'
 import type { RoutineRun } from './routines/routineHistory.js'
 export type { RoutineRun } from './routines/routineHistory.js'
 import type { Routine } from './routines/routines.js'
 export type { Routine } from './routines/routines.js'
 import type { ManagedWorktree, RepositoryInfo, WorktreeRequest } from './vcs/worktrees.js'
 export type { ManagedWorktree, RepositoryInfo, WorktreeRequest } from './vcs/worktrees.js'
-export type { SessionSnapshot } from './engine/engineManager.js'
-import type { Attachment } from './workspace/attachments.js'
+export type { SessionSnapshot } from '#desktop/conversation-manager'
+import type { Attachment } from '#desktop/attachment-reader'
 import type { DirEntry, FileContent } from './workspace/files.js'
 import type { GitSummary } from './vcs/git.js'
-import type { RestorePoint } from './session/sessions.js'
+import type { RestorePoint } from '#desktop/session-history'
 import type { RewindResult } from './session/rewind.js'
 import type { TerminalTargets } from '../shared/terminal.js'
 import type {
@@ -44,21 +46,21 @@ import type {
   OllamaModel,
   ProviderConfig,
   PullProgress,
-} from './providers/index.js'
-import type { ExtensionProgress, ExtensionState, ExtensionSource } from './extensions/plugins.js'
+} from '#desktop/model-provider'
+import type { ExtensionProgress, ExtensionState, ExtensionSource } from '#desktop/plugin-registry'
 import type { Corpus, IndexProgress } from './rag/index.js'
 import type { Project } from './workspace/projects.js'
 import type {
   EngineMessage,
   PermissionDecision,
   SessionSettings,
-} from '../shared/protocol.js'
-import type { TranscriptEntry } from './session/sessions.js'
+} from '#desktop/session-protocol'
+import type { TranscriptEntry } from '#desktop/session-history'
 
 export type Notice = { tone: 'info' | 'error'; text: string }
 export type { Attachment, DirEntry, FileContent, Project, TranscriptEntry }
 export type { GitFile, GitSummary } from './vcs/git.js'
-export type { RestorePoint } from './session/sessions.js'
+export type { RestorePoint } from '#desktop/session-history'
 export type { RewindResult } from './session/rewind.js'
 export type { TerminalTarget, TerminalTargets } from '../shared/terminal.js'
 export type {
@@ -80,12 +82,12 @@ export type {
   ProviderConfig,
   ProviderKind,
   PullProgress,
-} from './providers/index.js'
+} from '#desktop/model-provider'
 export type { Corpus, IndexProgress } from './rag/index.js'
-export type { ExtensionKind, ExtensionProgress, ExtensionState, ExtensionSource } from './extensions/plugins.js'
+export type { ExtensionKind, ExtensionProgress, ExtensionState, ExtensionSource } from '#desktop/plugin-registry'
 export type { SessionSummary } from './workspace/projects.js'
 
-const api = {
+const baseApi = {
   invokeModule(id: string, method: string, input?: unknown): Promise<unknown> {
     return ipcRenderer.invoke('module:invoke', { id, method, input })
   },
@@ -563,7 +565,7 @@ const api = {
   refreshExtensionSource(id: string, ref?: string): Promise<void> { return ipcRenderer.invoke('ext:source-refresh', { id, ref }) },
   removeExtensionSource(id: string): Promise<void> { return ipcRenderer.invoke('ext:source-remove', id) },
   diagnoseExtension(id: string): Promise<string> { return ipcRenderer.invoke('ext:diagnose', id) },
-  extensionCatalogueStatus(): Promise<import('./extensions/plugins.js').CatalogueStatus> { return ipcRenderer.invoke('ext:catalogue-status') },
+  extensionCatalogueStatus(): Promise<import('#desktop/plugin-registry').CatalogueStatus> { return ipcRenderer.invoke('ext:catalogue-status') },
   retryExtensionCatalogue(): Promise<void> { return ipcRenderer.invoke('ext:bootstrap') },
 
   listExtensions(): Promise<ExtensionState[]> {
@@ -627,6 +629,7 @@ const api = {
   },
 }
 
+const api = { ...baseApi, ...featureBridge }
 export type EngineApi = typeof api
 
 contextBridge.exposeInMainWorld('engine', api)

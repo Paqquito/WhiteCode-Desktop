@@ -3,10 +3,10 @@
  */
 
 import type { IpcMain } from 'electron'
-import type { MainContext } from '../ipcContext.js'
-import type { McpEntry, McpRegistry } from './mcpRegistry.js'
-import { pick, place } from './connectors.js'
-import type { Extensions, ExtensionProgress } from './plugins.js'
+import type { MainContext } from '#desktop/workbench-context'
+import type { McpEntry, McpRegistry } from '#desktop/connector-registry'
+import { pick, place } from '#desktop/connector-manifest'
+import type { Extensions, ExtensionProgress } from '#desktop/plugin-registry'
 
 export function registerMcpIpc(
   ipcMain: IpcMain,

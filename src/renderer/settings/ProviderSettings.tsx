@@ -15,7 +15,7 @@ import type {
   ProviderConfig,
   ProviderKind,
 } from '../../main/preload.js'
-import { DEFAULT_OLLAMA_HOST, usesGateway, useProvider } from '../state/useProvider.js'
+import { DEFAULT_OLLAMA_HOST, usesGateway, useProvider } from '#desktop/provider-state'
 import { Icon } from '../ui/Icon.js'
 
 const KINDS: Array<{ id: ProviderKind; label: string; hint: string }> = [

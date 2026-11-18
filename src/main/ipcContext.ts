@@ -24,7 +24,7 @@
  */
 
 import type { BrowserWindow } from 'electron'
-import type { EngineManager } from './engine/engineManager.js'
+import type { EngineManager } from '#desktop/conversation-manager'
 import type { ManagedWorktree } from './vcs/worktrees.js'
 
 export type MainContext = {

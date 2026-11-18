@@ -1,6 +1,7 @@
+import { AccountGate } from '#desktop/account-views'
 import { PreferencesProvider, usePreferences } from './state/usePreferences.js'
 import * as React from 'react'
-import { SessionCell } from './session/SessionCell.js'
+import { SessionCell } from '#desktop/workbench-cell'
 import { RoutinesDialog } from './dialogs/RoutinesDialog.js'
 import { SessionDialog } from './dialogs/SessionDialog.js'
 import type { EngineController } from './state/useEngine.js'
@@ -8,7 +9,7 @@ import { Sidebar, type SidebarMode } from './layout/Sidebar.js'
 import { useWorkspace } from './state/useWorkspace.js'
 import { useEngine } from './state/useEngine.js'
 import { useLayout, SIDEBAR_MIN } from './state/useLayout.js'
-import { useProvider } from './state/useProvider.js'
+import { useProvider } from '#desktop/provider-state'
 import { useCorpora } from './state/useCorpora.js'
 import { useExtensions } from './state/useExtensions.js'
 import { SessionStateProvider } from './state/useSessionState.js'
@@ -24,7 +25,7 @@ import { PluginCatalog } from './catalog/PluginCatalog.js'
 
 export function App(): React.ReactNode {
   if (typeof window.engine === 'undefined') return <BridgeMissing />
-  return <PreferencesProvider><SessionStateProvider><Workbench /></SessionStateProvider></PreferencesProvider>
+  return <AccountGate><PreferencesProvider><SessionStateProvider><Workbench /></SessionStateProvider></PreferencesProvider></AccountGate>
 }
 
 function Workbench(): React.ReactNode {

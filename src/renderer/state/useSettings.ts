@@ -12,14 +12,14 @@
  */
 
 import * as React from 'react'
-import { savedModel } from '../../shared/modelSelection.js'
+import { savedModel } from '#desktop/model-selection'
 import {
   DEFAULT_SESSION_SETTINGS,
   ESSENTIAL_TOOLS,
   type EffortLevel,
   type PermissionMode,
   type SessionSettings,
-} from '../../shared/protocol.js'
+} from '#desktop/session-protocol'
 
 export { ESSENTIAL_TOOLS }
 

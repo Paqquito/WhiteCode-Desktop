@@ -1,5 +1,5 @@
 /** WhiteCode's public JSONL protocol translated to the desktop's display events. */
-import type { EngineMessage, PermissionMode } from '../../shared/protocol.js'
+import type { EngineMessage, PermissionMode } from '#desktop/session-protocol'
 
 export const approvalMode = (mode: PermissionMode): string => ({ default: 'ask', acceptEdits: 'auto_edit', plan: 'planning', bypassPermissions: 'unrestricted', dontAsk: 'no_prompt' })[mode]
 export const desktopMode = (mode: string): PermissionMode => ({ ask: 'default', auto_edit: 'acceptEdits', planning: 'plan', unrestricted: 'bypassPermissions', no_prompt: 'dontAsk' } as Record<string, PermissionMode>)[mode] ?? 'default'

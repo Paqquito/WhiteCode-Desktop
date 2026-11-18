@@ -9,7 +9,7 @@
  */
 
 import * as React from 'react'
-import type { SessionStatus } from '../../shared/protocol.js'
+import type { SessionStatus } from '#desktop/session-protocol'
 import type { AttentionPhase, SessionAttention } from '../../shared/sessionAttention.js'
 import { SessionActivity } from './SessionActivity.js'
 

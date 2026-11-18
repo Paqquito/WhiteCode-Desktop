@@ -1,6 +1,6 @@
 import * as React from 'react'
-import type { ThreadEntry } from '../../shared/protocol.js'
-import { toolDescription, toolLabel, toolState, toolStateCount, type ToolState } from '../../shared/activity.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
+import { toolDescription, toolLabel, toolState, toolStateCount, type ToolState } from '#desktop/tool-activity'
 import { ToolCall } from './ToolCall.js'
 
 /**

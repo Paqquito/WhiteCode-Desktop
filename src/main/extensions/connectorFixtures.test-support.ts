@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
-import { parseConnector } from './connectors.js'
-import { McpRegistry as Registry } from './mcpRegistry.js'
+import { parseConnector } from '#desktop/connector-manifest'
+import { McpRegistry as Registry } from '#desktop/connector-registry'
 
 /** Fixture partagée par les tests de connecteurs. */
 export const TICKETS_CONNECTOR = parseConnector(JSON.parse(readFileSync(new URL('./fixtures/tickets/connector.json', import.meta.url), 'utf8')))

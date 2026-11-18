@@ -28,7 +28,7 @@ import type {
   PermissionMode,
   SessionStatus,
   ThreadEntry,
-} from './protocol.js'
+} from '#desktop/session-protocol'
 
 /**
  * Fenêtre de contexte du modèle, à défaut de mieux.

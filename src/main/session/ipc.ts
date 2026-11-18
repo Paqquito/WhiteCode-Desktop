@@ -7,8 +7,8 @@
  */
 
 import type { IpcMain } from 'electron'
-import type { MainContext } from '../ipcContext.js'
-import { listRestorePoints } from './sessions.js'
+import type { MainContext } from '#desktop/workbench-context'
+import { listRestorePoints } from '#desktop/session-history'
 import { rewindFiles } from './rewind.js'
 
 export function registerRewindIpc(ipcMain: IpcMain, ctx: MainContext): void {

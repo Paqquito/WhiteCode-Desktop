@@ -18,9 +18,9 @@
  */
 
 import * as React from 'react'
-import { catalogModels, selectedGatewayModel } from '../../shared/modelSelection.js'
+import { catalogModels, selectedGatewayModel } from '#desktop/model-selection'
 import type { MenuOption } from '../ui/Menu.js'
-import { usesGateway, type useProvider } from './useProvider.js'
+import { usesGateway, type useProvider } from '#desktop/provider-state'
 
 /** Entrée qui ouvre l'écran d'installation au lieu de choisir un modèle. */
 export const ADD_MODEL = ' ajouter'

@@ -7,13 +7,13 @@
  */
 
 import * as React from 'react'
-import type { ThreadEntry } from '../../shared/protocol.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
 import { Icon } from '../ui/Icon.js'
 import { LinkedText } from './fileLink.js'
 import { Markdown } from './Markdown.js'
-import { conversationTurns, activityBlocks } from '../../shared/activity.js'
+import { conversationTurns, activityBlocks } from '#desktop/tool-activity'
 import { ActivityGroup } from './ActivityGroup.js'
-import { TurnSummary } from './TurnSummary.js'
+import { TurnSummary } from '#desktop/turn-summary'
 import { ToolCall } from './ToolCall.js'
 
 export function Thread({ entries, onEdit, onFork, busy = false, cancelling = false, waiting = false, waitingLabel, onPermission, onReview, onShowAgents }: {

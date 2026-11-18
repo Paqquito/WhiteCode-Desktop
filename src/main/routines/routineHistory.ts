@@ -1,6 +1,6 @@
 import { readFile, mkdir, writeFile, rename } from 'node:fs/promises'
 import { join } from 'node:path'
-import { projectDataDirectory } from '../backend/paths.js'
+import { projectDataDirectory } from '#desktop/project-paths'
 import { randomUUID } from 'node:crypto'
 
 export type RoutineRun = {

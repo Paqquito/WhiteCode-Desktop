@@ -20,25 +20,25 @@ import { registerNativeModules } from './nativeHost.js'
 import { pathToFileURL } from 'node:url'
 import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Notification, safeStorage } from 'electron'
 import { join, resolve } from 'node:path'
-import { Engine } from './engine/engine.js'
-import { EngineManager, sameWorkspace } from './engine/engineManager.js'
+import { Engine } from '#desktop/conversation-runner'
+import { EngineManager, sameWorkspace } from '#desktop/conversation-manager'
 import { Worktrees } from './vcs/worktrees.js'
 import { SessionNotifications } from './session/sessionNotifications.js'
-import { DiagnosticLog, Redactor } from './logging/logging.js'
+import { DiagnosticLog, Redactor } from '#desktop/redaction'
 import {
   DEFAULT_SESSION_SETTINGS,
   type PermissionDecision,
   type SessionSettings,
-} from '../shared/protocol.js'
+} from '#desktop/session-protocol'
 import { RoutineScheduler } from './routines/routineScheduler.js'
 import { listProjects, setProjectsRoot } from './workspace/projects.js'
 import { ChatWorkspaces } from './workspace/chats.js'
-import { setProjectsRoot as setSessionsRoot } from './session/sessions.js'
+import { setProjectsRoot as setSessionsRoot } from '#desktop/session-history'
 import {
   engineConfigDir,
   Providers,
   type ProviderConfig,
-} from './providers/index.js'
+} from '#desktop/model-provider'
 import {
   LocalModels,
   resolveRepo,
@@ -46,23 +46,23 @@ import {
   type ModelsConfig,
   type QuantOption,
 } from './models/index.js'
-import { Extensions } from './extensions/plugins.js'
+import { Extensions } from '#desktop/plugin-registry'
 import { RagStore } from './rag/index.js'
 import { Terminals } from './terminal/terminal.js'
-import { McpRegistry } from './extensions/mcpRegistry.js'
+import { McpRegistry } from '#desktop/connector-registry'
 import { confirmConnectorWrite } from './extensions/writeConfirmation.js'
-import { configureProjectDataDirectory } from './backend/paths.js'
+import { configureProjectDataDirectory } from '#desktop/project-paths'
 import { shell } from 'electron'
-import type { MainContext } from './ipcContext.js'
-import { registerEngineIpc } from './engine/ipc.js'
-import { registerVcsIpc } from './vcs/ipc.js'
-import { registerExtensionsIpc, registerMcpIpc } from './extensions/ipc.js'
-import { registerProviderIpc } from './providers/ipc.js'
+import type { MainContext } from '#desktop/workbench-context'
+import { registerEngineIpc } from '#desktop/conversation-commands'
+import { registerVcsIpc } from '#desktop/repository-commands'
+import { registerExtensionsIpc, registerMcpIpc } from '#desktop/connector-commands'
+import { registerProviderIpc } from '#desktop/provider-commands'
 import { registerModelsIpc } from './models/ipc.js'
 import { registerRagIpc } from './rag/ipc.js'
 import { registerTerminalIpc } from './terminal/ipc.js'
 import { LOCAL_TERMINALS_ONLY } from '../shared/terminal.js'
-import { registerWorkspaceIpc } from './workspace/ipc.js'
+import { registerWorkspaceIpc } from '#desktop/attachment-commands'
 import { registerRoutinesIpc } from './routines/ipc.js'
 import { registerRewindIpc } from './session/ipc.js'
 

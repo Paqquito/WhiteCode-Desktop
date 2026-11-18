@@ -1,4 +1,4 @@
-import type { GatewayModel } from '../main/providers/index.js'
+import type { GatewayModel } from '#desktop/model-provider'
 
 export const LEGACY_MODEL = /^(claude[-.]|(?:sonnet|opus|haiku)(?:\[.*\])?$|opusplan$)/i
 

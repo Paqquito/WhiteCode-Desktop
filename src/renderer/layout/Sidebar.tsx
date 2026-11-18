@@ -1,3 +1,4 @@
+import { AccountControls } from '#desktop/account-views'
 /**
  * Barre latérale.
  *
@@ -198,7 +199,7 @@ export function Sidebar({
           conversation courante. Séparé de la liste pour ne pas défiler avec
           elle. */}
       <div className="sidebar-foot">
-        <button type="button" className="sidebar-settings" onClick={onOpenSettings}><Icon name="settings" />Paramètres</button>
+        <AccountControls onOpenSettings={onOpenSettings} />
       </div>
     </aside>
   )

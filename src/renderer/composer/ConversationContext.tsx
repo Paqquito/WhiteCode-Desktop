@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { SessionSettings, ThreadEntry } from '../../shared/protocol.js'
+import type { SessionSettings, ThreadEntry } from '#desktop/session-protocol'
 
 /** Only completed file tools are evidence. Shell commands and mere mentions
  * do not prove that a file was read or produced. */

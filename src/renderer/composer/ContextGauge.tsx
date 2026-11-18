@@ -12,7 +12,7 @@
  */
 
 import * as React from 'react'
-import type { SessionStatus } from '../../shared/protocol.js'
+import type { SessionStatus } from '#desktop/session-protocol'
 
 /** Seuil à partir duquel la saturation devient une information à agir. */
 const WARN = 0.7

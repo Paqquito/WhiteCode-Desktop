@@ -11,7 +11,7 @@
  * un mensonge sur l'état du dossier.
  */
 
-import type { ThreadEntry } from '../../shared/protocol.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
 import { asFileChange, type FileChange } from '../thread/Diff.js'
 
 export type SessionFile = {

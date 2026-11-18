@@ -9,9 +9,9 @@
  */
 
 import type { IpcMain } from 'electron'
-import type { MainContext } from '../ipcContext.js'
+import type { MainContext } from '#desktop/workbench-context'
 import type { Worktrees } from './worktrees.js'
-import { gitWorkflowState, gitWorkflowAction, workflowPR, type WorkflowRequest } from './workflow.js'
+import { gitWorkflowState, gitWorkflowAction, workflowPR, type WorkflowRequest } from '#desktop/repository-workflow'
 import { gitFileDiff, gitSummary, gitAction, pullRequest, type GitAction } from './git.js'
 
 export function registerVcsIpc(

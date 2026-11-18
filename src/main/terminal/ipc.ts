@@ -3,7 +3,7 @@
  */
 
 import type { IpcMain } from 'electron'
-import type { MainContext } from '../ipcContext.js'
+import type { MainContext } from '#desktop/workbench-context'
 import type { Terminals } from './terminal.js'
 import type { TerminalTargetProvider } from '../../shared/terminal.js'
 

@@ -1,7 +1,7 @@
 import { mkdir, open, readFile, rename, unlink } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import { join } from 'node:path'
-import type { ProviderConfig } from './index.js'
+import type { ProviderConfig } from '#desktop/model-provider'
 
 /** Electron safeStorage is injected so storage can also be tested without Electron. */
 export type SecretVault = {

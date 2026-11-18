@@ -10,13 +10,13 @@
  */
 
 import { dialog, type IpcMain, shell } from 'electron'
-import type { MainContext } from '../ipcContext.js'
+import type { MainContext } from '#desktop/workbench-context'
 import type { SessionOrigins } from '../session/sessionOrigins.js'
 import type { SessionMetaStore } from '../session/sessionMeta.js'
 import type { SessionMeta } from '../../shared/sessionMeta.js'
 import type { ProjectMetaStore } from './projectMeta.js'
 import type { ProjectMeta } from '../../shared/projectMeta.js'
-import { type Attachment, prepareAttachment } from './attachments.js'
+import { type Attachment, prepareAttachment } from '#desktop/attachment-reader'
 import {
   readDirectory,
   readFileContent,

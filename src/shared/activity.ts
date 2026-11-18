@@ -1,4 +1,4 @@
-import type { ThreadEntry } from './protocol.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
 export type ToolEntry = Extract<ThreadEntry, { kind: 'tool' }>
 export type ToolState = 'working' | 'done' | 'failed' | 'denied' | 'interrupted' | 'unknown'
 export const TOOL_STATE_LABELS: Record<ToolState, string> = {

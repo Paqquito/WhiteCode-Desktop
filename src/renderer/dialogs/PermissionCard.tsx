@@ -1,6 +1,6 @@
 /** A permission belongs to its conversation; it never blocks the other panels. */
 import * as React from 'react'
-import type { PendingPermission } from '../../shared/protocol.js'
+import type { PendingPermission } from '#desktop/session-protocol'
 import { asFileChange, FileChangeView } from '../thread/Diff.js'
 
 export function PermissionCard({ pending, onDecide, onInterrupt }: {

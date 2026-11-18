@@ -3,7 +3,7 @@
  */
 
 import { dialog, type IpcMain } from 'electron'
-import type { MainContext } from '../ipcContext.js'
+import type { MainContext } from '#desktop/workbench-context'
 import type { IndexProgress, RagStore } from './index.js'
 
 export function registerRagIpc(

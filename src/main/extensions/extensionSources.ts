@@ -3,7 +3,7 @@ import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:pat
 import { createHash } from 'node:crypto'
 import type { CatalogEntry } from './extensionCatalog.js'
 import { inventory, jsonFile, repositoryAddress } from './pluginRepository.js'
-import { parseConnector } from './connectors.js'
+import { parseConnector } from '#desktop/connector-manifest'
 import { parsePanel } from './panels.js'
 
 export type ExtensionSource = { id: string; repository: string; ref: string; commit: string; name: string; checkedAt: string; entries: CatalogEntry[] }

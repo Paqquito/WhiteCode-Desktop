@@ -3,7 +3,7 @@
  */
 
 import { app, type IpcMain } from 'electron'
-import type { MainContext } from '../ipcContext.js'
+import type { MainContext } from '#desktop/workbench-context'
 import {
   listGatewayModels,
   listOpenAIModels,
@@ -11,7 +11,7 @@ import {
   type ProviderConfig,
   type Providers,
   pullOllamaModel,
-} from './index.js'
+} from '#desktop/model-provider'
 
 export function registerProviderIpc(
   ipcMain: IpcMain,

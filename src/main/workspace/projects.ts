@@ -1,5 +1,5 @@
 /** Project inventory from native session metadata in the isolated desktop profile. */
-import { readTranscriptSummary } from '../session/transcriptSummary.js'
+import { readTranscriptSummary } from '#desktop/transcript-reader'
 import type { SessionOrigins } from '../session/sessionOrigins.js'
 import type { SessionMetaStore } from '../session/sessionMeta.js'
 import type { SessionOrigin } from '../../shared/sessionOrigin.js'

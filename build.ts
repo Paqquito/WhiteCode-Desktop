@@ -54,6 +54,24 @@ for (let i = 2; i < process.argv.length; i++) {
 }
 const modules = await loadModules(resolved.desktop?.modules ?? [], [...new Set(moduleRoots)], OUT)
 
+// The compiler and source-level tests consume the same selected services as the two bundles.
+const configArg = process.argv.indexOf('--compiler-config')
+if (configArg >= 0) {
+  if (!process.argv[configArg + 1] || process.argv[configArg + 1]!.startsWith('--')) throw Error('Chemin de configuration TypeScript requis.')
+  const config = resolve(process.argv[configArg + 1]!)
+  const paths = Object.assign({}, ...modules.map(module => module.provides ?? {})) as Record<string, string>
+  const types = Object.fromEntries(Object.entries(paths).map(([key, path]) => [key, [path]]))
+  types['@whitecode/desktop-modules'] = [join(ROOT, 'packages/desktop-modules/index.d.ts')]
+  // External module sources share dependencies with this Electron application.
+  types.react = [join(ROOT, 'node_modules/@types/react/index.d.ts')]
+  types['react/jsx-runtime'] = [join(ROOT, 'node_modules/@types/react/jsx-runtime.d.ts')]
+  types.electron = [join(ROOT, 'node_modules/electron/electron.d.ts')]
+  const files = [join(ROOT, 'src/bootstrap/index.ts'), join(ROOT, 'src/main/preload.ts'), join(ROOT, 'src/renderer/index.tsx'),
+    ...Object.values(paths), ...modules.flatMap(module => [module.main, module.renderer].filter((p): p is string => !!p))]
+  await mkdir(dirname(config), { recursive: true })
+  await writeFile(config, JSON.stringify({ extends: join(ROOT, 'tsconfig.json'), compilerOptions: { paths: types }, files, include: [], exclude: [] }, null, 2))
+}
+
 const shared = {
   minify: !DEV,
   sourcemap: DEV ? ('linked' as const) : ('none' as const),
@@ -61,7 +79,7 @@ const shared = {
 
 /** Processus principal et préchargement. */
 const node = await Bun.build({
-  entrypoints: [join(ROOT, 'src', 'main', 'index.ts'), join(ROOT, 'src', 'main', 'preload.ts')],
+  entrypoints: [join(ROOT, 'src', 'bootstrap', 'index.ts'), join(ROOT, 'src', 'main', 'preload.ts')],
   outdir: OUT,
   plugins: [bundleModules(modules, 'main', ROOT)],
   target: 'node',
@@ -128,7 +146,10 @@ for (const ligne of manifeste.split('\n')) {
     process.exit(1)
   }
 }
-await writeFile(join(OUT, 'renderer', 'styles.css'), morceaux.join(''))
+for (const module of modules) {
+  for (const file of module.styles ?? []) morceaux.push(await readFile(file, 'utf8'))
+}
+await writeFile(join(OUT, 'renderer', 'styles.css'), morceaux.join('\n'))
 
 /**
  * Feuille de style de xterm, copiée plutôt qu'importée depuis le bundle.

@@ -19,7 +19,7 @@ import {
   type AgentStatus,
   type AgentView,
 } from '../../shared/agents.js'
-import type { ThreadEntry } from '../../shared/protocol.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
 import { Panel, PanelEmpty } from '../ui/Panel.js'
 
 const LIBELLE: Record<AgentStatus, string> = {

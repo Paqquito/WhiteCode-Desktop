@@ -16,7 +16,7 @@
 import * as React from 'react'
 import type { Corpus, ExtensionState } from '../../main/preload.js'
 import { Icon } from '../ui/Icon.js'
-import type { Tab as SettingsTab } from '../settings/SettingsDialog.js'
+import type { Tab as SettingsTab } from '#desktop/settings-dialog'
 
 export function PlusMenu({
   corpora,

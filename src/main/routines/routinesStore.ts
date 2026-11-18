@@ -15,7 +15,7 @@ import { dirname, join } from 'node:path'
 
 import { parseCronExpression } from '../../shared/cron.js'
 import type { Routine } from './routines.js'
-import { projectDataDirectory } from '../backend/paths.js'
+import { projectDataDirectory } from '#desktop/project-paths'
 
 /** Routines de l'application dans le dossier de données de projet de l’application. */
 export function routinesFilePath(cwd: string): string {

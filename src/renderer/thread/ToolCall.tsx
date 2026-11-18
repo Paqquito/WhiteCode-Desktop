@@ -7,8 +7,8 @@
  */
 
 import * as React from 'react'
-import type { ThreadEntry } from '../../shared/protocol.js'
-import { toolState, TOOL_STATE_LABELS, toolDescription, toolLabel } from '../../shared/activity.js'
+import type { ThreadEntry } from '#desktop/session-protocol'
+import { toolState, TOOL_STATE_LABELS, toolDescription, toolLabel } from '#desktop/tool-activity'
 import { Icon } from '../ui/Icon.js'
 import { asFileChange, FileChangeView } from './Diff.js'
 

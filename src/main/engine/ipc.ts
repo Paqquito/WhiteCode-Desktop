@@ -9,11 +9,11 @@
 import type { IpcMain } from 'electron'
 import { realpath } from 'node:fs/promises'
 import type { ProjectMetaStore } from '../workspace/projectMeta.js'
-import type { MainContext } from '../ipcContext.js'
-import type { SessionSettings } from '../../shared/protocol.js'
-import type { PermissionDecision } from '../../shared/protocol.js'
+import type { MainContext } from '#desktop/workbench-context'
+import type { SessionSettings } from '#desktop/session-protocol'
+import type { PermissionDecision } from '#desktop/session-protocol'
 import type { WorktreeRequest, Worktrees } from '../vcs/worktrees.js'
-import { readTranscript, readSessionSummary } from '../session/sessions.js'
+import { readTranscript, readSessionSummary } from '#desktop/session-history'
 
 export function registerEngineIpc(
   ipcMain: IpcMain,
