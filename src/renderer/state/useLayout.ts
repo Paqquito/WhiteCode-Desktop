@@ -11,7 +11,7 @@
  */
 
 import * as React from 'react'
-import type { PanelId } from '#desktop/panel-selection'
+import type { PanelId } from './usePanels.js'
 
 export const SIDEBAR_MIN = 200
 export const SIDEBAR_MAX = 460

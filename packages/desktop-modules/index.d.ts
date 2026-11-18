@@ -12,6 +12,8 @@ export interface ModuleViewProps {
   call: ModuleCall
 }
 export interface ModulePanelProps extends ModuleViewProps {
+  sessionId: string | null
+  onPrompt(text: string): void
   workspace: string
   onClose(): void
 }

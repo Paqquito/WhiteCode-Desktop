@@ -155,10 +155,11 @@ export function useEngine(workspace: string, onTurnEnd: () => void, setWorkspace
       accept({ ...current, settings: next })
       void window.engine.setSessionSettings(id, next).then(accept).catch(error => report(id, error))
     }
-    const send = (text: string, content?: string | unknown[]) => {
+    type SendOptions = Parameters<typeof window.engine.send> extends [string, string, string | unknown[], ...infer Options] ? Options : never
+    const send = (text: string, content?: string | unknown[], ...options: SendOptions) => {
       if (!id || !text.trim() || !cache.current[id] || cache.current[id]!.state.status.busy) return
       setErrors(previous => ({ ...previous, [id]: '' }))
-      void window.engine.send(id, text.trim(), content ?? text.trim()).catch(error => report(id, error))
+      void window.engine.send(id, text.trim(), content ?? text.trim(), ...options).catch(error => report(id, error))
     }
     const interrupt = () => { if (id) void window.engine.interrupt(id).catch(error => report(id, error)) }
       const decidePermission = (allow: boolean, input?: Record<string, unknown>) => {
@@ -171,7 +172,7 @@ export function useEngine(workspace: string, onTurnEnd: () => void, setWorkspace
     const entries: ThreadEntry[] = !error && !notice ? state.entries : [...state.entries,
       ...(error ? [{ id: 'desktop-error', kind: 'notice' as const, tone: 'error' as const, text: error }] : []),
       ...(notice ? [{ id: 'desktop-notice', kind: 'notice' as const, ...notice }] : [])]
-    return { cancelling: state.cancelling, liveSessionIds: Object.keys(sessions), entries, pending: state.pending, status: state.status, settings, updateSettings,
+    return { threadState: state, cancelling: state.cancelling, liveSessionIds: Object.keys(sessions), entries, pending: state.pending, status: state.status, settings, updateSettings,
       origin: session?.origin, attention: session?.attention ?? INITIAL_ATTENTION, workspace: session?.cwd ?? workspace, worktree: session?.worktree, chat: session?.chat,
       activeId: id, ready: Boolean(session), send, interrupt, decidePermission,
       /**

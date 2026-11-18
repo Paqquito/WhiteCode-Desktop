@@ -75,7 +75,6 @@
     "#desktop/model-choice": "./src/renderer/state/useModelChoice.ts",
     "#desktop/model-provider": "./src/main/providers/index.ts",
     "#desktop/model-selection": "./src/shared/modelSelection.ts",
-    "#desktop/panel-selection": "./src/renderer/state/usePanels.ts",
     "#desktop/plugin-registry": "./src/main/extensions/plugins.ts",
     "#desktop/project-paths": "./src/main/backend/paths.ts",
     "#desktop/provider-commands": "./src/main/providers/ipc.ts",
@@ -91,12 +90,10 @@
     "#desktop/terminal-panel": "./src/renderer/panels/TerminalPanel.tsx",
     "#desktop/tool-activity": "./src/shared/activity.ts",
     "#desktop/tool-permission": "./src/renderer/dialogs/PermissionCard.tsx",
-    "#desktop/toolbar": "./src/renderer/layout/TopBar.tsx",
     "#desktop/transcript-reader": "./src/main/session/transcriptSummary.ts",
     "#desktop/turn-summary": "./src/renderer/thread/TurnSummary.tsx",
     "#desktop/workbench-cell": "./src/renderer/session/SessionCell.tsx",
     "#desktop/workbench-context": "./src/main/ipcContext.ts",
-    "#desktop/workbench-panels": "./src/renderer/panels/PanelHost.tsx",
     "#desktop-kit/main/backend/extensions": "./src/main/backend/extensions.ts",
     "#desktop-kit/main/backend/fileDelivery": "./src/main/backend/fileDelivery.ts",
     "#desktop-kit/main/backend/protocol": "./src/main/backend/protocol.ts",
@@ -195,6 +192,9 @@
     "#desktop-kit/shared/sessionOrigin": "./src/shared/sessionOrigin.ts",
     "#desktop-kit/shared/terminal": "./src/shared/terminal.ts",
     "#desktop-api": "./packages/desktop-modules/index.d.ts",
-    "#desktop-kit/main/backend/paths": "./src/main/backend/paths.ts"
+    "#desktop-kit/main/backend/paths": "./src/main/backend/paths.ts",
+    "#desktop-kit/src/renderer/layout/TopBar": "./src/renderer/layout/TopBar.tsx",
+    "#desktop-kit/src/renderer/panels/PanelHost": "./src/renderer/panels/PanelHost.tsx",
+    "#desktop-kit/src/renderer/state/usePanels": "./src/renderer/state/usePanels.ts"
   }
 }

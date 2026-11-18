@@ -11,7 +11,7 @@ export function NativeSettings({ id }: { id: string }) {
   const Settings = nativeSettings.find(entry => entry.id === id)?.views.Settings
   return Settings ? <Settings call={(method, input) => window.engine.invokeModule(id, method, input)} /> : null
 }
-export function NativePanel({ id, workspace, onClose }: { id: string; workspace: string; onClose(): void }) {
+export function NativePanel({ id, ...props }: Omit<import('../../packages/desktop-modules/index.js').ModulePanelProps, 'call'> & { id: string }) {
   const Panel = nativePanels.find(entry => entry.id === id)?.views.Panel
-  return Panel ? <Panel workspace={workspace} onClose={onClose} call={(method, input) => window.engine.invokeModule(id, method, input)} /> : null
+  return Panel ? <Panel {...props} call={(method, input) => window.engine.invokeModule(id, method, input)} /> : null
 }

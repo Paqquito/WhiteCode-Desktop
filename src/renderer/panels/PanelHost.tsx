@@ -19,7 +19,7 @@ import {
   PANEL_HEIGHT_MIN,
   type useLayout,
 } from '../state/useLayout.js'
-import { panelLabel, type PanelId } from '#desktop/panel-selection'
+import { panelLabel, type PanelId } from '../state/usePanels.js'
 import type { PluginPanelManifest } from '../../shared/pluginPanel.js'
 import { PluginPanel } from './PluginPanel.js'
 import { Splitter } from '../ui/Splitter.js'
@@ -143,7 +143,7 @@ function renderPanel(
   onPrompt: (text: string) => void,
   pluginPanels: readonly PluginPanelManifest[],
 ): React.ReactNode {
-  if (id.startsWith('module:')) return <NativePanel id={id.slice(7)} workspace={workspace} onClose={() => onClose(id)} />
+  if (id.startsWith('module:')) return <NativePanel sessionId={sessionId} onPrompt={onPrompt} id={id.slice(7)} workspace={workspace} onClose={() => onClose(id)} />
   if (id.startsWith('plugin:')) {
     const manifest = pluginPanels.find(panel => id === `plugin:${panel.id}`)
     return manifest ? <PluginPanel manifest={manifest} cwd={workspace} onClose={() => onClose(id)} onWork={onPrompt} /> : null
