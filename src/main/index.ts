@@ -1,3 +1,4 @@
+import { createApplicationWindow, registerSessionLinks } from './applicationWindow.js'
 import { registerBrowserIpc, registerPreviewScheme } from './browser/surfaces.js'
 import { distribution } from './backend/launch.js'
 import { existsSync, mkdirSync } from 'node:fs'
@@ -18,7 +19,7 @@ import { ProjectMetaStore } from './workspace/projectMeta.js'
 
 import { registerNativeModules } from './nativeHost.js'
 import { pathToFileURL } from 'node:url'
-import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, Notification, safeStorage } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, Notification, safeStorage } from 'electron'
 import { join, resolve } from 'node:path'
 import { Engine } from '#desktop/conversation-runner'
 import { EngineManager, sameWorkspace } from '#desktop/conversation-manager'
@@ -62,7 +63,7 @@ import { registerModelsIpc } from './models/ipc.js'
 import { registerRagIpc } from './rag/ipc.js'
 import { registerTerminalIpc } from './terminal/ipc.js'
 import { LOCAL_TERMINALS_ONLY } from '../shared/terminal.js'
-import { registerWorkspaceIpc } from '#desktop/attachment-commands'
+import { registerWorkspaceIpc } from './workspace/ipc.js'
 import { registerRoutinesIpc } from './routines/ipc.js'
 import { registerRewindIpc } from './session/ipc.js'
 
@@ -120,39 +121,7 @@ if (process.platform === 'win32') app.setAppUserModelId(DISTRIBUTION.bundleId + 
  */
 const SCHEME = DISTRIBUTION.urlScheme + '-desktop'
 
-function sessionFromDeepLink(urls: readonly string[]): string | null {
-  for (const raw of urls) {
-    if (!raw.startsWith(`${SCHEME}://`)) continue
-    try {
-      const url = new URL(raw)
-      if (url.hostname !== 'session') continue
-      const id = url.pathname.replace(/^\/+/, '')
-      if (id) return decodeURIComponent(id)
-    } catch {
-      // Un lien mal formé se trouve dans la nature ; il ne doit rien casser.
-    }
-  }
-  return null
-}
-
-if (!app.requestSingleInstanceLock()) {
-  app.quit()
-} else {
-  app.on('second-instance', (_event, argv) => {
-    const id = sessionFromDeepLink(argv)
-    if (id) openNotificationSession(id)
-    else if (window && !window.isDestroyed()) {
-      if (window.isMinimized()) window.restore()
-      window.focus()
-    }
-  })
-  // macOS ne relance pas le programme : il livre l'adresse à l'instance vivante.
-  app.on('open-url', (event, url) => {
-    event.preventDefault()
-    const id = sessionFromDeepLink([url])
-    if (id) openNotificationSession(id)
-  })
-}
+registerSessionLinks(SCHEME, () => window, openNotificationSession)
 
 function updateViewedSession(): void {
   const viewing = rendererReady && !requestedSession && window?.isFocused() && !window.isMinimized()
@@ -290,57 +259,12 @@ const terminals = new Terminals(
 const APP_ICON = join(DIST, 'renderer', 'assets', 'icon.png')
 
 function createWindow(): void {
-  window = new BrowserWindow({
-    width: 1240,
-    height: 860,
-    minWidth: 780,
-    minHeight: 540,
-    // Peint avant le premier rendu : sans cette teinte, la fenêtre s'ouvre
-    // sur un fond blanc système puis bascule, ce qui produit un clignotement.
-    backgroundColor: '#ffffff',
-    title: DISTRIBUTION.product,
-    icon: nativeImage.createFromPath(APP_ICON),
-    // La barre de menu native (File / Edit / View / Window) n'offre rien que
-    // l'application n'expose déjà, et rompt la ligne épurée : l'espace
-    // au-dessus du contenu doit appartenir à l'application, pas au système.
-    autoHideMenuBar: true,
-    webPreferences: {
-      preload: join(DIST, 'preload.js'),
-      // Le rendu n'a aucun accès direct à Node : tout passe par le
-      // préchargement, qui expose une surface nommée et vérifiée.
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
+  window = createApplicationWindow({
+    product: DISTRIBUTION.product, icon: APP_ICON, dist: DIST,
+    closePolicy: () => personalPreferences.get().confirmClose,
+    busy: () => engines?.isBusy === true,
+    closeSurfaces: owner => browserSurfaces.closeOwner(owner),
   })
-
-  const browserOwner = window
-  // The privileged desktop and its password form only load the bundled UI.
-  // Web pages use the existing isolated BrowserSurfaces instead.
-  window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
-  window.webContents.on('will-navigate', event => event.preventDefault())
-  window.webContents.on('will-redirect', event => event.preventDefault())
-  window.on('close', event => {
-    // Préférence « Confirmer avant de fermer » : une réponse en cours serait
-    // interrompue sans trace, d'où le réglage par défaut « si une réponse est
-    // en cours ».
-    const policy = personalPreferences.get().confirmClose
-    if (policy === 'always' || (policy === 'busy' && engines?.isBusy)) {
-      const choice = dialog.showMessageBoxSync(browserOwner, {
-        type: 'question',
-        buttons: ['Fermer', 'Annuler'],
-        defaultId: 1,
-        cancelId: 1,
-        title: DISTRIBUTION.product,
-        message: engines?.isBusy ? 'Une réponse est en cours. Fermer quand même ?' : `Fermer ${DISTRIBUTION.product} ?`,
-        detail: engines?.isBusy ? 'Le tour en cours sera interrompu. Les conversations restent enregistrées.' : 'Les conversations restent enregistrées.',
-      })
-      if (choice !== 0) { event.preventDefault(); return }
-    }
-    browserSurfaces.closeOwner(browserOwner)
-  })
-  window.webContents.on('did-start-loading', () => browserSurfaces.closeOwner(browserOwner))
-  window.webContents.on('render-process-gone', () => browserSurfaces.closeOwner(browserOwner))
-  void window.loadFile(join(DIST, 'renderer', 'index.html'))
   window.webContents.on('did-start-loading', () => { rendererReady = false; updateViewedSession() })
   window.webContents.on('render-process-gone', () => { rendererReady = false; updateViewedSession() })
   window.webContents.on('did-finish-load', () => {

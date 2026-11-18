@@ -28,7 +28,7 @@ Pour une autre marque, construisez le moteur avec son identité, puis le desktop
 
 ## Modules et distribution Windows
 
-L’identité WhiteCode active le module GitLab du dépôt voisin WhiteCode-Extensions. Ses réglages permettent de vérifier le compte et son panneau affiche les demandes de fusion ouvertes. Pour compiler sans module natif, utilisez une identité avec une liste de modules vide. Le format, les catalogues additionnels et les points d’entrée sont décrits dans [MODULES.md](MODULES.md).
+L’identité WhiteCode active le module GitLab du dépôt voisin WhiteCode-Extensions. Ses réglages permettent de vérifier le compte et son panneau permet de consulter, créer, modifier et fusionner les demandes, de gérer leurs discussions, jobs et pipelines. Chaque écriture est confirmée dans le desktop. Pour compiler sans module natif, utilisez une identité avec une liste de modules vide. Le format, les catalogues additionnels et les points d’entrée sont décrits dans [MODULES.md](MODULES.md).
 
 Sur Windows x64, après le build du moteur et du desktop avec la même identité, lancez `npm run package:windows`. Le dossier créé sous `release/` contient l’exécutable de bureau, le moteur et le terminal natif. Distribuez le dossier entier. Si `INNO_SETUP_COMPILER` désigne `ISCC.exe`, la commande produit aussi un installeur par utilisateur. Les profils se trouvent dans `%APPDATA%\<slug>-desktop` et le moteur utilise les emplacements de l’identité.
 

@@ -56,7 +56,6 @@
     "#desktop/account-storage": "./src/main/providers/storage.ts",
     "#desktop/account-views": "./src/renderer/accountViews.tsx",
     "#desktop/application": "./src/main/index.ts",
-    "#desktop/attachment-commands": "./src/main/workspace/ipc.ts",
     "#desktop/attachment-reader": "./src/main/workspace/attachments.ts",
     "#desktop/bridge": "./src/main/featureBridge.ts",
     "#desktop/composer": "./src/renderer/composer/Composer.tsx",
@@ -195,6 +194,8 @@
     "#desktop-kit/main/backend/paths": "./src/main/backend/paths.ts",
     "#desktop-kit/src/renderer/layout/TopBar": "./src/renderer/layout/TopBar.tsx",
     "#desktop-kit/src/renderer/panels/PanelHost": "./src/renderer/panels/PanelHost.tsx",
-    "#desktop-kit/src/renderer/state/usePanels": "./src/renderer/state/usePanels.ts"
+    "#desktop-kit/src/renderer/state/usePanels": "./src/renderer/state/usePanels.ts",
+    "#desktop-kit/main/applicationWindow": "./src/main/applicationWindow.ts",
+    "#desktop-kit/main/workspace/ipc": "./src/main/workspace/ipc.ts"
   }
 }

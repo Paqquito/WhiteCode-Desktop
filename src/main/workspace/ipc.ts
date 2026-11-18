@@ -33,6 +33,7 @@ export function registerWorkspaceIpc(
     sessionOrigins: SessionOrigins
     sessionMeta: SessionMetaStore
     projectMeta: ProjectMetaStore
+    prepareAttachments?: (paths: string[]) => Promise<Attachment[]>
     chats?: ChatWorkspaces
   },
 ): void {
@@ -88,7 +89,7 @@ export function registerWorkspaceIpc(
   ipcMain.handle(
     'attachments:prepare',
     async (_event, paths: string[]): Promise<Attachment[]> => {
-      return Promise.all(paths.map(path => prepareAttachment(path)))
+      return deps.prepareAttachments ? deps.prepareAttachments(paths) : Promise.all(paths.map(path => prepareAttachment(path)))
     },
   )
 

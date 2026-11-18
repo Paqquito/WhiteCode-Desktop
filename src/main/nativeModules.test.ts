@@ -27,3 +27,32 @@ test('la distribution sélectionne ses points d’entrée et ses ressources au b
     await expect(loadModules(['sample'], [], dist)).rejects.toThrow('0 manifeste')
   } finally { await rm(root, { recursive: true, force: true }) }
 })
+
+test('les services actifs appartiennent à un seul module et leurs dépendances sont présentes', async () => {
+  const root = await mkdtemp(join(tmpdir(), 'module-services-'))
+  const dist = join(root, 'dist')
+  async function manifest(id: string, provides: Record<string, string>, requires: string[] = []) {
+    const directory = join(root, id)
+    await mkdir(directory, { recursive: true })
+    await writeFile(join(directory, 'service.ts'), 'export const name = "selected"')
+    await writeFile(join(directory, 'module.json'), JSON.stringify({ apiVersion: 1, provides, requires }))
+  }
+  try {
+    await manifest('service', { application: 'service.ts' }, ['support'])
+    await manifest('support', {})
+    await expect(loadModules(['service'], [root], dist)).rejects.toThrow('Dépendance')
+    const selected = await loadModules(['service', 'support'], [root], dist)
+    const entry = join(root, 'entry.ts')
+    await writeFile(entry, "export { name } from '#desktop/application'")
+    const build = await Bun.build({ entrypoints: [entry], plugins: [bundleModules(selected, 'main', root)] })
+    expect(build.success).toBe(true)
+    expect(await build.outputs[0]!.text()).toContain('selected')
+    expect((await loadModules(['support'], [root], dist))[0]?.provides).toEqual({})
+    await manifest('support', { application: 'service.ts' })
+    await expect(loadModules(['support', 'service'], [root], dist)).rejects.toThrow('Deux modules')
+    await manifest('support', { unknown: 'service.ts' })
+    await expect(loadModules(['support'], [root], dist)).rejects.toThrow('inconnu')
+    await manifest('support', { application: '../entry.ts' })
+    await expect(loadModules(['support'], [root], dist)).rejects.toThrow('Chemin')
+  } finally { await rm(root, { recursive: true, force: true }) }
+})

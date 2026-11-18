@@ -24,7 +24,24 @@ Dans chaque dossier de module, `module.json` déclare les points d’entrée et 
 ```
 
 - Le processus principal appelle l’export `register(host)` au démarrage. `host.directory` est le dossier privé du module sous le profil du produit. `host.registerIpc(nom, handler)` déclare une opération accessible à l’interface de confiance. Le module valide les arguments et gère les autorisations liées aux écritures.
-- Le rendu exporte `views` avec `label`, et éventuellement les composants React `Settings` et `Panel`. Ils reçoivent `call(méthode, arguments)`. Le panneau reçoit aussi le dossier du projet et la fonction de fermeture. Les jetons et les requêtes authentifiées restent dans le processus principal.
+- Le rendu exporte `views` avec `label`, et éventuellement les composants React `Settings` et `Panel`. Ils reçoivent `call(méthode, arguments)`. Le panneau reçoit aussi le dossier du projet, la session active, une fonction pour préparer un message et la fonction de fermeture. Les jetons et les requêtes authentifiées restent dans le processus principal.
 - Les ressources déclarées sont copiées sous `dist/modules/<identifiant>/`. Les chemins doivent rester dans le dossier du module.
 - Les interfaces TypeScript sont dans [le contrat de modules](packages/desktop-modules/index.d.ts). Le module GitLab du dépôt WhiteCode-Extensions illustre les deux points d’entrée.
 - Les catalogues additionnels sont lus via Git et son gestionnaire d’identifiants. Une erreur est affichée avec le catalogue et un lancement ultérieur réessaie. Après une première installation réussie, l’utilisateur peut supprimer la source ou choisir une autre référence.
+
+## Services fournis par une distribution
+
+Pour adapter un service du desktop à la compilation, ajoutez une entrée dans `provides`. Les noms disponibles sont les entrées `#desktop/` de [package.json](package.json). Leur valeur dans le paquet du desktop désigne l’implémentation WhiteCode par défaut. Le module peut importer les composants partagés via les entrées `#desktop-kit/`. Les chemins de son manifeste sont relatifs à son propre dossier.
+
+```json
+{
+  "apiVersion": 1,
+  "provides": { "account-views": "account.tsx" },
+  "styles": ["account.css"],
+  "requires": ["authentication"]
+}
+```
+
+Le build refuse un service inconnu, deux fournisseurs d’un même service, une dépendance absente ou un chemin sortant du module. `styles` ajoute les feuilles de style sélectionnées au rendu. Les entrées `main` et `renderer` restent adaptées aux fonctionnalités indépendantes qui ajoutent simplement des commandes ou un panneau.
+
+Pour vérifier une distribution personnalisée, lancez `bun build.ts --modules <dossier> --compiler-config <fichier.json>` avec l’identité et le moteur correspondants, puis `node node_modules/typescript/bin/tsc --noEmit -p <fichier.json>`. Le compilateur vérifie ensemble les services choisis et leurs appelants.

@@ -69,7 +69,7 @@ if (configArg >= 0) {
   const files = [join(ROOT, 'src/bootstrap/index.ts'), join(ROOT, 'src/main/preload.ts'), join(ROOT, 'src/renderer/index.tsx'),
     ...Object.values(paths), ...modules.flatMap(module => [module.main, module.renderer].filter((p): p is string => !!p))]
   await mkdir(dirname(config), { recursive: true })
-  await writeFile(config, JSON.stringify({ extends: join(ROOT, 'tsconfig.json'), compilerOptions: { paths: types }, files, include: [], exclude: [] }, null, 2))
+  await writeFile(config, JSON.stringify({ extends: join(ROOT, 'tsconfig.json'), compilerOptions: { paths: types, typeRoots: [join(ROOT, 'node_modules/@types')] }, files, include: [], exclude: [] }, null, 2))
 }
 
 const shared = {
