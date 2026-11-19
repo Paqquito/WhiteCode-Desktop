@@ -8,7 +8,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Engine, type EngineOptions } from './engine.js'
-import { DEFAULT_SESSION_SETTINGS } from '../../shared/protocol.js'
+import { DEFAULT_SESSION_SETTINGS, ESSENTIAL_TOOLS } from '../../shared/protocol.js'
 import { setProjectsRoot, listSessions, readTranscript, listRestorePoints } from '../session/sessions.js'
 import { rewindFiles } from '../session/rewind.js'
 import { TICKETS_CONNECTOR } from '../extensions/connectorFixtures.test-support.js'
@@ -155,7 +155,7 @@ for (const allow of [false, true]) test('Connector MCP writes remain human-confi
 }, 30000)
 
 test('WhiteCode questions return the human answer through the desktop control channel', async () => {
-  const f = await fixture((_body, round) => round === 1 ? [{ type: 'tool_use', id: 'choice-1', name: 'request_user_choice', input: { questions: [{ question: 'Quelle option ?', options: [{ label: 'A' }, { label: 'B' }] }] } }] : [{ type: 'text', text: 'Choix reçu.' }], { settings: { ...DEFAULT_SESSION_SETTINGS, tools: ['request_user_choice'] } })
+  const f = await fixture((_body, round) => round === 1 ? [{ type: 'tool_use', id: 'choice-1', name: 'request_user_choice', input: { questions: [{ question: 'Quelle option ?', options: [{ label: 'A' }, { label: 'B' }] }] } }] : [{ type: 'text', text: 'Choix reçu.' }], { settings: { ...DEFAULT_SESSION_SETTINGS, tools: ESSENTIAL_TOOLS } })
   f.engine.on('message', message => { if (message.type === 'control_request') f.engine.respondToPermission(message.request_id, { behavior: 'allow', updatedInput: { answers: [{ labels: ['B'] }] } }) })
   try { expect(await f.turn('Pose une question')).toMatchObject({ failed: false }); expect(JSON.stringify(f.bodies[1].messages)).toContain('B') }
   finally { f.close() }
