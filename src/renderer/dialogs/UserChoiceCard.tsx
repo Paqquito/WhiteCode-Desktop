@@ -23,8 +23,8 @@ function ChoiceField({ question, answer, onChange }: {
 }): React.ReactNode {
   const id = React.useId()
   const field = React.useRef<HTMLTextAreaElement>(null)
-  const useSlotList = !question.allow_multiple && question.options.some(option => option.slot?.requested_day === false)
-  const inlineOptions = useSlotList ? question.options.filter(option => !option.slot) : question.options
+  const slots = question.allow_multiple ? [] : question.options.filter((option): option is TimeSlotOption => !!option.slot)
+  const inlineOptions = slots.length ? question.options.filter(option => !option.slot) : question.options
   React.useEffect(() => { if (answer.writing) field.current?.focus() }, [answer.writing])
   function select(label: string, checked: boolean) {
     const labels = question.allow_multiple && !answer.writing ? answer.labels.filter(value => value !== label) : []
@@ -37,7 +37,7 @@ function ChoiceField({ question, answer, onChange }: {
       <span className="choice-heading"><span className="choice-icon"><Icon name="options" size={17} /></span>{question.header || question.question}</span>
       {question.header && <span className="choice-prompt">{question.question}</span>}
     </legend>
-    {useSlotList && <TimeSlotSelect options={question.options.filter((option): option is TimeSlotOption => !!option.slot)}
+    {slots.length > 0 && <TimeSlotSelect options={slots}
       value={answer.writing ? undefined : answer.labels[0]} onSelect={label => select(label, true)} />}
     {optionGroups(inlineOptions).map((group, index) => {
       const description = group[0].description
