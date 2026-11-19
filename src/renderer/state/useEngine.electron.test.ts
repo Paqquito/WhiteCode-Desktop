@@ -476,6 +476,22 @@ test('renderer isolates navigation, background snapshots and delayed draft/attac
       check(decisions.length===1&&decisions[0]===false,'Escape did not deny once');
       button(document,'Autoriser une fois').click();check(decisions[1]===true,'allow once lost');
       button(document,'Arrêter la réponse').click();check(stopped,'interrupt lost');
+      let choiceResult;
+      const questions=[{header:'Horaire',question:'À quelle heure ?',options:[{label:'14:30',description:'Disponible'},{label:'15:30',description:'Disponible'}]}];
+      const choice=React.createElement(PermissionCard,{pending:{...pending,toolName:'request_user_choice',input:{questions}},onDecide:(_allow,input)=>{choiceResult=input},onInterrupt:()=>{}});
+      renderRoot.render(React.createElement(Composer,{...approvalProps,permission:choice}));
+      await until(()=>document.querySelector('.choice-card'));
+      const validate=button(document,'Valider mon choix');
+      check(validate.disabled,'choice submitted without an answer');
+      document.querySelectorAll('.choice-option')[1].click();await until(()=>!validate.disabled);
+      validate.click();check(choiceResult.answers[0].labels[0]==='15:30','clicked label did not select the slot');
+      document.querySelector('.choice-write').click();
+      await until(()=>document.activeElement===document.querySelector('.choice-text'));
+      check(validate.disabled,'previous slot stayed active during free text entry');
+      type(document.activeElement,'Mardi matin');await until(()=>!validate.disabled);
+      validate.click();check(choiceResult.answers[0].other==='Mardi matin','free text was not submitted');
+      document.querySelector('.choice-write').click();await until(()=>document.querySelector('.choice-option input:checked'));
+      validate.click();check(choiceResult.answers[0].labels[0]==='15:30','closing free text lost the previous selection');
       renderRoot.unmount();renderRoot=createRoot(document.getElementById('root'));
       const sidebarSessions=[
         {id:'running',title:'Analyse du projet',activity:'running',updatedAt:4},

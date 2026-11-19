@@ -133,6 +133,7 @@
     "#desktop-kit/renderer/composer/TextAttachmentPreview": "./src/renderer/composer/TextAttachmentPreview.tsx",
     "#desktop-kit/renderer/composer/useCompletion": "./src/renderer/composer/useCompletion.ts",
     "#desktop-kit/renderer/composer/useFileDrop": "./src/renderer/composer/useFileDrop.ts",
+    "#desktop-kit/renderer/dialogs/PermissionCard": "./src/renderer/dialogs/PermissionCard.tsx",
     "#desktop-kit/renderer/dialogs/RestoreDialog": "./src/renderer/dialogs/RestoreDialog.tsx",
     "#desktop-kit/renderer/layout/RoutineOrigin": "./src/renderer/layout/RoutineOrigin.tsx",
     "#desktop-kit/renderer/layout/SessionMenu": "./src/renderer/layout/SessionMenu.tsx",

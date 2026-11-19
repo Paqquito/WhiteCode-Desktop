@@ -22,9 +22,23 @@ test('file changes remain reviewable without expanding the card by default', () 
 
 test('WhiteCode questions are selectable and do not submit a preselected answer', () => {
   const html = renderToStaticMarkup(<PermissionCard pending={{ requestId: 'choice', toolUseId: 'c1', toolName: 'request_user_choice', input: { questions: [{ question: 'Quelle branche ?', options: [{ label: 'Main', description: 'Branche principale' }, { label: 'Feature' }] }] } }} onDecide={() => {}} onInterrupt={() => {}} />)
-  expect(html).toContain('<legend>Quelle branche ?</legend>')
+  expect(html).toContain('<legend')
+  expect(html).toContain('Quelle branche ?')
   expect(html).toContain('type="radio"')
   expect(html).not.toContain('checked=""')
   expect(html).toContain('Autre réponse')
   expect(html).toContain('disabled=""')
+})
+
+test('a shared hint describes only consecutive matching choices', () => {
+  const options = [{ label: 'A', description: 'Même condition' }, { label: 'B', description: 'Même condition' }, { label: 'C', description: 'Autre condition' }]
+  const html = renderToStaticMarkup(<PermissionCard pending={{ requestId: 'r', toolUseId: 't', toolName: 'request_user_choice',
+    input: { questions: [{ header: 'Choix', question: 'Quelle option ?', options, allow_multiple: true }] } }} onDecide={() => {}} onInterrupt={() => {}} />)
+  expect(html.split('Même condition')).toHaveLength(2)
+  const hints = [...html.matchAll(/aria-describedby="([^"]+)"/g)].map(match => match[1])
+  expect(hints).toHaveLength(3)
+  expect(hints[0]).toBe(hints[1])
+  expect(hints[1]).not.toBe(hints[2])
+  expect(html).toContain('type="checkbox"')
+  expect(html).toContain('aria-expanded="false"')
 })
