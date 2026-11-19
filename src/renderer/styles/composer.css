@@ -14,8 +14,8 @@
 .permission-actions button { padding: 6px 12px; min-height: 32px; font-size: var(--fs-sm); border-radius: 999px; }
 .permission-actions .permission-stop { margin-right: auto; }
 
-.choice-card { padding: 8px 8px 0; }
-.choice-fields { max-height: 48vh; overflow-y: auto; padding: 3px; }
+.choice-card { container-type: inline-size; padding: 8px 8px 0; }
+.choice-fields { max-height: min(56vh, 480px); overflow-y: auto; padding: 3px; }
 .choice-field { min-width: 0; padding: 0; margin: 0; border: 0; }
 .choice-field + .choice-field { margin-top: 20px; }
 .choice-legend { width: 100%; padding: 0; margin-bottom: 12px; overflow-wrap: anywhere; }
@@ -46,6 +46,11 @@
 .choice-actions button { border-radius: var(--r-sm); }
 .choice-actions .permission-stop { color: var(--text-muted); }
 .choice-actions .primary:disabled { opacity: 1; color: var(--text-muted); background: var(--bg-inset); border-color: var(--border); }
+@container (max-width: 340px) {
+  .choice-fields { max-height: min(62vh, 480px); }
+  .choice-actions { display: grid; grid-template-columns: 1fr auto; }
+  .choice-actions .primary { grid-column: 1 / -1; }
+}
 
 .menu-list.wide {
   min-width: 300px;
