@@ -46,8 +46,6 @@ const empty = (): Registry => ({ version: 2, enabled: [], sources: [], installat
 const validId = (id: string) => { if (typeof id !== 'string' || !/^[a-z0-9][a-z0-9-]{0,100}$/.test(id)) throw new Error('Identifiant d’extension invalide.') }
 
 export class Extensions {
-  private state?: Registry
-  private loading?: Promise<Registry>
   private queue: Promise<unknown> = Promise.resolve()
   private readonly validate: (path: string) => Promise<string>
   constructor(private readonly root: string, roots: RuntimeRoots, private readonly legacyPlugins: () => Promise<PluginMigration[]> = async () => []) {
@@ -55,12 +53,8 @@ export class Extensions {
   }
   private get file() { return join(this.root, 'extensions.json') }
   private get store() { return join(this.root, 'extensions') }
+  // Another desktop or local installer can atomically replace the registry between turns.
   private async load(): Promise<Registry> {
-    if (this.state) return this.state
-    if (!this.loading) this.loading = this.readRegistry().then(state => this.state = state).finally(() => { this.loading = undefined })
-    return this.loading
-  }
-  private async readRegistry(): Promise<Registry> {
     try {
       const raw = JSON.parse(await readFile(this.file, 'utf8'))
       if (Array.isArray(raw) && raw.every(id => typeof id === 'string')) return { ...empty(), enabled: raw }
@@ -73,7 +67,7 @@ export class Extensions {
     const temporary = `${this.file}.${randomUUID()}.tmp`
     try {
       await writeFile(temporary, JSON.stringify(state, null, 2), { flag: 'wx', mode: 0o600 })
-      await rename(temporary, this.file); this.state = state
+      await rename(temporary, this.file)
     } finally { await unlink(temporary).catch(() => {}) }
   }
   private change<T>(action: () => Promise<T>): Promise<T> {

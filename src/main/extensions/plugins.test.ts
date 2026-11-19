@@ -29,7 +29,9 @@ const skill = '---\nname: sample\ndescription: Fixture skill\n---\nReturn CATALO
 const silence = () => {}
 
 test('an installed plugin supplies validated connectors and panels only while enabled', async () => {
-  const { root, repository, extensions } = await fixture()
+  const { root, repository, profile, extensions } = await fixture()
+  const runningDesktop = new Extensions(profile, TEST_ROOTS)
+  expect(await runningDesktop.pluginDirs()).toEqual([])
   try {
     await cp(new URL('./fixtures/tickets/', import.meta.url), repository, { recursive: true })
     commit(repository)
@@ -38,6 +40,8 @@ test('an installed plugin supplies validated connectors and panels only while en
     expect(await extensions.install(entry.id, silence)).toBe(true)
     expect(await extensions.connectors()).toEqual([])
     await extensions.setEnabled(entry.id, true)
+    expect(await runningDesktop.pluginDirs()).toEqual(await extensions.pluginDirs())
+    expect(await runningDesktop.pluginDirs()).toHaveLength(1)
     expect((await extensions.connectors()).map(connector => connector.id)).toEqual(['tickets'])
     expect((await extensions.list()).find(item => item.id === entry.id)?.panel?.title).toBe('Tickets')
     await extensions.setEnabled(entry.id, false)
