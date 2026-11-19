@@ -221,9 +221,9 @@ export type SessionSettings = {
 /**
  * Outils indispensables.
  *
- * De quoi lire, écrire et exécuter — ce dont un agent de code ne peut pas se
- * passer. Les autres outils intégrés (web, notebooks, sous-agents) sortent du
- * jeu réduit. Les serveurs MCP se sélectionnent séparément par conversation.
+ * Les noms ci-dessous identifient le préréglage dans les sessions enregistrées.
+ * Au lancement, whiteCodeTools y ajoute la recherche web, les skills, les
+ * questions et la livraison de fichiers. Les serveurs MCP se choisissent séparément.
  * Retirer les définitions d'outils inutilisées allège l'invite système
  * de plusieurs milliers de jetons, ce qui se voit directement sur le temps de
  * réponse d'un modèle local.

@@ -12,12 +12,12 @@ const TOOLS: Record<string, string[]> = {
 }
 export function whiteCodeTools(tools: string[]): string[] {
   const names = new Set(tools.flatMap(name => TOOLS[name] ?? [name]))
-  // Saved sessions store the reduced preset as desktop names. Translate it here
-  // so existing and new sessions can load skills, ask questions and attach output.
+  // Keep the stored preset stable for existing chats. Expand it to native tools at launch.
   if (tools.length === ESSENTIAL_TOOLS.length && ESSENTIAL_TOOLS.every(name => tools.includes(name))) {
     names.add('use_skill')
     names.add('request_user_choice')
     names.add('deliver_file')
+    names.add('search_web')
   }
   return [...names]
 }

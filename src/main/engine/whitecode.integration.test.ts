@@ -161,6 +161,28 @@ test('WhiteCode questions return the human answer through the desktop control ch
   finally { f.close() }
 }, 25000)
 
+test('a chat with saved essential tools exposes native web search and returns a source to the model', async () => {
+  const settings = { ...DEFAULT_SESSION_SETTINGS, tools: [...ESSENTIAL_TOOLS] }
+  const f = await fixture((_body, round) => round === 1
+    ? [{ type: 'tool_use', id: 'release-search', name: 'search_web', input: { query: 'Latest public release of Ollama' } }]
+    : [{ type: 'text', text: 'Source reçue.' }], { settings, chat: true })
+  const source = 'https://example.org/releases/latest'
+  const queries: string[] = []
+  const search = Bun.serve({ hostname: '127.0.0.1', port: 0, async fetch(request) {
+    queries.push((await request.json()).query)
+    return Response.json({ results: [{ url: source, title: 'Latest release', excerpt: 'Release notes' }] })
+  } })
+  try {
+    const path = join(f.config, 'config.json')
+    const config = JSON.parse(await readFile(path, 'utf8'))
+    await writeFile(path, JSON.stringify({ ...config, tools: { webSearch: { endpoint: search.url.href } } }))
+    expect(await f.turn('Quelle est la dernière version d’Ollama ?')).toMatchObject({ failed: false })
+    expect(f.bodies[0].tools.map((tool: { name: string }) => tool.name)).toContain('search_web')
+    expect(queries).toEqual(['Latest public release of Ollama'])
+    expect(JSON.stringify(f.bodies[1].messages)).toContain(source)
+  } finally { f.close(); await search.stop(true) }
+}, 25000)
+
 test('a distributed plugin skill loads through the real desktop engine without connector credentials', async () => {
   const f = await fixture((_body, round) => round === 1
     ? [{ type: 'tool_use', id: 'tickets-skill', name: 'use_skill', input: { name: 'fixture-tickets:tickets' } }]
