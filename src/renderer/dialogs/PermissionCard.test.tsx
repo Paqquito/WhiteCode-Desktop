@@ -42,3 +42,24 @@ test('a shared hint describes only consecutive matching choices', () => {
   expect(html).toContain('type="checkbox"')
   expect(html).toContain('aria-expanded="false"')
 })
+
+test('only a single-choice question with an alternative on another day gets a grouped selector', () => {
+  const slot = (label: string, day: string, requested_day: boolean) => ({
+    label, description: 'Disponibilité publiée', slot: { day, hours: '09:00 – 10:00', requested_day },
+  })
+  const monday = slot('Lundi à neuf heures', 'lundi 23 novembre', true)
+  const tuesday = slot('Mardi à neuf heures', 'mardi 24 novembre', false)
+  const keep = { label: 'Conserver le créneau demandé' }
+  function render(options: (typeof monday | typeof keep)[], allow_multiple = false) {
+    return renderToStaticMarkup(<PermissionCard pending={{ requestId: 'r', toolUseId: 't', toolName: 'request_user_choice',
+      input: { questions: [{ question: 'Quel horaire ?', options, allow_multiple }] } }} onDecide={() => {}} onInterrupt={() => {}} />)
+  }
+  expect(render([monday, keep])).not.toContain('<select')
+  expect(render([tuesday, keep], true)).not.toContain('<select')
+  expect(render([tuesday, keep])).toContain('<optgroup label="mardi 24 novembre"')
+  const mixed = render([monday, tuesday, keep])
+  expect(mixed).toContain('<optgroup label="lundi 23 novembre"')
+  expect(mixed).toContain('value="Mardi à neuf heures"')
+  expect(mixed.match(/type="radio"/g)).toHaveLength(1)
+  expect(mixed.indexOf('Conserver le créneau demandé')).toBeGreaterThan(mixed.indexOf('</select>'))
+})

@@ -492,6 +492,20 @@ test('renderer isolates navigation, background snapshots and delayed draft/attac
       validate.click();check(choiceResult.answers[0].other==='Mardi matin','free text was not submitted');
       document.querySelector('.choice-write').click();await until(()=>document.querySelector('.choice-option input:checked'));
       validate.click();check(choiceResult.answers[0].labels[0]==='15:30','closing free text lost the previous selection');
+      const dated={...pending,toolName:'request_user_choice',input:{questions:[{question:'Quel créneau ?',options:[
+        {label:'Lundi 09:00',slot:{day:'Lundi',hours:'09:00',requested_day:true}},
+        {label:'Mardi 09:00',slot:{day:'Mardi',hours:'09:00',requested_day:false}},
+        {label:'Conserver le créneau demandé'}]}]}};
+      const picker=React.createElement(PermissionCard,{key:'dates',pending:dated,onDecide:(_allow,input)=>{choiceResult=input},onInterrupt:()=>{}});
+      renderRoot.render(React.createElement(Composer,{...approvalProps,permission:picker}));
+      await until(()=>document.querySelector('.slot-control select'));
+      const select=document.querySelector('.slot-control select');
+      check(!select.value && button(document,'Valider mon choix').disabled,'schedule list preselected a slot');
+      select.value='Mardi 09:00';select.dispatchEvent(new Event('change',{bubbles:true}));
+      await until(()=>document.querySelector('.slot-value strong')?.textContent==='Mardi');
+      button(document,'Valider mon choix').click();check(choiceResult.answers[0].labels[0]==='Mardi 09:00','selected time lost its date');
+      document.querySelector('.choice-option').click();await until(()=>select.value==='');
+      button(document,'Valider mon choix').click();check(choiceResult.answers[0].labels[0]==='Conserver le créneau demandé','keep conflicted with selected time');
       renderRoot.unmount();renderRoot=createRoot(document.getElementById('root'));
       const sidebarSessions=[
         {id:'running',title:'Analyse du projet',activity:'running',updatedAt:4},

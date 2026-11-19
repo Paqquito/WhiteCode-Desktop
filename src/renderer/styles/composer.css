@@ -23,6 +23,27 @@
 .choice-icon { display: inline-grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: var(--r-sm); color: var(--accent); background: var(--accent-soft); }
 .choice-prompt { display: block; margin-top: 6px; color: var(--text-muted); line-height: 1.45; }
 .choice-group + .choice-group { margin-top: 9px; }
+.choice-slots > label { display: block; margin-bottom: 5px; font-weight: 600; }
+.slot-control { display: grid; }
+.slot-control > * { grid-area: 1 / 1; min-width: 0; }
+.slot-control select, .slot-control select::picker(select) { appearance: base-select; }
+.slot-control select {
+  width: 100%; min-height: 40px; padding: 8px 11px; font: inherit; color: transparent;
+  background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--r-md); cursor: pointer;
+}
+.slot-control select::picker-icon { margin-inline-start: auto; align-self: center; color: var(--accent); }
+.slot-control select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.slot-control select::picker(select) {
+  margin-block: 4px; max-height: min(20rem, 54vh); overflow: auto; padding: 5px;
+  color: var(--text); background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--r-md); box-shadow: var(--shadow-pop);
+}
+.slot-control optgroup { padding: 5px; color: var(--text); font-weight: 700; }
+.slot-control optgroup + optgroup { border-top: 1px solid var(--border); }
+.slot-control option { padding: 6px 10px; color: var(--text); font-weight: 400; white-space: normal; overflow-wrap: anywhere; }
+.slot-control option:is(:hover,:focus-visible,:checked) { background: var(--accent-soft); }
+.slot-value { z-index: 1; align-self: center; padding: 8px 34px 8px 12px; pointer-events: none; overflow-wrap: anywhere; }
+.slot-value, .slot-control option { font-variant-numeric: tabular-nums; }
+.slot-preview { white-space: pre-wrap; overflow-wrap: anywhere; }
 .choice-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); gap: 6px; }
 .choice-option {
   display: flex; align-items: center; gap: 9px; min-width: 0; min-height: 40px; padding: 8px 11px;
