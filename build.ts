@@ -113,6 +113,9 @@ for (const result of [node, web]) {
 }
 
 
+// Les notices du desktop accompagnent aussi les distributions personnalisées.
+for (const file of ['LICENSE', 'THIRD_PARTY_NOTICES.txt']) await cp(join(ROOT, file), join(OUT, file))
+
 // Fichiers statiques : ils ne passent pas par le bundler.
 await cp(
   join(ROOT, 'src', 'renderer', 'index.html'),

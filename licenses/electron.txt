@@ -1,0 +1,3 @@
+## Electron and Chromium
+
+The packaged Windows desktop includes the upstream Electron LICENSE and LICENSES.chromium.html next to the executable. They accompany the Electron runtime and its bundled Chromium, Node.js and other components.

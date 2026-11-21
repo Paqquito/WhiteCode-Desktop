@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "WhiteCode — application de bureau en marque blanche",
   "private": true,
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "test": "bun run scripts/test.ts",

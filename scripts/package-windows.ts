@@ -31,6 +31,12 @@ const runtime = join(stage, 'resources/engine/dist')
 await mkdir(runtime, { recursive: true })
 await writeFile(join(runtime, binary), binaryBytes)
 await cp(join(engine, 'dist/manifest.json'), join(runtime, 'manifest.json'))
+// Older engine builds may only provide their standalone executable and receipt.
+for (const file of ['LICENSE', 'THIRD_PARTY_NOTICES.txt']) {
+  if (manifest.deliverables.some((entry: { file: string }) => entry.file === file)) {
+    await cp(join(engine, 'dist', file), join(runtime, file))
+  }
+}
 const pty = join(app, 'node_modules/node-pty')
 await mkdir(pty, { recursive: true })
 for (const path of ['package.json', 'LICENSE', 'lib', 'prebuilds/win32-x64']) {

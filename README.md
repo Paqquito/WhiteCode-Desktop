@@ -1,59 +1,39 @@
 # WhiteCode Desktop
 
-Application de bureau de WhiteCode, l'agent de programmation en marque blanche. L'interface Electron pilote l'exécutable du moteur par son protocole public JSONL : réponses progressives, outils, permissions, questions, annulation, reprise des conversations et restauration des fichiers.
+WhiteCode Desktop est l’interface graphique du moteur WhiteCode. Elle permet de travailler dans un dépôt, de reprendre une conversation et de vérifier les actions proposées par l’assistant.
 
-## Marque blanche
+## Premier lancement
 
-Le nom, les dossiers, les variables d'environnement, le schéma d'URL, la couleur d'accent et l'icône viennent du **fichier d'identité** du moteur (spécification SPEC-CAD-002). Sans identité particulière, c'est `identity/whitecode.identity.json` : noir, blanc et gris, et un carré noir comme icône.
+Installez Git, Node.js avec npm et Bun 1.4.2. Clonez ces trois dépôts dans **le même dossier**. Le desktop utilise le moteur compilé dans `WhiteCode` et récupère son module GitLab dans `WhiteCode-Extensions`.
 
-- Le nom du produit et la couleur sont figés dans le bundle de l'interface au build (`__BRAND__`).
-- L'icône `ICON` de l'identité accepte le PNG et le SVG. En son absence, le build génère un carré noir.
-- `dist/distribution.json` porte les noms techniques lus par le processus principal.
-
-## Démarrer
-
-Prérequis : Node.js avec npm, Bun 1.4.2, le catalogue WhiteCode-Extensions (pour le module GitLab par défaut) et le dépôt du moteur `WhiteCode` à côté de celui-ci (ou désigné par `DESKTOP_ENGINE_DIR`).
-
-```bash
-# Dans le dépôt du moteur
+```sh
+git clone https://github.com/Paqquito/WhiteCode.git
+git clone https://github.com/Paqquito/WhiteCode-Desktop.git
+git clone https://github.com/Paqquito/WhiteCode-Extensions.git
+cd WhiteCode
 bun install --frozen-lockfile
 bun scripts/build.ts --identity identity/whitecode.identity.json --profile public
-
-# Dans ce dépôt
-npm ci --include=dev --no-audit --no-fund
+cd ../WhiteCode-Desktop
+npm ci --include=dev
 npm start
 ```
 
-Pour utiliser un moteur déjà compilé dans un autre dossier, créez un fichier `.env.local` à la racine du desktop et ajoutez une ligne comme `DESKTOP_ENGINE_DIR=C:/dev/mon-moteur` avec le chemin absolu de votre clone. Ensuite, `npm start` charge ce réglage pour le build et pour Electron à chaque lancement.
+Ouvrez **Paramètres → Fournisseur**. Choisissez votre serveur compatible, une API compatible OpenAI, Ollama ou llama.cpp. Renseignez les paramètres demandés, puis choisissez votre modèle pour la première conversation.
 
-Pour une autre marque, construisez le moteur avec son identité, puis le desktop avec `DESKTOP_IDENTITY=<chemin du fichier d'identité>`.
+Aux lancements suivants, exécutez simplement `npm start` depuis `WhiteCode-Desktop`. Si votre moteur compilé se trouve ailleurs, créez un fichier `.env.local` ici et indiquez `DESKTOP_ENGINE_DIR=C:/dev/mon-moteur`. Le chemin doit désigner le dossier qui contient `dist/manifest.json`.
 
-## Modules et distribution Windows
+## Extensions et personnalisation
 
-L’identité WhiteCode active le module GitLab du dépôt voisin WhiteCode-Extensions. Ses réglages permettent de vérifier le compte et son panneau permet de consulter, créer, modifier et fusionner les demandes, de gérer leurs discussions, jobs et pipelines. Chaque écriture est confirmée dans le desktop. Pour compiler sans module natif, utilisez une identité avec une liste de modules vide. Le format, les catalogues additionnels et les points d’entrée sont décrits dans [MODULES.md](MODULES.md).
+Installez les extensions à partir de **Plugins et skills**. Les prérequis de Bureautique et Outlook sont détaillés dans le [catalogue WhiteCode-Extensions](https://github.com/Paqquito/WhiteCode-Extensions#readme).
 
-Sur Windows x64, après le build du moteur et du desktop avec la même identité, lancez `npm run package:windows`. Le dossier créé sous `release/` contient l’exécutable de bureau, le moteur et le terminal natif. Distribuez le dossier entier. Si `INNO_SETUP_COMPILER` désigne `ISCC.exe`, la commande produit aussi un installeur par utilisateur. Les profils se trouvent dans `%APPDATA%\<slug>-desktop` et le moteur utilise les emplacements de l’identité.
+Le fichier d’identité du moteur détermine le nom, les couleurs, l’icône et les modules du desktop. Pour une autre distribution, compilez le moteur avec son identité et indiquez ce même fichier dans `DESKTOP_IDENTITY` lors de la construction du desktop. Voir le [format des modules natifs](MODULES.md) et le [format des panneaux et connecteurs](PLUGIN_PANELS.md).
 
-## Fournisseurs
+## Vérifier ou distribuer le desktop
 
-Aucun fournisseur n'est configuré par défaut. Paramètres → Fournisseur propose :
+`npx tsc --noEmit` vérifie les types. `npm test` reconstruit le moteur et l’interface et lance la suite de tests. Les tests de documents nécessitent LibreOffice. `LIBREOFFICE_PATH` permet de désigner une installation portable.
 
-- un serveur d'inférence compatible avec le protocole Messages du moteur (adresse et jeton facultatif) ;
-- une API compatible OpenAI (Chat Completions), par un pont local ;
-- Ollama, par un pont local ;
-- llama.cpp, avec les modèles GGUF de ce poste.
+Sous Windows x64, `npm run package:windows` prépare l’application dans `release/`. Distribuez le dossier entier. Pour produire un installeur par utilisateur, indiquez le chemin de `ISCC.exe` dans `INNO_SETUP_COMPILER`.
 
-Les secrets restent dans le processus principal et le coffre du système ; le moteur ne reçoit qu'une clé locale éphémère.
+## Licence
 
-## Plugins et connecteurs
-
-Le catalogue par défaut est [WhiteCode-Extensions](https://github.com/Paqquito/WhiteCode-Extensions). Un plugin peut apporter des skills, des agents, un connecteur MCP HTTPS (`connector.json`) et un panneau déclaratif (`panel.json`) : voir [PLUGIN_PANELS.md](PLUGIN_PANELS.md). Les écritures déclarées par un connecteur demandent toujours une confirmation humaine.
-
-## Vérifications
-
-```bash
-npx tsc --noEmit
-npm test
-```
-
-`npm test` reconstruit le moteur et l'interface puis lance toute la suite, sans en ignorer. Git et LibreOffice sont nécessaires (`LIBREOFFICE_PATH` peut désigner une installation portable).
+Le desktop est sous [licence MIT](LICENSE). Les [notices des dépendances](THIRD_PARTY_NOTICES.txt) accompagnent l’application. Electron fournit aussi sa licence et les crédits de Chromium. Après une mise à jour des dépendances, régénérez les notices avec `bun ../WhiteCode-Extensions/scripts/dependency-notices.ts . @anthropic-ai/sdk`.

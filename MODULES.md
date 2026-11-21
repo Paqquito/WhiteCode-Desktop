@@ -13,7 +13,7 @@ Le build lit la section `desktop` de l’identité validée par le moteur. Les m
 }
 ```
 
-Le build cherche chaque identifiant dans `../WhiteCode-Extensions/modules`. L’option répétable `--modules <dossier>` ajoute des dossiers. Une absence ou un doublon arrête la construction. Une identité sans modules produit le desktop seul. Le nom du produit, le profil utilisateur et l’accent proviennent des variables d’identité documentées dans SPEC-CAD-002.
+Le build cherche chaque identifiant dans `../WhiteCode-Extensions/modules`. L’option répétable `--modules <dossier>` ajoute des dossiers. Une absence ou un doublon arrête la construction. Une identité sans modules produit le desktop seul. Le nom du produit, le profil utilisateur et l’accent proviennent du [fichier d’identité du moteur](https://github.com/Paqquito/WhiteCode/blob/main/docs/marque-blanche.md).
 
 ## Contrat de la version 1
 
